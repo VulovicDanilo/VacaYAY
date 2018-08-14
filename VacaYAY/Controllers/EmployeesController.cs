@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using VacaYAY.Business;
+using VacaYAY.Business.DTOs;
 using VacaYAY.Data;
 using VacaYAY.Entities.Employees;
 using VacaYAY.ViewModels;
@@ -91,13 +92,27 @@ namespace VacaYAY.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Employee employee = EmployeeService.GetEmployee(id);
-            if (employee == null)
+            EditEmployeeDTO employeeDTO = EmployeeService.GetEmployeeEdit(id);
+            if (employeeDTO == null)
             {
                 return HttpNotFound();
             }
-            //ViewBag.UserID = new SelectList(db.Users, "Id", "Email", employee.UserID);
-            return View(employee);
+            EditEmployeeViewModel vm = EditEmployeeViewModel.ToVM(employeeDTO);
+            foreach(var contract in vm.Contracts)
+            {
+                contract.Link = HttpContext.Server.MapPath(contract.Link);
+            }
+            return View(vm);
+        }
+        public FileResult Download(string filename="")
+        {
+            FileInfo file = new FileInfo(filename);
+            var fileContents = System.IO.File.ReadAllBytes(filename);
+            var response = new FileContentResult(fileContents, "application/octet-stream")
+            {
+                FileDownloadName = file.Name
+            };
+            return response;
         }
 
         // POST: Employees/Edit/5

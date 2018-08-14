@@ -124,6 +124,10 @@ namespace VacaYAY.Data.Repos
                 return null;
             }
         }
+        /// <summary>
+        /// Returns a list of all rejected <see cref="Request"/>'s.
+        /// </summary>
+        /// <returns></returns>
         public List<Request> AllRejected()
         {
             try
@@ -135,7 +139,19 @@ namespace VacaYAY.Data.Repos
                 Console.WriteLine(e.Message);
                 return null;
             }
-}
+        }
+        public List<Request> AllUsersRequests(string userID)
+        {
+            try
+            {
+                return db.Requests.Where(x=>x.Employee.UserID==userID).ToList();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
         /// <summary>
         /// Deletes <see cref="Request"/> with specific id.
         /// </summary>

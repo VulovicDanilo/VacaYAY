@@ -165,7 +165,7 @@
 <div id='myModalCreateRequest' class='modal'>
     <div class="modal-dialog">
         <div class="modal-content" style="overflow: auto;padding:20px">
-            <button type="button"class="close float-right" id="closbtn">x</button>
+            <button type="button" class="btn btn-info pull-right" id="closbtn">x</button>
             <div id='myModalContentCreateRequest'>
             </div>
         </div>
@@ -174,7 +174,7 @@
 <div id='Modal' class='modal'>
     <div class="modal-dialog">
         <div class="modal-content" style="overflow: auto;padding:20px">
-            <button type="button"class="close float-right" id="closbtnEdit">x</button>
+            <button type="button" class="btn btn-info pull-right" id="closbtnEdit">x</button>
             <div id='ModalContent'>
             </div>
         </div>
@@ -183,7 +183,7 @@
 <div id='ModalDetails' class='modal'>
     <div class="modal-dialog">
         <div class="modal-content" style="overflow: auto;padding:20px">
-            <button type="button"class="close float-right" id="closebtnDetails">x</button>
+            <button type="button" class="btn btn-info pull-right" id="closebtnDetails">x</button>
             <div id='ModalDetailsContent'>
             </div>
         </div>
@@ -192,7 +192,7 @@
 <div id='ModalApprove' class='modal'>
     <div class="modal-dialog">
         <div class="modal-content" style="overflow: auto;padding:20px">
-            <button type="button"class="close float-right" id="closebtnApprove">x</button>
+            <button type="button" class="btn btn-info pull-right" id="closebtnApprove">x</button>
             <div id='ModalApproveContent'>
             </div>
         </div>
@@ -201,7 +201,7 @@
 <div id='ModalReject' class='modal'>
     <div class="modal-dialog">
         <div class="modal-content" style="overflow: auto;padding:20px">
-            <button class="btn btn-primary pull-right" id="closebtnReject">x</button>
+            <button class="btn btn-info pull-right" id="closebtnReject">x</button>
             <div id='ModalRejectContent'>
             </div>
         </div>
@@ -214,34 +214,33 @@
     <a href="javascript:void(0);"
        class="btnCreateRequest">Create new Request</a>
 </p>
-<table class="table table-responsive">
+<table class="table table-bordered">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.SubmissionDate)
+        <th class="col-md-2">
+            @Html.DisplayNameFor(model => model.Employee.Name)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.StartDate)
+        <th class="col-md-2">
+        @Html.DisplayNameFor(model => model.Employee.LastName)
         </th>
-        <th>
+        <th class="col-md-2">
+        @Html.DisplayNameFor(model => model.StartDate)
+        </th>
+        <th class="col-md-2">
             @Html.DisplayNameFor(model => model.EndDate)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.NumberOfDays)
+        <th  class="col-md-2">
+
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Status)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TypeOfDays)
-        </th>
-        <th></th>
     </tr>
 
     @foreach (var item in Model)
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.SubmissionDate)
+                @Html.DisplayFor(modelItem => item.Employee.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee.LastName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.StartDate)
@@ -249,32 +248,29 @@
             <td>
                 @Html.DisplayFor(modelItem => item.EndDate)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumberOfDays)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TypeOfDays)
-            </td>
-            <td>
-
-                <a href="javascript:void(0);" data-id="@item.RequestID" class="editRequest">Edit</a> |
-                <a href="javascript:void(0);" data-id="@item.RequestID" class="detailsRequest">Details</a> |
-                @if (HttpContext.Current.User.IsInRole("Manager"))
-                {
-                    <a href="javascript:void(0);" data-id="@item.RequestID" class="approveRequest">Approve</a> 
-                }
-                | 
-                @if (HttpContext.Current.User.IsInRole("Manager"))
-                {
+            @if (User.IsInRole("Manager"))
+            {
+                <td class="text-center">
+                    <a href="javascript:void(0);" data-id="@item.RequestID" class="editRequest">Edit</a> |
+                    <a href="javascript:void(0);" data-id="@item.RequestID" class="detailsRequest">Details</a> |
+                    <a href="javascript:void(0);" data-id="@item.RequestID" class="approveRequest">Approve</a> |
                     <a href="javascript:void(0);" data-id="@item.RequestID" class="rejectRequest">Reject</a>
-                }
-                @*@Html.ActionLink("Edit", "Edit", new { id = item.RequestID }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.RequestID }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.RequestID })*@
-            </td>
+                </td>
+            }
+            else if (User.IsInRole("Employee"))
+            {
+                <td class="text-center">
+                    <a href="javascript:void(0);" data-id="@item.RequestID" class="editRequest">Edit</a> |
+                    <a href="javascript:void(0);" data-id="@item.RequestID" class="detailsRequest">Details</a>
+                </td>
+            }
+            else
+            {
+                <td></td>
+            }
+            @*@Html.ActionLink("Edit", "Edit", new { id = item.RequestID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.RequestID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.RequestID })*@
 
         </tr>
     }

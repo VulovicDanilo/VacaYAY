@@ -22,6 +22,7 @@ namespace VacaYAY.ViewModels
                 SerialNumber = dto.SerialNumber,
                 StartDate = dto.StartDate,
                 EndDate = dto.EndDate,
+                Link = dto.Link,
             };
             return vm;
         }

@@ -16,6 +16,7 @@ namespace VacaYAY.Business.DTOs
         public DateTime EndDate { get; set; }
         public int NumOfDays { get; set; }
         public TypeOfDays TypeOfDays { get; set; }
+        public Status Status { get; set; }
         public DetailsRequestEmployeeDTO Employee { get; set; }
         public List<EditRequestCommentDTO> Comments { get; set; }
 
@@ -30,10 +31,21 @@ namespace VacaYAY.Business.DTOs
                 EndDate = request.EndDate,
                 NumOfDays = request.NumberOfDays,
                 TypeOfDays = request.TypeOfDays,
+                Status = request.Status,
                 Employee = DetailsRequestEmployeeDTO.ToDTO(request.Employee),
                 Comments = EditRequestCommentDTO.ToDTOList(request.Comments),
             };
             return dto;
+        }
+        public static List<DetailsRequestDTO> ToDTOs(List<Request> requests)
+        {
+            List<DetailsRequestDTO> dtos = new List<DetailsRequestDTO>();
+            foreach(var request in requests)
+            {
+                DetailsRequestDTO dto = DetailsRequestDTO.ToDTO(request);
+                dtos.Add(dto);
+            }
+            return dtos;
         }
     }
 }

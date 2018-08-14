@@ -27,6 +27,7 @@ namespace VacaYAY.ViewModels
         public int NumOfDays { get; set; }
         [Display(Name = "Type of vacation")]
         public TypeOfDays TypeOfDays { get; set; }
+        public Status Status { get; set; }
         public DetailsRequestEmployeeViewModel Employee { get; set; }
         public List<EditRequestCommentViewModel> Comments { get; set; } = new List<EditRequestCommentViewModel>();
 
@@ -40,6 +41,7 @@ namespace VacaYAY.ViewModels
                 SubmissionDate = dto.SubmissionDate,
                 NumOfDays = dto.NumOfDays,
                 TypeOfDays = dto.TypeOfDays,
+                Status=dto.Status,
                 Comments = EditRequestCommentViewModel.ToViewModelList(dto.Comments),
                 Employee = DetailsRequestEmployeeViewModel.ToViewModel(dto.Employee),
             }; 

@@ -12,7 +12,9 @@ namespace VacaYAY.ViewModels
         [Key]
         public int EmployeeID { get; set; }
         public string Name { get; set; }
+        [Display(Name= "Last name")]
         public string LastName { get; set; }
+        [Display(Name="Manager")]
         public bool IsManager { get; set; }
         public List<EditEmployeeContractViewModel> Contracts { get; set; }
         public List<EditEmployeeResolutionViewModel> Resolutions { get; set; }

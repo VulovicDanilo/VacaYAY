@@ -96,6 +96,5 @@
     }
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.RequestID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Approve", "AsyncApprove", new { id = Model.RequestID },new { @class = "btn btn-success" }) 
 </p>

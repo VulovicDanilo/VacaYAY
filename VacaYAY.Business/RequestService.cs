@@ -24,7 +24,7 @@ namespace VacaYAY.Business
             Employee employee = EmployeeService.GetEmployeeWithUserID(userID);
             request.EmployeeID = employee.EmployeeID;
             int days = CalculateNumberOfWorkingDays(request.StartDate, request.EndDate);
-            if (employee.CurrentVacationDays >= days)
+            if (employee.CurrentVacationDays >= days && request.EndDate>request.StartDate)
             {
                 request.NumberOfDays = days;
                 request.Comments.First().CommenterID = employee.EmployeeID;
@@ -41,6 +41,13 @@ namespace VacaYAY.Business
                 return false;
             }
         }
+
+        public static object AllUsersRequests(string userID)
+        {
+            List<DetailsRequestDTO> dtos = DetailsRequestDTO.ToDTOs(repo.AllUsersRequests(userID));
+            return dtos;
+        }
+
         public static int CalculateNumberOfWorkingDays(DateTime start, DateTime end)
         {
             int days = 0;

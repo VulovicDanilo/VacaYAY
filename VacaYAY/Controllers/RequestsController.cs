@@ -21,9 +21,13 @@ namespace VacaYAY.Controllers
         private ApplicationDbContext db = ApplicationDbContext.Context;
 
         // GET: Requests
-        [Authorize]
+        [Authorize(Roles = "Manager,Employee")]
         public ActionResult Index()
         {
+            if (User.IsInRole("Manager"))
+                return View(RequestService.AllPending());
+            else if (User.IsInRole("Employee"))
+                return View(RequestService.AllUsersRequests(User.Identity.GetUserId()));
             return View(RequestService.AllPending());
         }
 

@@ -119,6 +119,7 @@
     <Compile Include="DTOs\IndexEmployeeContractDTO.cs" />
     <Compile Include="DTOs\IndexEmployeeDTO.cs" />
     <Compile Include="DTOs\RegisterEmployeeDTO.cs" />
+    <Compile Include="DTOs\ShowRequestDTO.cs" />
     <Compile Include="EmailService.cs" />
     <Compile Include="EmployeeService.cs" />
     <Compile Include="ExtraDaysAditionService.cs" />
@@ -142,9 +143,7 @@
       <Name>VacaYAY.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Service\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
