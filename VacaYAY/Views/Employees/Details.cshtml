@@ -1,0 +1,90 @@
+﻿@model VacaYAY.Entities.Employees.Employee
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Employee</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.Active)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Active)
+        </dd>*@
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ExtraVacationDays)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ExtraVacationDays)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalExtraVacationDays)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TotalExtraVacationDays)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CurrentVacationDays)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CurrentVacationDays)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LeftoverVacationDays)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LeftoverVacationDays)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsManager)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsManager)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.EmployeeID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

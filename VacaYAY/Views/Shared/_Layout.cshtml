@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <div class="navbar navbar-inverse bg-dark navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle fancy-lines" data-toggle="collapse" data-target=".navbar-collapse" onclick="myFunction(this)">
+                    <span class="icon-bar bar1"></span>
+                    <span class="icon-bar bar2"></span>
+                    <span class="icon-bar bar3"></span>
+                </button>
+                @Html.ActionLink("VacaYAY", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="nav-item">@Html.ActionLink("Employees", "Index", "Employees")</li>
+                    <li>@Html.ActionLink("Requests", "Index", "Requests")</li>
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <div class="navbar navbar-inverse navbar-fixed-bottom">
+            <div class="container">
+                <p class="pull-left" style="color:white;padding-top:10px">&copy; @DateTime.Now.Year - INGSoftware summer internship</p>
+                <a class="pull-right" style="color:white;padding-top:10px" href="https://www.ingsoftware.com/">INGSoftware_</a>
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script>
+        function myFunction(x) {
+            x.classList.toggle("change");
+            console.log("Clicked");
+        }
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

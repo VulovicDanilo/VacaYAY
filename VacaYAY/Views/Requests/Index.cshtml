@@ -1,0 +1,282 @@
+﻿@model IEnumerable<VacaYAY.Entities.Requests.Request>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@section scripts {
+    <script>
+        var ajaxCallURL = '/Requests/Create';
+        $(function () {
+            $(".btnCreateRequest").click(function () {
+                var $buttonClicked = $(this);
+                var id = $buttonClicked.attr("data-id");
+                var options = {
+                    "backdrop": false,
+                    keyboard: true
+                };
+                $.ajax({
+                    type: "GET",
+                    url: ajaxCallURL,
+                    contentType: "application/json; charset=utf-8",
+                    datatype: "json",
+                    success: function (data) {
+                        console.log(data);
+                        $('#myModalContentCreateRequest').html(data);
+                        $('#myModalCreateRequest').modal(options);
+                        $('#myModalCreateRequest').modal('show');
+                    },
+                    error: function () {
+                        alert("Content load failed.");
+                    }
+                });
+            });
+            $("#closbtn").click(function () {
+                $('#myModalCreateRequest').modal('hide');
+            });
+        });
+        var ajaxCallURL2 = '/Requests/AsyncEdit';
+        $(function () {
+            $(".editRequest").click(function () {
+                var $buttonClicked = $(this);
+                var id = $buttonClicked.attr("data-id");
+                var options = {
+                    "backdrop": false,
+                    keyboard: true
+                };
+                $.ajax({
+                    type: "GET",
+                    url: ajaxCallURL2,
+                    contentType: "application/json; charset=utf-8",
+                    datatype: "json",
+                    data: {
+                        "id": id
+                    },
+                    success: function (data) {
+                        $('#ModalContent').html(data);
+                        $('#Modal').modal(options);
+                        $('#Modal').modal('show');
+                    },
+                    error: function () {
+                        alert("Content load failed.");
+                    }
+                });
+            });
+            $("#closbtnEdit").click(function () {
+                $('#Modal').modal('hide');
+            });
+        });
+        var ajaxCallURL3 = '/Requests/AsyncDetails';
+        $(function () {
+            $(".detailsRequest").click(function () {
+                var $buttonClicked = $(this);
+                var id = $buttonClicked.attr("data-id");
+                var options = {
+                    "backdrop": false,
+                    keyboard: true
+                };
+                $.ajax({
+                    type: "GET",
+                    url: ajaxCallURL3,
+                    contentType: "application/json; charset=utf-8",
+                    datatype: "json",
+                    data: {
+                        "id": id
+                    },
+                    success: function (data) {
+                        $('#ModalDetailsContent').html(data);
+                        $('#ModalDetails').modal(options);
+                        $('#ModalDetails').modal('show');
+                    },
+                    error: function () {
+                        alert("Content load failed.");
+                    }
+                });
+            });
+            $("#closebtnDetails").click(function () {
+                $('#ModalDetails').modal('hide');
+            });
+        });
+        var ajaxCallURL4 = '/Requests/AsyncApprove';
+        $(function () {
+            $(".approveRequest").click(function () {
+                var $buttonClicked = $(this);
+                var id = $buttonClicked.attr("data-id");
+                var options = {
+                    "backdrop": false,
+                    keyboard: true
+                };
+                $.ajax({
+                    type: "GET",
+                    url: ajaxCallURL4,
+                    contentType: "application/json; charset=utf-8",
+                    datatype: "json",
+                    data: {
+                        "id": id
+                    },
+                    success: function (data) {
+                        $('#ModalApproveContent').html(data);
+                        $('#ModalApprove').modal(options);
+                        $('#ModalApprove').modal('show');
+                    },
+                    error: function () {
+                        alert("Content load failed.");
+                    }
+                });
+            });
+            $("#closebtnApprove").click(function () {
+                $('#ModalApprove').modal('hide');
+            });
+        });
+        var ajaxCallURL5 = '/Requests/AsyncReject';
+        $(function () {
+            $(".rejectRequest").click(function () {
+                var $buttonClicked = $(this);
+                var id = $buttonClicked.attr("data-id");
+                var options = {
+                    "backdrop": false,
+                    keyboard: true
+                };
+                $.ajax({
+                    type: "GET",
+                    url: ajaxCallURL5,
+                    contentType: "application/json; charset=utf-8",
+                    datatype: "json",
+                    data: {
+                        "id": id
+                    },
+                    success: function (data) {
+                        $('#ModalRejectContent').html(data);
+                        $('#ModalReject').modal(options);
+                        $('#ModalReject').modal('show');
+                    },
+                    error: function () {
+                        alert("Content load failed.");
+                    }
+                });
+            });
+            $("#closebtnReject").click(function () {
+                $('#ModalReject').modal('hide');
+            });
+        });
+
+    </script>
+}
+<div id='myModalCreateRequest' class='modal'>
+    <div class="modal-dialog">
+        <div class="modal-content" style="overflow: auto;padding:20px">
+            <button type="button"class="close float-right" id="closbtn">x</button>
+            <div id='myModalContentCreateRequest'>
+            </div>
+        </div>
+    </div>
+</div>
+<div id='Modal' class='modal'>
+    <div class="modal-dialog">
+        <div class="modal-content" style="overflow: auto;padding:20px">
+            <button type="button"class="close float-right" id="closbtnEdit">x</button>
+            <div id='ModalContent'>
+            </div>
+        </div>
+    </div>
+</div>
+<div id='ModalDetails' class='modal'>
+    <div class="modal-dialog">
+        <div class="modal-content" style="overflow: auto;padding:20px">
+            <button type="button"class="close float-right" id="closebtnDetails">x</button>
+            <div id='ModalDetailsContent'>
+            </div>
+        </div>
+    </div>
+</div>
+<div id='ModalApprove' class='modal'>
+    <div class="modal-dialog">
+        <div class="modal-content" style="overflow: auto;padding:20px">
+            <button type="button"class="close float-right" id="closebtnApprove">x</button>
+            <div id='ModalApproveContent'>
+            </div>
+        </div>
+    </div>
+</div>
+<div id='ModalReject' class='modal'>
+    <div class="modal-dialog">
+        <div class="modal-content" style="overflow: auto;padding:20px">
+            <button class="btn btn-primary pull-right" id="closebtnReject">x</button>
+            <div id='ModalRejectContent'>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2>Vacation Requests</h2>
+
+<p>
+    <a href="javascript:void(0);"
+       class="btnCreateRequest">Create new Request</a>
+</p>
+<table class="table table-responsive">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.SubmissionDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumberOfDays)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TypeOfDays)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubmissionDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberOfDays)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TypeOfDays)
+            </td>
+            <td>
+
+                <a href="javascript:void(0);" data-id="@item.RequestID" class="editRequest">Edit</a> |
+                <a href="javascript:void(0);" data-id="@item.RequestID" class="detailsRequest">Details</a> |
+                @if (HttpContext.Current.User.IsInRole("Manager"))
+                {
+                    <a href="javascript:void(0);" data-id="@item.RequestID" class="approveRequest">Approve</a> 
+                }
+                | 
+                @if (HttpContext.Current.User.IsInRole("Manager"))
+                {
+                    <a href="javascript:void(0);" data-id="@item.RequestID" class="rejectRequest">Reject</a>
+                }
+                @*@Html.ActionLink("Edit", "Edit", new { id = item.RequestID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.RequestID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.RequestID })*@
+            </td>
+
+        </tr>
+    }
+
+</table>

@@ -1,0 +1,204 @@
+﻿@model VacaYAY.ViewModels.RegisterEmployeeViewModel
+
+@{
+    ViewBag.Title = "Register";
+}
+
+@section scripts {
+    <script>
+        var ajaxCallURL = '/Employees/AsyncDetails';
+        $(function () {
+            $(".getEmployee").click(function () {
+                var $buttonClicked = $(this);
+                var id = $buttonClicked.attr("data-id");
+                var options = {
+                    "backdrop": "static",
+                    keyboard: true
+                };
+                $.ajax({
+                    type: "GET",
+                    url: ajaxCallURL,
+                    contentType: "application/json; charset=utf-8",
+                    datatype: "json",
+                    data: {
+                        "id": id
+                    },
+                    success: function (data) {
+                        $('#myModalContentDetails').html(data);
+                        $('#myModalDetails').modal(options);
+                        $('#myModalDetails').modal('show');
+                    },
+                    error: function () {
+                        alert("Content load failed.");
+                    }
+                });
+            });
+            $("#closbtn").click(function () {
+                $('#myModal').modal('hide');
+            });
+        });
+        // EDIT
+        var ajaxCallURL = '/Contracts/AsyncContract';
+        $(function () {
+            $(".createContractModal").click(function () {
+                console.log("KLIKNUTO JE DUGME");
+                var $buttonClicked = $(this);
+                var inner = $('#myModalContentEdit');
+                var outer = $('#myModalEdit');
+                var options = {
+                    "backdrop": false,
+                    keyboard: true
+                };
+                $.ajax({
+                    type: "GET",
+                    url: ajaxCallURL,
+                    contentType: "application/json; charset=utf-8",
+                    datatype: "json",
+                    success: function (data) {
+                        console.log("PRIBAVLJEN HTML");
+                        $('#myModalContentEdit').html(data);
+                        $('#myModalEdit').modal(options);
+                        $("#myModalEdit").one("submit", "#create_contract_form", function (e) {
+                            e.preventDefault();
+                            var form = $(this);
+                            var data = form.serializeArray();
+                            var text = data[1].value;
+                            var startDate = data[2].value;
+                            var endDate = data[3].value;
+
+                            $("#contracts-table-body").append("<tr><td> " + text + " </td><td>" + startDate + "</td><td>" + endDate + "</td><td><input type='file' accept='.docx,.doc,.pdf' required name='file' /></td></tr>");
+                            $("#contracts-table").append("<input type='hidden' value= '" + text + "' name='text' />")
+                                .append("<input type='hidden' value= '" + startDate + "' name='startDate' />")
+                                .append("<input type='hidden' value= '" + endDate + "' name='endDate' />")
+                            outer.modal("hide");
+                            console.log(inner);
+                            while (inner.firstChild)
+                                inner.removeChild(inner.firstChild);
+                        });
+                        $("#closebtn").click(function () {
+                            outer.modal("hide");
+                            console.log(inner);
+                            while (inner.firstChild)
+                                inner.removeChild(inner.firstChild);
+                        });
+                    },
+                    error: function () {
+                        alert("Content load failed.");
+                    }
+                });
+            });
+        })
+    </script>
+}
+<div id='myModalDetails' class='modal'>
+    <div class="modal-dialog">
+        <div class="modal-content" style="overflow: auto;padding:20px">
+            <div id='myModalContentDetails'>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div id='myModalEdit' class='modal'>
+    <div class="modal-dialog">
+        <div class="modal-content" style="overflow: auto;padding:20px">
+                <div id='myModalContentEdit'>
+
+                </div>
+        </div>
+    </div>
+</div>
+
+<h2>Register</h2>
+
+
+@using (Html.BeginForm(null,null,FormMethod.Post,new { id = "form", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Add Employee</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.isManager, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.isManager)
+                    @Html.ValidationMessageFor(model => model.isManager, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <table class="table table-striped" id="contracts-table">
+                <tbody id="contracts-table-body">
+                    <tr>
+                        <th>
+                            Text
+                        </th>
+                        <th>
+                            Start Date
+                        </th>
+                        <th>
+                            End Date
+                        </th>
+                        <th>
+                            File
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="form-group">
+            <a href="javascript:void(0);"
+               class="createContractModal">Add Contract</a>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@*@section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@
