@@ -31,7 +31,7 @@ namespace VacaYAY.ViewModels
         public DetailsRequestEmployeeViewModel Employee { get; set; }
         public List<EditRequestCommentViewModel> Comments { get; set; } = new List<EditRequestCommentViewModel>();
 
-        public static DetailsRequestViewModel ToViewModel(DetailsRequestDTO dto)
+        public static DetailsRequestViewModel ToVM(DetailsRequestDTO dto)
         {
             DetailsRequestViewModel vm = new DetailsRequestViewModel()
             {
@@ -46,6 +46,16 @@ namespace VacaYAY.ViewModels
                 Employee = DetailsRequestEmployeeViewModel.ToViewModel(dto.Employee),
             }; 
             return vm;
+        }
+        public static List<DetailsRequestViewModel> ToVMs(List<DetailsRequestDTO> dtos)
+        {
+            List<DetailsRequestViewModel> vms = new List<DetailsRequestViewModel>();
+            foreach(var dto in dtos)
+            {
+                var vm = DetailsRequestViewModel.ToVM(dto);
+                vms.Add(vm);
+            }
+            return vms;
         }
         public static DetailsRequestDTO ToDTO(DetailsRequestViewModel vm)
         {

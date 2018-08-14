@@ -144,7 +144,8 @@ namespace VacaYAY.Data.Repos
         {
             try
             {
-                return db.Requests.Where(x=>x.Employee.UserID==userID).ToList();
+                List<Request> list=db.Requests.Where(x => x.Employee.UserID == userID).ToList();
+                return list;
             }
             catch (Exception e)
             {

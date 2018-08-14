@@ -52,3 +52,12 @@ textarea {
     -webkit-transform: rotate(45deg) translate(-8px, -8px);
     transform: rotate(45deg) translate(-8px, -4px);
 }
+.approved{
+    background-color:palegreen
+}
+.rejected{
+    background-color:indianred
+}
+.pending{
+    background-color:royalblue
+}

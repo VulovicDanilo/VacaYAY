@@ -25,10 +25,14 @@ namespace VacaYAY.Controllers
         public ActionResult Index()
         {
             if (User.IsInRole("Manager"))
-                return View(RequestService.AllPending());
+            {
+                return View(DetailsRequestViewModel.ToVMs(RequestService.All()));
+            }
             else if (User.IsInRole("Employee"))
-                return View(RequestService.AllUsersRequests(User.Identity.GetUserId()));
-            return View(RequestService.AllPending());
+            {
+                return View(DetailsRequestViewModel.ToVMs(RequestService.AllUsersRequests(User.Identity.GetUserId())));
+            }
+            return View(DetailsRequestViewModel.ToVMs(RequestService.AllPending()));
         }
 
         // GET: Requests/Details/5
@@ -43,7 +47,7 @@ namespace VacaYAY.Controllers
             {
                 return RedirectToAction("Index");
             }
-            return View(DetailsRequestViewModel.ToViewModel(dto));
+            return View(DetailsRequestViewModel.ToVM(dto));
         }
         public ActionResult AsyncDetails(int? id)
         {
@@ -56,7 +60,7 @@ namespace VacaYAY.Controllers
             {
                 return RedirectToAction("Index");
             }
-            return PartialView(DetailsRequestViewModel.ToViewModel(dto));
+            return PartialView(DetailsRequestViewModel.ToVM(dto));
         }
 
         // GET: Requests/Create
@@ -167,7 +171,7 @@ namespace VacaYAY.Controllers
             {
                 return RedirectToAction("Index");
             }
-            return PartialView(DetailsRequestViewModel.ToViewModel(dto));
+            return PartialView(DetailsRequestViewModel.ToVM(dto));
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -195,7 +199,7 @@ namespace VacaYAY.Controllers
             {
                 return RedirectToAction("Index");
             }
-            return PartialView(DetailsRequestViewModel.ToViewModel(dto));
+            return PartialView(DetailsRequestViewModel.ToVM(dto));
         }
         [HttpPost]
         [ValidateAntiForgeryToken]

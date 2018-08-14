@@ -1,4 +1,4 @@
-﻿@model IEnumerable<VacaYAY.Entities.Requests.Request>
+﻿@model IEnumerable<VacaYAY.ViewModels.DetailsRequestViewModel>
 
 @{
     ViewBag.Title = "Index";
@@ -133,6 +133,7 @@
             $(".rejectRequest").click(function () {
                 var $buttonClicked = $(this);
                 var id = $buttonClicked.attr("data-id");
+                var url = $buttonClicked.attr("data-target");
                 var options = {
                     "backdrop": false,
                     keyboard: true
@@ -212,30 +213,31 @@
 
 <p>
     <a href="javascript:void(0);"
-       class="btnCreateRequest">Create new Request</a>
+       class="btnCreateRequest" data-target="/Requests/Create">Create new Request</a>
 </p>
+
 <table class="table table-bordered">
     <tr>
         <th class="col-md-2">
             @Html.DisplayNameFor(model => model.Employee.Name)
         </th>
         <th class="col-md-2">
-        @Html.DisplayNameFor(model => model.Employee.LastName)
+            @Html.DisplayNameFor(model => model.Employee.LastName)
         </th>
         <th class="col-md-2">
-        @Html.DisplayNameFor(model => model.StartDate)
+            @Html.DisplayNameFor(model => model.StartDate)
         </th>
         <th class="col-md-2">
             @Html.DisplayNameFor(model => model.EndDate)
         </th>
-        <th  class="col-md-2">
+        <th class="col-md-4">
 
         </th>
     </tr>
-
     @foreach (var item in Model)
     {
-        <tr>
+        var classStyle = (item.Status == VacaYAY.Common.Enums.Status.Approved) ? "success" : item.Status == VacaYAY.Common.Enums.Status.Rejected ? "danger" : "info";
+        <tr class="@classStyle">
             <td>
                 @Html.DisplayFor(modelItem => item.Employee.Name)
             </td>
@@ -248,26 +250,44 @@
             <td>
                 @Html.DisplayFor(modelItem => item.EndDate)
             </td>
-            @if (User.IsInRole("Manager"))
+
+            <td class="text-center">
+                <a href="javascript:void(0);" data-id="@item.RequestID" data-target="/Requests/AsyncDetails"class="detailsRequest">Details</a>
+                @if (item.Status == VacaYAY.Common.Enums.Status.Pending)
+                {
+                    <span> | </span>
+                    <a href="javascript:void(0);" data-id="@item.RequestID" data-target="/Requests/AsyncEdit" class="editRequest">Edit</a>
+                    if (User.IsInRole("Manager"))
+                    {
+                        <span> | </span>
+                        <a href="javascript:void(0);" data-id="@item.RequestID" data-target="/Requests/AsyncApprove"class="approveRequest">Approve</a>
+                        <span> | </span>
+                        <a href="javascript:void(0);" data-id="@item.RequestID" data-target="/Requests/AsyncReject"class="rejectRequest">Reject</a>
+                    }
+                }
+            </td>
+
+            @*@if (User.IsInRole("Manager"))
             {
                 <td class="text-center">
-                    <a href="javascript:void(0);" data-id="@item.RequestID" class="editRequest">Edit</a> |
                     <a href="javascript:void(0);" data-id="@item.RequestID" class="detailsRequest">Details</a> |
                     <a href="javascript:void(0);" data-id="@item.RequestID" class="approveRequest">Approve</a> |
                     <a href="javascript:void(0);" data-id="@item.RequestID" class="rejectRequest">Reject</a>
                 </td>
             }
-            else if (User.IsInRole("Employee"))
+            else if (User.IsInRole("Employee") && item.Status == VacaYAY.Common.Enums.Status.Pending)
             {
                 <td class="text-center">
                     <a href="javascript:void(0);" data-id="@item.RequestID" class="editRequest">Edit</a> |
                     <a href="javascript:void(0);" data-id="@item.RequestID" class="detailsRequest">Details</a>
                 </td>
             }
-            else
+            else if (User.IsInRole("Employee"))
             {
-                <td></td>
-            }
+                <td class="text-center">
+                    <a href="javascript:void(0);" data-id="@item.RequestID" class="detailsRequest">Details</a>
+                </td>
+            }*@
             @*@Html.ActionLink("Edit", "Edit", new { id = item.RequestID }) |
                 @Html.ActionLink("Details", "Details", new { id = item.RequestID }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.RequestID })*@

@@ -42,7 +42,7 @@ namespace VacaYAY.Business
             }
         }
 
-        public static object AllUsersRequests(string userID)
+        public static List<DetailsRequestDTO> AllUsersRequests(string userID)
         {
             List<DetailsRequestDTO> dtos = DetailsRequestDTO.ToDTOs(repo.AllUsersRequests(userID));
             return dtos;
@@ -87,13 +87,13 @@ namespace VacaYAY.Business
             }
             return false;
         }
-        public static List<Request> All()
+        public static List<DetailsRequestDTO> All()
         {
-            return repo.All();
+            return DetailsRequestDTO.ToDTOs(repo.All());
         }
-        public static List<Request> AllPending()
+        public static List<DetailsRequestDTO> AllPending()
         {
-            return repo.AllPending();
+            return DetailsRequestDTO.ToDTOs(repo.AllPending());
         }
         public static List<Request> AllApproved()
         {
