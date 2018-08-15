@@ -13,7 +13,8 @@ namespace VacaYAY.Entities.ExtraDaysAditions
     {
         public int ExtraDaysAditionID { get; set; }
         public DateTime Timestamp { get; set; }
-        public int Days { get; set; }
+        public int VacDays { get; set; }
+        public int LeftoverDays { get; set; }
         public Basis Basis { get; set; }
         [ForeignKey("HR")]
         public int HR_ID { get; set; }

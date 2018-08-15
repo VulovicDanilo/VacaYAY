@@ -18,7 +18,7 @@ namespace VacaYAY.Controllers
 {
     public class RequestsController : Controller
     {
-        private ApplicationDbContext db = ApplicationDbContext.Context;
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Requests
         [Authorize(Roles = "Manager,Employee")]

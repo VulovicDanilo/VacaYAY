@@ -13,7 +13,7 @@ namespace VacaYAY.Controllers
 {
     public class ExtraDaysAditionsController : Controller
     {
-        private ApplicationDbContext db = ApplicationDbContext.Context;
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: ExtraDaysAditions
         public ActionResult Index()

@@ -17,6 +17,8 @@ namespace VacaYAY.Business.DTOs
         public string Password { get; set; }
         public string Name { get; set; }
         public string LastName { get; set; }
+        public string City { get; set; }
+        public string Profession { get; set; }
         public bool IsManager { get; set; }
         public List<CreateContractDTO> Contracts { get; set; }
         
@@ -39,6 +41,8 @@ namespace VacaYAY.Business.DTOs
                 {
                     Name = dto.Name,
                     LastName = dto.LastName,
+                    City=dto.City,
+                    Profession=dto.Profession,
                     IsManager = dto.IsManager,
                     UserID = u.Id,
                     Contracts = CreateContractDTO.ToEntityList(dto.Contracts,u.Id),

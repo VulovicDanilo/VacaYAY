@@ -38,6 +38,8 @@ namespace VacaYAY.Entities.Employees
         public int LeftoverVacationDays { get; set; }
         [Display(Name = "Manager")]
         public bool IsManager { get; set; }
+        public string City { get; set; }
+        public string Profession { get; set; }
         public virtual List<Contract> Contracts { get; set; }
         public virtual List<Request> Requests { get; set; }
         public virtual List<Resolution> Resolutions { get; set; }

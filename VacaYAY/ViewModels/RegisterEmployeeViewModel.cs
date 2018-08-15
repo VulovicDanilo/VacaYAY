@@ -21,6 +21,8 @@ namespace VacaYAY.ViewModels
         [Required]
         [Display(Name="Prezime")]
         public string LastName { get; set; }
+        public string City { get; set; }
+        public string Profession { get; set; }
         [Display(Name="Manager")]
         public bool isManager { get; set; }
         public List<CreateContractViewModel> Contracts { get; set; }
@@ -30,9 +32,11 @@ namespace VacaYAY.ViewModels
             RegisterEmployeeDTO dto = new RegisterEmployeeDTO()
             {
                 Email = employee.Email,
+                Password = employee.Password,
                 Name = employee.Name,
                 LastName = employee.LastName,
-                Password = employee.Password,
+                City=employee.City,
+                Profession=employee.Profession,
                 IsManager = employee.isManager,
                 Contracts = CreateContractViewModel.ToDTOs(employee.Contracts),
             };

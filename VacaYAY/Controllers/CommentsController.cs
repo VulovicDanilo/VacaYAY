@@ -13,7 +13,7 @@ namespace VacaYAY.Controllers
 {
     public class CommentsController : Controller
     {
-        private ApplicationDbContext db = ApplicationDbContext.Context;
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Comments
         public ActionResult Index()

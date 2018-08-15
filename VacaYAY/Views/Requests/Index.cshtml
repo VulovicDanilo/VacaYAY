@@ -6,25 +6,29 @@
 
 @section scripts {
     <script>
-        var ajaxCallURL = '/Requests/Create';
+
         $(function () {
-            $(".btnCreateRequest").click(function () {
+            $(".btnModal").click(function () {
                 var $buttonClicked = $(this);
                 var id = $buttonClicked.attr("data-id");
+                var callback = $buttonClicked.attr("data-url");
+                $(".myModelContent").html('');
                 var options = {
                     "backdrop": false,
                     keyboard: true
                 };
                 $.ajax({
                     type: "GET",
-                    url: ajaxCallURL,
+                    url: callback,
                     contentType: "application/json; charset=utf-8",
                     datatype: "json",
+                    data: {
+                        "id": id
+                    },
                     success: function (data) {
-                        console.log(data);
-                        $('#myModalContentCreateRequest').html(data);
-                        $('#myModalCreateRequest').modal(options);
-                        $('#myModalCreateRequest').modal('show');
+                        $('#myModalContent').html(data);
+                        $('#myModal').modal(options);
+                        $('#myModal').modal('show');
                     },
                     error: function () {
                         alert("Content load failed.");
@@ -32,178 +36,16 @@
                 });
             });
             $("#closbtn").click(function () {
-                $('#myModalCreateRequest').modal('hide');
+                $('#myModal').modal('hide');
             });
         });
-        var ajaxCallURL2 = '/Requests/AsyncEdit';
-        $(function () {
-            $(".editRequest").click(function () {
-                var $buttonClicked = $(this);
-                var id = $buttonClicked.attr("data-id");
-                var options = {
-                    "backdrop": false,
-                    keyboard: true
-                };
-                $.ajax({
-                    type: "GET",
-                    url: ajaxCallURL2,
-                    contentType: "application/json; charset=utf-8",
-                    datatype: "json",
-                    data: {
-                        "id": id
-                    },
-                    success: function (data) {
-                        $('#ModalContent').html(data);
-                        $('#Modal').modal(options);
-                        $('#Modal').modal('show');
-                    },
-                    error: function () {
-                        alert("Content load failed.");
-                    }
-                });
-            });
-            $("#closbtnEdit").click(function () {
-                $('#Modal').modal('hide');
-            });
-        });
-        var ajaxCallURL3 = '/Requests/AsyncDetails';
-        $(function () {
-            $(".detailsRequest").click(function () {
-                var $buttonClicked = $(this);
-                var id = $buttonClicked.attr("data-id");
-                var options = {
-                    "backdrop": false,
-                    keyboard: true
-                };
-                $.ajax({
-                    type: "GET",
-                    url: ajaxCallURL3,
-                    contentType: "application/json; charset=utf-8",
-                    datatype: "json",
-                    data: {
-                        "id": id
-                    },
-                    success: function (data) {
-                        $('#ModalDetailsContent').html(data);
-                        $('#ModalDetails').modal(options);
-                        $('#ModalDetails').modal('show');
-                    },
-                    error: function () {
-                        alert("Content load failed.");
-                    }
-                });
-            });
-            $("#closebtnDetails").click(function () {
-                $('#ModalDetails').modal('hide');
-            });
-        });
-        var ajaxCallURL4 = '/Requests/AsyncApprove';
-        $(function () {
-            $(".approveRequest").click(function () {
-                var $buttonClicked = $(this);
-                var id = $buttonClicked.attr("data-id");
-                var options = {
-                    "backdrop": false,
-                    keyboard: true
-                };
-                $.ajax({
-                    type: "GET",
-                    url: ajaxCallURL4,
-                    contentType: "application/json; charset=utf-8",
-                    datatype: "json",
-                    data: {
-                        "id": id
-                    },
-                    success: function (data) {
-                        $('#ModalApproveContent').html(data);
-                        $('#ModalApprove').modal(options);
-                        $('#ModalApprove').modal('show');
-                    },
-                    error: function () {
-                        alert("Content load failed.");
-                    }
-                });
-            });
-            $("#closebtnApprove").click(function () {
-                $('#ModalApprove').modal('hide');
-            });
-        });
-        var ajaxCallURL5 = '/Requests/AsyncReject';
-        $(function () {
-            $(".rejectRequest").click(function () {
-                var $buttonClicked = $(this);
-                var id = $buttonClicked.attr("data-id");
-                var url = $buttonClicked.attr("data-target");
-                var options = {
-                    "backdrop": false,
-                    keyboard: true
-                };
-                $.ajax({
-                    type: "GET",
-                    url: ajaxCallURL5,
-                    contentType: "application/json; charset=utf-8",
-                    datatype: "json",
-                    data: {
-                        "id": id
-                    },
-                    success: function (data) {
-                        $('#ModalRejectContent').html(data);
-                        $('#ModalReject').modal(options);
-                        $('#ModalReject').modal('show');
-                    },
-                    error: function () {
-                        alert("Content load failed.");
-                    }
-                });
-            });
-            $("#closebtnReject").click(function () {
-                $('#ModalReject').modal('hide');
-            });
-        });
-
     </script>
 }
-<div id='myModalCreateRequest' class='modal'>
+<div id='myModal' class='modal'>
     <div class="modal-dialog">
         <div class="modal-content" style="overflow: auto;padding:20px">
             <button type="button" class="btn btn-info pull-right" id="closbtn">x</button>
-            <div id='myModalContentCreateRequest'>
-            </div>
-        </div>
-    </div>
-</div>
-<div id='Modal' class='modal'>
-    <div class="modal-dialog">
-        <div class="modal-content" style="overflow: auto;padding:20px">
-            <button type="button" class="btn btn-info pull-right" id="closbtnEdit">x</button>
-            <div id='ModalContent'>
-            </div>
-        </div>
-    </div>
-</div>
-<div id='ModalDetails' class='modal'>
-    <div class="modal-dialog">
-        <div class="modal-content" style="overflow: auto;padding:20px">
-            <button type="button" class="btn btn-info pull-right" id="closebtnDetails">x</button>
-            <div id='ModalDetailsContent'>
-            </div>
-        </div>
-    </div>
-</div>
-<div id='ModalApprove' class='modal'>
-    <div class="modal-dialog">
-        <div class="modal-content" style="overflow: auto;padding:20px">
-            <button type="button" class="btn btn-info pull-right" id="closebtnApprove">x</button>
-            <div id='ModalApproveContent'>
-            </div>
-        </div>
-    </div>
-</div>
-<div id='ModalReject' class='modal'>
-    <div class="modal-dialog">
-        <div class="modal-content" style="overflow: auto;padding:20px">
-            <button class="btn btn-info pull-right" id="closebtnReject">x</button>
-            <div id='ModalRejectContent'>
+            <div id='myModalContent'>
             </div>
         </div>
     </div>
@@ -213,7 +55,7 @@
 
 <p>
     <a href="javascript:void(0);"
-       class="btnCreateRequest" data-target="/Requests/Create">Create new Request</a>
+       class="btnModal" data-url="/Requests/Create">Create new Request</a>
 </p>
 
 <table class="table table-bordered">
@@ -252,47 +94,20 @@
             </td>
 
             <td class="text-center">
-                <a href="javascript:void(0);" data-id="@item.RequestID" data-target="/Requests/AsyncDetails"class="detailsRequest">Details</a>
+                <a href="javascript:void(0);" data-id="@item.RequestID" data-url="/Requests/AsyncDetails"class="btnModal">Details</a>
                 @if (item.Status == VacaYAY.Common.Enums.Status.Pending)
                 {
                     <span> | </span>
-                    <a href="javascript:void(0);" data-id="@item.RequestID" data-target="/Requests/AsyncEdit" class="editRequest">Edit</a>
+                    <a href="javascript:void(0);" data-id="@item.RequestID" data-url="/Requests/AsyncEdit" class="btnModal">Edit</a>
                     if (User.IsInRole("Manager"))
                     {
                         <span> | </span>
-                        <a href="javascript:void(0);" data-id="@item.RequestID" data-target="/Requests/AsyncApprove"class="approveRequest">Approve</a>
+                        <a href="javascript:void(0);" data-id="@item.RequestID" data-url="/Requests/AsyncApprove"class="btnModal">Approve</a>
                         <span> | </span>
-                        <a href="javascript:void(0);" data-id="@item.RequestID" data-target="/Requests/AsyncReject"class="rejectRequest">Reject</a>
+                        <a href="javascript:void(0);" data-id="@item.RequestID" data-url="/Requests/AsyncReject"class="btnModal">Reject</a>
                     }
                 }
             </td>
-
-            @*@if (User.IsInRole("Manager"))
-            {
-                <td class="text-center">
-                    <a href="javascript:void(0);" data-id="@item.RequestID" class="detailsRequest">Details</a> |
-                    <a href="javascript:void(0);" data-id="@item.RequestID" class="approveRequest">Approve</a> |
-                    <a href="javascript:void(0);" data-id="@item.RequestID" class="rejectRequest">Reject</a>
-                </td>
-            }
-            else if (User.IsInRole("Employee") && item.Status == VacaYAY.Common.Enums.Status.Pending)
-            {
-                <td class="text-center">
-                    <a href="javascript:void(0);" data-id="@item.RequestID" class="editRequest">Edit</a> |
-                    <a href="javascript:void(0);" data-id="@item.RequestID" class="detailsRequest">Details</a>
-                </td>
-            }
-            else if (User.IsInRole("Employee"))
-            {
-                <td class="text-center">
-                    <a href="javascript:void(0);" data-id="@item.RequestID" class="detailsRequest">Details</a>
-                </td>
-            }*@
-            @*@Html.ActionLink("Edit", "Edit", new { id = item.RequestID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.RequestID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.RequestID })*@
-
         </tr>
     }
-
 </table>

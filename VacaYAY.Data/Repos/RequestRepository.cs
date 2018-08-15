@@ -31,6 +31,8 @@ namespace VacaYAY.Data.Repos
             {
                 db.Requests.Add(request);
                 db.SaveChanges();
+                db.Entry(request).Reference(x => x.Employee).Load();
+                db.Entry(request).Reference(x => x.Comments).Load();
                 return true;
             }
             catch (Exception e)
@@ -143,7 +145,7 @@ namespace VacaYAY.Data.Repos
         public List<Request> AllUsersRequests(string userID)
         {
             try
-            {
+            { 
                 List<Request> list=db.Requests.Where(x => x.Employee.UserID == userID).ToList();
                 return list;
             }

@@ -14,15 +14,15 @@ namespace VacaYAY.ViewModels
         public int RequestID;
         [DataType(DataType.Date)]
         [Display(Name = "Submission Date")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime SubmissionDate { get; set; }
         [DataType(DataType.Date)]
         [Display(Name = "Start Date")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime StartDate { get; set; }
         [DataType(DataType.Date)]
         [Display(Name = "End Date")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime EndDate { get; set; }
         public int NumOfDays { get; set; }
         [Display(Name = "Type of vacation")]

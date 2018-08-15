@@ -24,7 +24,7 @@ namespace VacaYAY.Business
             Employee employee = EmployeeService.GetEmployeeWithUserID(userID);
             request.EmployeeID = employee.EmployeeID;
             int days = CalculateNumberOfWorkingDays(request.StartDate, request.EndDate);
-            if (employee.CurrentVacationDays >= days && request.EndDate>request.StartDate)
+            if (employee.CurrentVacationDays >= days && request.EndDate>=request.StartDate)
             {
                 request.NumberOfDays = days;
                 request.Comments.First().CommenterID = employee.EmployeeID;

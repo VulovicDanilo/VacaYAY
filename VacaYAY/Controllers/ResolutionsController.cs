@@ -13,7 +13,7 @@ namespace VacaYAY.Controllers
 {
     public class ResolutionsController : Controller
     {
-        private ApplicationDbContext db = ApplicationDbContext.Context;
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Resolutions
         public ActionResult Index()
