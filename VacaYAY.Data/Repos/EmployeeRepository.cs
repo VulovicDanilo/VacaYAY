@@ -30,7 +30,7 @@ namespace VacaYAY.Data.Repos
                 db.SaveChanges();
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 return false;
@@ -67,7 +67,7 @@ namespace VacaYAY.Data.Repos
                 db.SaveChanges();
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 return false;
@@ -83,7 +83,7 @@ namespace VacaYAY.Data.Repos
             {
                 return db.Employees.ToList();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 return null;
@@ -113,7 +113,7 @@ namespace VacaYAY.Data.Repos
         {
             try
             {
-                return db.Employees.Where(x => x.Active==false).ToList();
+                return db.Employees.Where(x => x.Active == false).ToList();
             }
             catch (Exception e)
             {
@@ -128,7 +128,7 @@ namespace VacaYAY.Data.Repos
         {
             try
             {
-                return db.Employees.OrderBy(x => x.LastName).ThenBy(x=>x.Name).ToList();
+                return db.Employees.OrderBy(x => x.LastName).ThenBy(x => x.Name).ToList();
             }
             catch (Exception e)
             {
@@ -142,7 +142,7 @@ namespace VacaYAY.Data.Repos
         /// <param name="name"></param>
         /// <param name="lastName"></param>
         /// <returns></returns>
-        public List<Employee> GetWithName(string name,string lastName)
+        public List<Employee> GetWithName(string name, string lastName)
         {
             try
             {
@@ -249,7 +249,7 @@ namespace VacaYAY.Data.Repos
                     .Select(x => x.User.Email)
                     .ToList();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 return null;
@@ -292,12 +292,17 @@ namespace VacaYAY.Data.Repos
                 }
                 return false;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 return false;
             }
         }
+        /// <summary>
+        /// Gets Users vacation days.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public int GetUsersVacationDays(string id)
         {
             try
@@ -310,6 +315,20 @@ namespace VacaYAY.Data.Repos
             {
                 Console.WriteLine(e.Message);
                 return -1;
+            }
+        }
+        public string GetUserIDWithEmployeeID(int? id)
+        {
+            try
+            {
+                return db.Employees.
+                    Where(x => x.EmployeeID == id)
+                    .Select(x => x.UserID).First();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return "";
             }
         }
         /// <summary>
@@ -326,7 +345,7 @@ namespace VacaYAY.Data.Repos
                 db.SaveChanges();
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 return false;

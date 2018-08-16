@@ -55,7 +55,6 @@
                     contentType: "application/json; charset=utf-8",
                     datatype: "json",
                     success: function (data) {
-                        console.log("PRIBAVLJEN HTML");
                         $('#myModalContentEdit').html(data);
                         $('#myModalEdit').modal(options);
                         $("#myModalEdit").one("submit", "#create_contract_form", function (e) {
@@ -120,7 +119,7 @@
     <h4>Add Employee</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <h5>Nalog</h5>
+    <h5>Login info</h5>
     <div class="form-group">
         @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
@@ -136,7 +135,7 @@
             @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
         </div>
     </div>
-    <h5>Osnovni podaci</h5>
+    <h5>Basic info</h5>
 
     <div class="form-group">
         @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -180,7 +179,7 @@
         </div>
     </div>
 
-    <div class="form-group">
+    @*<div class="form-group">
         <table class="table table-bordered" id="contracts-table">
             <tbody id="contracts-table-body">
                 <tr>
@@ -204,7 +203,7 @@
     <div class="form-group">
         <a href="javascript:void(0);"
            class="createContractModal">Add Contract</a>
-    </div>
+    </div>*@
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" value="Create" class="btn btn-default" />

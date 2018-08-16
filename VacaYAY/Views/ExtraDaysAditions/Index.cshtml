@@ -15,7 +15,7 @@
             @Html.DisplayNameFor(model => model.Timestamp)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Days)
+            @Html.DisplayNameFor(model => model.VacDays)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Basis)
@@ -29,7 +29,7 @@
             @Html.DisplayFor(modelItem => item.Timestamp)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Days)
+            @Html.DisplayFor(modelItem => item.VacDays+item.LeftoverDays)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Basis)

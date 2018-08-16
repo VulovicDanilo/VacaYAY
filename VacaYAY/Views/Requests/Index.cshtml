@@ -39,6 +39,23 @@
                 $('#myModal').modal('hide');
             });
         });
+        function filter($param) {
+            var $div = $(event.target)
+            if ($div.is('p')) {
+                $div = $div.parent();
+            }
+            var $active = $(".selected");
+            $active.removeClass("selected");
+            $div.addClass('selected');
+            var rows = $("#requests-table").children('tbody').children('tr');
+            for (var i = 1; i < rows.length; i++) {
+                if (rows[i].className == $param || $param == "all")
+                    rows[i].hidden = false;
+                else
+                    rows[i].hidden = true;
+            }
+            return this;
+        }
     </script>
 }
 <div id='myModal' class='modal'>
@@ -53,13 +70,32 @@
 
 <h2>Vacation Requests</h2>
 
-<p>
-    <a href="javascript:void(0);"
-       class="btnModal" data-url="/Requests/Create">Create new Request</a>
-</p>
+<div class="above-table">
+    <a href="javascript:void(0);" class="btnModal" data-url="/Requests/Create">Create Request</a>
+    <div class="legend pull-right">
+        <div class="legend-box all selected" onclick="filter('all')">
+            <p>All requests</p>
+        </div>
 
-<table class="table table-bordered">
-    <tr>
+        <div class="legend-box approved" onclick="filter('approved')">
+            <p>Approved</p>
+        </div>
+
+        <div class="legend-box rejected" onclick="filter('rejected')">
+            <p>Rejected</p>
+        </div>
+
+        <div class="legend-box pending" onclick="filter('pending')">
+            <p>Pending</p>
+        </div>
+    </div>
+
+</div>
+
+
+
+<table class="table table-bordered" id="requests-table">
+    <tr class="requests-top-row">
         <th class="col-md-2">
             @Html.DisplayNameFor(model => model.Employee.Name)
         </th>
@@ -78,8 +114,9 @@
     </tr>
     @foreach (var item in Model)
     {
-        var classStyle = (item.Status == VacaYAY.Common.Enums.Status.Approved) ? "success" : item.Status == VacaYAY.Common.Enums.Status.Rejected ? "danger" : "info";
+        var classStyle = (item.Status == VacaYAY.Common.Enums.Status.Approved) ? "approved" : item.Status == VacaYAY.Common.Enums.Status.Rejected ? "rejected" : "pending";
         <tr class="@classStyle">
+            @Html.HiddenFor(model => item.Status)
             <td>
                 @Html.DisplayFor(modelItem => item.Employee.Name)
             </td>
@@ -94,7 +131,7 @@
             </td>
 
             <td class="text-center">
-                <a href="javascript:void(0);" data-id="@item.RequestID" data-url="/Requests/AsyncDetails"class="btnModal">Details</a>
+                <a href="javascript:void(0);" data-id="@item.RequestID" data-url="/Requests/AsyncDetails" class="btnModal">Details</a>
                 @if (item.Status == VacaYAY.Common.Enums.Status.Pending)
                 {
                     <span> | </span>
@@ -102,9 +139,9 @@
                     if (User.IsInRole("Manager"))
                     {
                         <span> | </span>
-                        <a href="javascript:void(0);" data-id="@item.RequestID" data-url="/Requests/AsyncApprove"class="btnModal">Approve</a>
+                        <a href="javascript:void(0);" data-id="@item.RequestID" data-url="/Requests/AsyncApprove" class="btnModal">Approve</a>
                         <span> | </span>
-                        <a href="javascript:void(0);" data-id="@item.RequestID" data-url="/Requests/AsyncReject"class="btnModal">Reject</a>
+                        <a href="javascript:void(0);" data-id="@item.RequestID" data-url="/Requests/AsyncReject" class="btnModal">Reject</a>
                     }
                 }
             </td>

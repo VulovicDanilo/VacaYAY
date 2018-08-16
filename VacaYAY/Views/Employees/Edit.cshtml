@@ -3,16 +3,79 @@
 @{
     ViewBag.Title = "Edit";
 }
+@section scripts {
+    <script>
+        var ajaxCallURL = '/Contracts/AsyncContract';
+        $(function () {
+            $(".createModal").click(function () {
+                var $buttonClicked = $(this);
+                var options = {
+                    "backdrop": false,
+                    keyboard: true
+                };
+                $.ajax({
+                    type: "GET",
+                    url: ajaxCallURL,
+                    contentType: "application/json; charset=utf-8",
+                    datatype: "json",
+                    success: function (data) {
+                        $('#myModalContent').html(data);
+                        $('#myModal').modal(options);
+                        $("#myModal").on("submit", "#create_contract_form", function (e) {
+                            e.preventDefault();
+                            var form = $(this);
+                            var data = form.serializeArray();
+                            console.log(data);
+                            var serial = data[1].value;
+                            var startDate = data[2].value;
+                            var endDate = data[3].value;
+
+                            $("#contracts-table-body").append("<tr><td> " + serial + " </td><td>" + startDate + "</td><td>" + endDate + "</td><td><input type='file' accept='.docx,.doc,.pdf' required name='file' /></td><td></td></tr>");
+                            $("#contracts-table").append("<input type='hidden' value= '" + serial + "' name='serial' />")
+                                .append("<input type='hidden' value= '" + startDate + "' name='startDate' />")
+                                .append("<input type='hidden' value= '" + endDate + "' name='endDate' />")
+                            $("#myModal").modal("hide");
+                            $('#myModalContent').html("");
+                            console.log(inner);
+                            //while (inner.firstChild)
+                            //    inner.removeChild(inner.firstChild);
+                        });
+                        $("#closebtn").click(function () {
+                            $("#myModal").modal("hide");
+                            $('#myModalContent').html("");
+                            //console.log(inner);
+                            //while (inner.firstChild)
+                            //    inner.removeChild(inner.firstChild);
+                        });
+                    },
+                    error: function () {
+                        alert("Content load failed.");
+                    }
+                });
+            });
+        })
+    </script>
+}
+
+<div id='myModal' class='modal'>
+    <div class="modal-dialog">
+        <div class="modal-content" style="overflow: auto;padding:20px">
+            <button type="button" class="btn btn-info pull-right" id="closebtn">x</button>
+            <div id='myModalContent'>
+            </div>
+        </div>
+    </div>
+</div>
 
 <h2>Edit</h2>
 
 
-@using (Html.BeginForm())
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    
-<div class="form-horizontal">
-    <h4>EditEmployeeViewModel</h4>
+
+    <div class="form-horizontal">
+    <h4>Edit Employee</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @Html.HiddenFor(model => model.EmployeeID)
@@ -30,6 +93,22 @@
         <div class="col-md-10">
             @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Profession, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Profession, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Profession, "", new { @class = "text-danger" })
         </div>
     </div>
 
@@ -57,33 +136,37 @@
                         End Date
                     </th>
                     <th>
-                        File
+                        Download
                     </th>
                     <th>
-                        Edit
+                        Preview
                     </th>
                 </tr>
                 @foreach (var item in Model.Contracts)
                 {
-                <tr>
-                    @Html.HiddenFor(model => item.ContractID)
-                    <td>
-                        @Html.DisplayFor(model => item.SerialNumber)
-                    </td>
-                    <td>
-                        @Html.EditorFor(model => item.StartDate)
-                    </td>
-                    <td>
-                        @Html.EditorFor(model => item.EndDate)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Download file", "Download", new { filename = item.Link }, new { target = "_blank" })
-                        <a href="controllerName/Download?file=@item.Link" target="_blank">Download</a>
-                    </td>
-                </tr>
+                    <tr>
+                        @Html.HiddenFor(model => item.ContractID)
+                        <td>
+                            @Html.DisplayFor(model => item.SerialNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.StartDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.EndDate)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Download file", "Download", new { filename = item.Link }, new { target = "_blank" })
+                        </td>
+                        <td>
+                            @Html.ActionLink("Preview", "Preview", "Employees", new { filename = item.Link }, new { target = "_blank" })
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
+        <a href="javascript:void(0);"
+           class="createModal">Add Contract</a>
     </div>
 
     <div class="form-group">
@@ -91,13 +174,13 @@
             <input type="submit" value="Save" class="btn btn-default" />
         </div>
     </div>
-</div>
+    </div>
 }
 
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+@*@section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@

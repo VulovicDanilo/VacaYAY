@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mime;
 using System.Web;
 using System.Web.Mvc;
 using VacaYAY.Business;
@@ -66,7 +67,7 @@ namespace VacaYAY.Controllers
             for (int i = 0; i < texts.Length; i++)
             {
                 CreateContractViewModel contract = new CreateContractViewModel();
-                contract.Text = texts[i];
+                contract.SerialNumber = texts[i];
                 contract.StartDate = startDates[i];
                 contract.EndDate = endDates[i];
                 if (Request.Files[i] != null)
@@ -75,7 +76,6 @@ namespace VacaYAY.Controllers
                     if (contract.EndDate > contract.StartDate)
                         contracts.Add(contract);
                 }
-
             }
             employee.Contracts = contracts;
             if (ModelState.IsValid)
@@ -98,6 +98,7 @@ namespace VacaYAY.Controllers
                 return HttpNotFound();
             }
             EditEmployeeViewModel vm = EditEmployeeViewModel.ToVM(employeeDTO);
+            HttpContext.Session["OldContracts"] = vm.Contracts;
             foreach(var contract in vm.Contracts)
             {
                 contract.Link = HttpContext.Server.MapPath(contract.Link);
@@ -114,21 +115,59 @@ namespace VacaYAY.Controllers
             };
             return response;
         }
-
+        public ActionResult Preview(string filename)
+        {
+            FileInfo file = new FileInfo(filename);
+            var fileContents = System.IO.File.ReadAllBytes(filename);
+            if (fileContents==null)
+            {
+                return null;
+            }
+            var contentDispositionHeader = new ContentDisposition()
+            {
+                Inline=true,
+                FileName=file.Name,
+            };
+            Response.Headers.Add("Content-Disposition", contentDispositionHeader.ToString());
+            return File(fileContents, MediaTypeNames.Application.Pdf);
+        }
         // POST: Employees/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "EmployeeID,Name,LastName,UserID,Active,ExtraVacationDays,TotalExtraVacationDays,CurrentVacationDays,LeftoverVacationDays,isManager")] Employee employee)
+        public ActionResult Edit(EditEmployeeViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                EmployeeService.Update(employee);
+                EditEmployeeDTO dto = EditEmployeeViewModel.ToDTO(vm);
+
+                List<EditEmployeeContractViewModel> OldContracts = HttpContext.Session["OldContracts"] as List<EditEmployeeContractViewModel>;
+                List<CreateContractViewModel> NewContracts = new List<CreateContractViewModel>();
+                
+                string[] serials = Request.Form.GetValues("serial");
+                DateTime[] startDates = Request.Form.GetValues("startDate").Select(x => DateTime.Parse(x)).ToArray();
+                DateTime[] endDates = Request.Form.GetValues("endDate").Select(x => DateTime.Parse(x)).ToArray();
+                var files = Request.Files;
+                for (int i = 0; i < serials.Length; i++)
+                {
+                    CreateContractViewModel contract = new CreateContractViewModel();
+                    contract.SerialNumber = serials[i];
+                    contract.StartDate = startDates[i];
+                    contract.EndDate = endDates[i];
+                    if (files[i] != null)
+                    {
+                        contract.File = files[i];
+                        if (contract.EndDate > contract.StartDate)
+                            NewContracts.Add(contract);
+                    }
+                }
+                dto.NewContracts = CreateContractViewModel.ToDTOs(NewContracts);
+                EmployeeService.UpdateEmployee(dto);
                 return RedirectToAction("Index");
             }
             //ViewBag.UserID = new SelectList(db.Users, "Id", "Email", employee.UserID);
-            return View(employee);
+            return RedirectToAction("Index");
         }
 
         // GET: Employees/Delete/5

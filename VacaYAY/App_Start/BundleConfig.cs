@@ -29,6 +29,7 @@ namespace VacaYAY
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap2.css",
                       "~/Content/font-awesome.css",
+                      "~/Content/animate.css",
                       "~/Content/Site.css"));
         }
     }

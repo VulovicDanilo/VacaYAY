@@ -36,5 +36,27 @@ namespace VacaYAY.ViewModels
             }
             return vms;
         }
+        public static EditEmployeeContractDTO ToDTO(EditEmployeeContractViewModel vm)
+        {
+            EditEmployeeContractDTO dto = new EditEmployeeContractDTO()
+            {
+                ContractID = vm.ContractID,
+                SerialNumber = vm.SerialNumber,
+                StartDate = vm.StartDate,
+                EndDate = vm.EndDate,
+                Link = vm.Link,
+            };
+            return dto;
+        }
+        public static List<EditEmployeeContractDTO> ToDTOs(List<EditEmployeeContractViewModel> vms)
+        {
+            List<EditEmployeeContractDTO> dtos = new List<EditEmployeeContractDTO>();
+            foreach(var vm in vms)
+            {
+                EditEmployeeContractDTO dto = EditEmployeeContractViewModel.ToDTO(vm);
+                dtos.Add(dto);
+            }
+            return dtos;
+        }
     }
 }

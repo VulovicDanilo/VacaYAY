@@ -4,6 +4,16 @@
     ViewBag.Title = "Active";
 }
 
+@section scripts{
+    <script>
+        $(".clickable-row").click(function () {
+            window.location = $(this).data("href");
+        });
+        $(".clickable-row").hover(function () {
+            $(this).css('color',)
+        })
+    </script>
+}
 <h2>All employees</h2>
 
 <p>
@@ -18,7 +28,7 @@
 </p>
 
 <table class="table table-responsive">
-    <tr style="background-color:dimgray;color:white;">
+    <tr class="requests-top-row">
         <th>
             @Html.DisplayNameFor(model => model.Name)
         </th>
@@ -44,7 +54,8 @@
 
     @foreach (var item in Model)
     {
-        <tr>
+        var classRow = User.IsInRole("Manager") ? "clickable-row" : "";
+        <tr class="@classRow" data-href="/Employees/Edit/@item.EmployeeID">
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>

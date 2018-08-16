@@ -14,6 +14,8 @@ namespace VacaYAY.ViewModels
         public string Name { get; set; }
         [Display(Name= "Last name")]
         public string LastName { get; set; }
+        public string City { get; set; }
+        public string Profession { get; set; }
         [Display(Name="Manager")]
         public bool IsManager { get; set; }
         public List<EditEmployeeContractViewModel> Contracts { get; set; }
@@ -26,13 +28,29 @@ namespace VacaYAY.ViewModels
                 EmployeeID = dto.EmployeeID,
                 Name = dto.Name,
                 LastName = dto.LastName,
+                City=dto.City,
+                Profession=dto.Profession,
                 IsManager = dto.IsManager,
                 Contracts = EditEmployeeContractViewModel.ToVMs(dto.Contracts),
                 Resolutions = EditEmployeeResolutionViewModel.ToVMs(dto.Resolutions),
             };
             return vm;
         }
-
+        public static EditEmployeeDTO ToDTO(EditEmployeeViewModel vm)
+        {
+            EditEmployeeDTO dto = new EditEmployeeDTO()
+            {
+                EmployeeID = vm.EmployeeID,
+                Name = vm.Name,
+                LastName = vm.LastName,
+                City = vm.City,
+                Profession = vm.Profession,
+                IsManager = vm.IsManager,
+                //Contracts = EditEmployeeContractViewModel.ToDTOs(vm.Contracts),
+                //Resolutions=EditEmployeeResolutionViewModel.ToDTOs(vm.Resolutions),
+            };
+            return dto;
+        }
 
     }
 }

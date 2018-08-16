@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - INGSoftware</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
@@ -12,7 +12,7 @@
     <div class="navbar navbar-inverse bg-dark navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle fancy-lines" data-toggle="collapse" data-target=".navbar-collapse" onclick="myFunction(this)">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" onclick="burgerToggle(this)">
                     <span class="icon-bar bar1"></span>
                     <span class="icon-bar bar2"></span>
                     <span class="icon-bar bar3"></span>
@@ -34,7 +34,7 @@
         <div class="navbar navbar-inverse navbar-fixed-bottom">
             <div class="container">
                 <p class="pull-left" style="color:white;padding-top:10px">&copy; @DateTime.Now.Year - INGSoftware summer internship</p>
-                <a class="pull-right" style="color:white;padding-top:10px" href="https://www.ingsoftware.com/">INGSoftware_</a>
+                <a class="pull-right" style="color:white;padding-top:10px" href="https://www.ingsoftware.com/">INGSoftware<span class="blink">_</span></a>
             </div>
         </div>
     </div>
@@ -42,9 +42,8 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     <script>
-        function myFunction(x) {
+        function burgerToggle(x) {
             x.classList.toggle("change");
-            console.log("Clicked");
         }
     </script>
     @RenderSection("scripts", required: false)

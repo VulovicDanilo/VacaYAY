@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Security;
 using VacaYAY.Business.DTOs;
 using VacaYAY.Data;
 using VacaYAY.Data.Repos;
@@ -79,9 +80,9 @@ namespace VacaYAY.Business
             List<Employee> employees = repo.AllInactiveEmployees();
             return IndexEmployeeDTO.ToDTOs(employees);
         }
-        public static bool RegisterEmployee(RegisterEmployeeDTO employee)
+        public static bool RegisterEmployee(RegisterEmployeeDTO dto)
         {
-            Employee emp = RegisterEmployeeDTO.ToEntity(employee);
+            Employee emp = RegisterEmployeeDTO.ToEntity(dto);
             if (repo.Add(emp))
             {
                 CalculateVacationDays(emp);
@@ -96,7 +97,31 @@ namespace VacaYAY.Business
             dto.AddResolutions(resolutions);
             return dto;
         }
-        public static void CalculateVacationDays(Employee employee)
+        public static string GetUserIDWithEmployeeID(int? id)
+        {
+            return repo.GetUserIDWithEmployeeID(id);
+        }
+        public static bool UpdateEmployee(EditEmployeeDTO dto)
+        {
+            string userID = GetUserIDWithEmployeeID(dto.EmployeeID);
+
+            Employee emp = repo.Find(dto.EmployeeID);
+            emp.Name = dto.Name;
+            emp.LastName = dto.LastName;
+            emp.City = dto.City;
+            emp.Profession = dto.Profession;
+            List<Contract> newContracts = CreateContractDTO.ToEntityList(dto.NewContracts, userID);
+            emp.Contracts.AddRange(newContracts);
+            if (emp.IsManager != dto.IsManager)
+            {
+                if (EditRole(userID, dto.IsManager))
+                    emp.IsManager = dto.IsManager;
+            }
+            return repo.Update(emp);
+        }
+
+        #region helpers
+        private static void CalculateVacationDays(Employee employee)
         {
             int days = 0;
             if (employee.Contracts != null)
@@ -119,7 +144,6 @@ namespace VacaYAY.Business
                         days = (20 + employee.ExtraVacationDays) / 12 * numOfMonths + employee.LeftoverVacationDays;
                         employee.CurrentVacationDays = days;
                     }
-
                 }
                 else
                 {
@@ -131,5 +155,27 @@ namespace VacaYAY.Business
                 employee.CurrentVacationDays = 0;
             }
         }
+
+        private static bool EditRole(string userID, bool IsManager)
+        {
+            var store = new UserStore<ApplicationUser>(new ApplicationDbContext());
+            UserManager<ApplicationUser> _userManager = new UserManager<ApplicationUser>(store);
+            var roles = _userManager.GetRoles(userID);
+            if (_userManager.RemoveFromRole(userID, roles[0]).Succeeded)
+            {
+                if (IsManager)
+                {
+                    _userManager.AddToRole(userID, "Manager");
+                }
+                else
+                {
+                    _userManager.AddToRole(userID, "Employee");
+                }
+                return true;
+            }
+            return false;
+        }
+        #endregion
+
     }
 }
