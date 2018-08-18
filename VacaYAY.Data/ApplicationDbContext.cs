@@ -10,7 +10,7 @@ using VacaYAY.Entities.Contracts;
 using VacaYAY.Entities.Employees;
 using VacaYAY.Entities.Requests;
 using VacaYAY.Entities.Resolutions;
-using VacaYAY.Entities.ExtraDaysAditions;
+using VacaYAY.Entities.ExtraDays;
 using VacaYAY.Entities;
 
 namespace VacaYAY.Data
@@ -47,7 +47,7 @@ namespace VacaYAY.Data
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Request> Requests { get; set; }
         public DbSet<Resolution> Resolutions { get; set; }
-        public DbSet<ExtraDaysAdition> ExtraDaysAditions { get; set; }
+        public DbSet<ExtraDays> ExtraDays { get; set; }
         
     }
 }

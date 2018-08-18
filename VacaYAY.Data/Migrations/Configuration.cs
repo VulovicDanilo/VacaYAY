@@ -10,7 +10,6 @@ namespace VacaYAY.Data.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
-            AutomaticMigrationDataLossAllowed = true;
         }
 
         protected override void Seed(VacaYAY.Data.ApplicationDbContext context)

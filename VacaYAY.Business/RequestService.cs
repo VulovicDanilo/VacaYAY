@@ -18,13 +18,13 @@ namespace VacaYAY.Business
         private static RequestRepository repo = new RequestRepository();
         private static ResolutionRepository resRepo = new ResolutionRepository();
 
-        public static bool Add(CreateRequestDTO dto,string userID)
+        public static bool Add(CreateRequestDTO dto, string userID)
         {
             Request request = CreateRequestDTO.ToEntity(dto);
             Employee employee = EmployeeService.GetEmployeeWithUserID(userID);
             request.EmployeeID = employee.EmployeeID;
             int days = CalculateNumberOfWorkingDays(request.StartDate, request.EndDate);
-            if (employee.CurrentVacationDays >= days && request.EndDate>=request.StartDate)
+            if (employee.CurrentVacationDays >= days && request.EndDate >= request.StartDate)
             {
                 request.NumberOfDays = days;
                 request.Comments.First().CommenterID = employee.EmployeeID;
@@ -117,8 +117,8 @@ namespace VacaYAY.Business
             {
                 request.Employee.CurrentVacationDays -= request.NumberOfDays;
                 request.Status = Status.Approved;
+                request.Comments.Last().Status = request.Status;
                 // TODO Generate resolution PDF and store it and send it via e-mail and set 
-
                 PDFGen generator = new PDFGen();
                 string filepath = "~/Resolutions/" + request.Employee.UserID + "/";
                 var directory = HttpContext.Current.Server.MapPath(filepath);
@@ -126,9 +126,9 @@ namespace VacaYAY.Business
                 FileInfo file = new FileInfo(filename);
                 if (!Directory.Exists(directory))
                     Directory.CreateDirectory(directory);
-                file.MoveTo(directory+filename);
+                file.MoveTo(directory + filename);
                 resolution.Link = filepath + filename;
-                EmailSender.ApproveRequest(request, HR,file.FullName);
+                EmailSender.ApproveRequest(request, HR, file.FullName);
                 ResolutionService.Add(resolution);
                 return repo.Update(request);
             }
@@ -139,8 +139,58 @@ namespace VacaYAY.Business
             Request request = RequestService.GetRequest(RequestID);
             Employee HR = EmployeeService.GetEmployee(HRID);
             request.Status = Status.Rejected;
-            EmailSender.RejectRequest(request,HR);
+            request.Comments.Last().Status = request.Status;
+            EmailSender.RejectRequest(request, HR);
             return repo.Update(request);
+        }
+        public static bool AddCollective(CreateRequestDTO dto, string HRID)
+        {
+            List<Employee> employees = EmployeeService.GetAllActiveEmployees();
+            Employee HR = EmployeeService.GetEmployeeWithUserID(HRID);
+            DateTime subDate = DateTime.Now;
+
+            foreach (var employee in employees)
+            {
+                Request request = CreateRequestDTO.ToEntity(dto);
+                request.TypeOfDays = TypeOfDays.Collective;
+                request.Status = Status.Approved;
+                request.EmployeeID = employee.EmployeeID;
+                request.NumberOfDays = CalculateNumberOfWorkingDays(request.StartDate, request.EndDate);
+                request.Comments.First().CommenterID = employee.EmployeeID;
+                request.Comments.Last().Status = request.Status;
+                request.SubmissionDate = subDate;
+
+                // TODO Lower everyones Vacation Days!!!
+                // ...
+                // ...
+                RequestRepository requestRepository = new RequestRepository();
+                if (requestRepository.Add(request))
+                {
+                    Resolution resolution = new Resolution()
+                    {
+                        RequestID = request.RequestID,
+                        ApprovalDate = DateTime.Now,
+                        HR_ID = HR.EmployeeID,
+                    };
+                    PDFGen generator = new PDFGen();
+                    string filepath = "~/Resolutions/" + request.Employee.UserID + "/";
+                    var directory = HttpContext.Current.Server.MapPath(filepath);
+                    string filename = generator.GenerateResolution(request);
+                    FileInfo file = new FileInfo(filename);
+                    if (!Directory.Exists(directory))
+                        Directory.CreateDirectory(directory);
+                    file.MoveTo(directory + filename);
+                    resolution.Link = filepath + filename;
+                    EmailSender.SendCollective(request, HR, file.FullName);
+                    if (!ResolutionService.Add(resolution))
+                        return false;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

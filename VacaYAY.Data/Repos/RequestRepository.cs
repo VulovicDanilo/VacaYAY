@@ -32,7 +32,7 @@ namespace VacaYAY.Data.Repos
                 db.Requests.Add(request);
                 db.SaveChanges();
                 db.Entry(request).Reference(x => x.Employee).Load();
-                db.Entry(request).Reference(x => x.Comments).Load();
+                //db.Entry(request).Reference(x => x.Comments).Load();
                 return true;
             }
             catch (Exception e)

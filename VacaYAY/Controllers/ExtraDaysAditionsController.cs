@@ -7,7 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using VacaYAY.Data;
-using VacaYAY.Entities.ExtraDaysAditions;
+using VacaYAY.Entities.ExtraDays;
 
 namespace VacaYAY.Controllers
 {
@@ -18,7 +18,7 @@ namespace VacaYAY.Controllers
         // GET: ExtraDaysAditions
         public ActionResult Index()
         {
-            return View(db.ExtraDaysAditions.ToList());
+            return View(db.ExtraDays.ToList());
         }
 
         // GET: ExtraDaysAditions/Details/5
@@ -28,7 +28,7 @@ namespace VacaYAY.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ExtraDaysAdition extraDaysAdition = db.ExtraDaysAditions.Find(id);
+            ExtraDays extraDaysAdition = db.ExtraDays.Find(id);
             if (extraDaysAdition == null)
             {
                 return HttpNotFound();
@@ -47,11 +47,11 @@ namespace VacaYAY.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ExtraDaysAditionID,Timestamp,Days,Basis")] ExtraDaysAdition extraDaysAdition)
+        public ActionResult Create([Bind(Include = "ExtraDaysAditionID,Timestamp,Days,Basis")] ExtraDays extraDaysAdition)
         {
             if (ModelState.IsValid)
             {
-                db.ExtraDaysAditions.Add(extraDaysAdition);
+                db.ExtraDays.Add(extraDaysAdition);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -66,7 +66,7 @@ namespace VacaYAY.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ExtraDaysAdition extraDaysAdition = db.ExtraDaysAditions.Find(id);
+            ExtraDays extraDaysAdition = db.ExtraDays.Find(id);
             if (extraDaysAdition == null)
             {
                 return HttpNotFound();
@@ -79,7 +79,7 @@ namespace VacaYAY.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ExtraDaysAditionID,Timestamp,Days,Basis")] ExtraDaysAdition extraDaysAdition)
+        public ActionResult Edit([Bind(Include = "ExtraDaysAditionID,Timestamp,Days,Basis")] ExtraDays extraDaysAdition)
         {
             if (ModelState.IsValid)
             {
@@ -97,7 +97,7 @@ namespace VacaYAY.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ExtraDaysAdition extraDaysAdition = db.ExtraDaysAditions.Find(id);
+            ExtraDays extraDaysAdition = db.ExtraDays.Find(id);
             if (extraDaysAdition == null)
             {
                 return HttpNotFound();
@@ -110,8 +110,8 @@ namespace VacaYAY.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            ExtraDaysAdition extraDaysAdition = db.ExtraDaysAditions.Find(id);
-            db.ExtraDaysAditions.Remove(extraDaysAdition);
+            ExtraDays extraDaysAdition = db.ExtraDays.Find(id);
+            db.ExtraDays.Remove(extraDaysAdition);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

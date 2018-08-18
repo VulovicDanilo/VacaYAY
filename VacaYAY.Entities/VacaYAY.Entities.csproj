@@ -121,7 +121,7 @@
     <Compile Include="Comments\Comment.cs" />
     <Compile Include="Contacts\Contract.cs" />
     <Compile Include="Employees\Employee.cs" />
-    <Compile Include="ExtraDaysAditions\ExtraDaysAdition.cs" />
+    <Compile Include="ExtraDays\ExtraDays.cs" />
     <Compile Include="IdentityModels.cs" />
     <Compile Include="ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

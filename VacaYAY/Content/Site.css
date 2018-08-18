@@ -59,11 +59,20 @@ textarea {
 .all{
     background-color:lightgray
 }
+.all-employees {
+    background-color: lightgray
+}
+.active-employees {
+    background-color: #67FF8B
+}
+.deleted-employees{
+    background-color: sandybrown;
+}
 
 .clickable-row:hover{
-    background-color:lightgray;
+    opacity:0.65;
 }
-.requests-top-row {
+.top-row {
     background-color:#772953;
     color:white;
     border-bottom:1px black solid;

@@ -75,110 +75,137 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-    <h4>Edit Employee</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.EmployeeID)
+        <h4>Edit Employee</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.EmployeeID)
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Profession, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Profession, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Profession, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.IsManager, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            <div class="checkbox">
-                @Html.EditorFor(model => model.IsManager)
-                @Html.ValidationMessageFor(model => model.IsManager, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        <table class="table table-bordered" id="contracts-table">
-            <tbody id="contracts-table-body">
-                <tr>
-                    <th>
-                        Serial Number
-                    </th>
-                    <th>
-                        Start Date
-                    </th>
-                    <th>
-                        End Date
-                    </th>
-                    <th>
-                        Download
-                    </th>
-                    <th>
-                        Preview
-                    </th>
-                </tr>
-                @foreach (var item in Model.Contracts)
-                {
-                    <tr>
-                        @Html.HiddenFor(model => item.ContractID)
-                        <td>
-                            @Html.DisplayFor(model => item.SerialNumber)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(model => item.StartDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(model => item.EndDate)
-                        </td>
-                        <td>
-                            @Html.ActionLink("Download file", "Download", new { filename = item.Link }, new { target = "_blank" })
-                        </td>
-                        <td>
-                            @Html.ActionLink("Preview", "Preview", "Employees", new { filename = item.Link }, new { target = "_blank" })
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <a href="javascript:void(0);"
-           class="createModal">Add Contract</a>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Save" class="btn btn-default" />
+        <div class="form-group">
+            @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Profession, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Profession, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Profession, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.VacationDays, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.VacationDays)
+                    @Html.ValidationMessageFor(model => model.VacationDays, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.LeftoverDays, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.LeftoverDays)
+                    @Html.ValidationMessageFor(model => model.LeftoverDays, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IsManager, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @if (Model.IsHimself)
+                    {
+                        @Html.DisplayFor(model => model.IsManager)
+                    }
+                    else
+                    {
+                        @Html.EditorFor(model => model.IsManager)
+                    }
+                    @Html.ValidationMessageFor(model => model.IsManager, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <table class="table table-bordered" id="contracts-table">
+                <tbody id="contracts-table-body">
+                    <tr>
+                        <th>
+                            Serial Number
+                        </th>
+                        <th>
+                            Start Date
+                        </th>
+                        <th>
+                            End Date
+                        </th>
+                        <th>
+                            Download
+                        </th>
+                        <th>
+                            Preview
+                        </th>
+                    </tr>
+                    @foreach (var item in Model.Contracts)
+                    {
+                        <tr>
+                            @Html.HiddenFor(model => item.ContractID)
+                            <td>
+                                @Html.DisplayFor(model => item.SerialNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => item.StartDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => item.EndDate)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Download file", "Download", new { filename = item.Link }, new { target = "_blank" })
+                            </td>
+                            <td>
+                                @Html.ActionLink("Preview", "Preview", "Employees", new { filename = item.Link }, new { target = "_blank" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <a href="javascript:void(0);"
+               class="createModal">Add Contract</a>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("All employees", "Index")
 </div>
 
 @*@section Scripts {

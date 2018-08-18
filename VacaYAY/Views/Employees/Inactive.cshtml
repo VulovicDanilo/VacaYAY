@@ -6,8 +6,8 @@
 
 <h2>Inactive</h2>
 
-<p> 
-    @Html.ActionLink("All employees","Index") <span> | </span>
+<p>
+    @Html.ActionLink("All employees", "Index") <span> | </span>
     @Html.ActionLink("Active employees", "Active")
     @if (Request.IsAuthenticated && User.IsInRole("Manager"))
     {
@@ -17,7 +17,7 @@
     }
 </p>
 <table class="table table-responsive">
-    <tr class="requests-top-row">
+    <tr class="top-row">
         <th>
             @Html.DisplayNameFor(model => model.Name)
         </th>
@@ -34,10 +34,10 @@
             End Date
         </th>
         <th>
-            Edit
+            Details
         </th>
         <th>
-            Delete
+            Restore
         </th>
     </tr>
 
@@ -68,10 +68,11 @@
                 <td></td>
             }
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.EmployeeID })
+                @Html.ActionLink("Details", "Details", new { id = item.EmployeeID })
+
             </td>
             <td>
-                @Html.ActionLink("Delete", "Delete", new { id = item.EmployeeID })
+                @Html.ActionLink("Restore", "Restore", new { id = item.EmployeeID })
             </td>
         </tr>
     }

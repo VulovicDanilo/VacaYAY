@@ -66,6 +66,12 @@
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.4.0.0\lib\net451\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.4.0.0\lib\net451\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -74,6 +80,9 @@
     </Reference>
     <Reference Include="OpenSSL.X509Certificate2.Provider, Version=1.2.0.0, Culture=neutral, PublicKeyToken=78f5ba1b024431f9, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenSSL.X509Certificate2.Provider.1.2.0\lib\net45\OpenSSL.X509Certificate2.Provider.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -106,11 +115,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContractService.cs" />
+    <Compile Include="DTOs\DetailsEmployeeDTO.cs" />
+    <Compile Include="DTOs\DetailsEmployeeContractDTO.cs" />
+    <Compile Include="DTOs\DetailsEmployeeExtraDaysDTO.cs" />
     <Compile Include="DTOs\DetailsRequestDTO.cs" />
     <Compile Include="DTOs\DetailsRequestEmployeeDTO.cs" />
     <Compile Include="DTOs\EditEmployeeContractDTO.cs" />
     <Compile Include="DTOs\EditEmployeeDTO.cs" />
-    <Compile Include="DTOs\EditEmployeeResolutionDTO.cs" />
+    <Compile Include="DTOs\ResolutionDTO.cs" />
     <Compile Include="DTOs\EditRequestCommentDTO.cs" />
     <Compile Include="DTOs\CreateContractDTO.cs" />
     <Compile Include="DTOs\CreateRequestDTO.cs" />
@@ -119,10 +131,9 @@
     <Compile Include="DTOs\IndexEmployeeContractDTO.cs" />
     <Compile Include="DTOs\IndexEmployeeDTO.cs" />
     <Compile Include="DTOs\RegisterEmployeeDTO.cs" />
-    <Compile Include="DTOs\ShowRequestDTO.cs" />
     <Compile Include="EmailService.cs" />
     <Compile Include="EmployeeService.cs" />
-    <Compile Include="ExtraDaysAditionService.cs" />
+    <Compile Include="ExtraDaysService.cs" />
     <Compile Include="FileUploader.cs" />
     <Compile Include="PDFGeneratorService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -9,26 +9,48 @@
         $(".clickable-row").click(function () {
             window.location = $(this).data("href");
         });
-        $(".clickable-row").hover(function () {
-            $(this).css('color',)
-        })
+        function filter($param) {
+            var $div = $(event.target)
+            if ($div.is('p')) {
+                $div = $div.parent();
+            }
+            var $selected = $(".selected");
+            $selected.removeClass("selected");
+            $div.addClass('selected');
+            var rows = $("#employees-table").children('tbody').children('tr');
+            for (var i = 1; i < rows.length; i++) {
+                console.log(rows[i].className);
+                if (rows[i].className.includes($param) || $param == "all")
+                    rows[i].hidden = false;
+                else
+                    rows[i].hidden = true;
+            }
+            return this;
+        }
     </script>
 }
 <h2>All employees</h2>
 
-<p>
-    @Html.ActionLink("Active employees", "Active") <span> | </span>
-    @Html.ActionLink("Inactive employees", "Inactive")
-    @if (Request.IsAuthenticated && User.IsInRole("Manager"))
-    {
-        <span class="pull-right">
-            @Html.ActionLink("Create New Employee", "Register")
-        </span>
-    }
-</p>
+<div class="above-table">
+    @Html.ActionLink("Create New Employee", "Register")
+    <div class="legend pull-right">
+        <div class="legend-box all-employees selected" onclick="filter('all')">
+            <p>All Employees</p>
+        </div>
 
-<table class="table table-responsive">
-    <tr class="requests-top-row">
+        <div class="legend-box active-employees" onclick="filter('active')">
+            <p>Active</p>
+        </div>
+
+        <div class="legend-box deleted-employees" onclick="filter('deleted')">
+            <p>Inactive</p>
+        </div>
+    </div>
+
+</div>
+
+<table id="employees-table" class="table table-responsive">
+    <tr class="top-row">
         <th>
             @Html.DisplayNameFor(model => model.Name)
         </th>
@@ -48,14 +70,15 @@
             Edit
         </th>
         <th>
-            Delete
+            Delete/Restore
         </th>
     </tr>
 
     @foreach (var item in Model)
     {
         var classRow = User.IsInRole("Manager") ? "clickable-row" : "";
-        <tr class="@classRow" data-href="/Employees/Edit/@item.EmployeeID">
+        var classStyle = (item.Active == true) ? "active-employees" : "deleted-employees";
+        <tr class="@classRow @classStyle" data-href="/Employees/Details/@item.EmployeeID">
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
@@ -80,25 +103,20 @@
                 <td></td>
             }
             <td>
-                @if (Request.IsAuthenticated && User.IsInRole("Manager"))
-                {
-                    @Html.ActionLink("Edit", "Edit", new { id = item.EmployeeID })
-                }
-                else
-                {
-                    <span style="color:darkgray">Edit</span>
-                }
+                @Html.ActionLink("Edit", "Edit", new { id = item.EmployeeID })
             </td>
-            <td>
-                @if (Request.IsAuthenticated && User.IsInRole("Manager"))
-                {
+            @if (item.Active)
+            {
+                <td>
                     @Html.ActionLink("Delete", "Delete", new { id = item.EmployeeID })
-                }
-                else
-                {
-                    <span style="color:darkgray">Delete</span>
-                }
-            </td>
+                </td>
+            }
+            else
+            {
+                <td>
+                    @Html.ActionLink("Restore", "Restore", new { id = item.EmployeeID })
+                </td>
+            }
         </tr>
     }
 

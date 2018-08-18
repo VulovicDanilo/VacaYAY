@@ -1,13 +1,18 @@
 ﻿@model VacaYAY.ViewModels.DetailsEmployeeViewModel
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Profile";
 }
 
-<h2>Details</h2>
+<h2>Your Details</h2>
 
 <div>
-    <h4>Employee Details</h4>
+    @if (User.IsInRole("Manager"))
+    {
+        <a href="~/Employees/Edit/@Model.EmployeeID">
+            Edit <i class="fa fa-cog"></i>
+        </a>
+    }
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -71,7 +76,7 @@
                 End Date
             </th>
             <th>
-                Document
+                Preview(Download if not .pdf)
             </th>
         </tr>
 
@@ -109,7 +114,7 @@
                 Days
             </th>
             <th>
-                Document
+                Preview(Download if not .pdf)
             </th>
         </tr>
 
@@ -165,17 +170,4 @@
 
     </table>
 </div>
-@if (Model.Active)
-{
-    <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.EmployeeID }) |
-        @Html.ActionLink("Back to List", "Index")
-    </p>
-}
-else
-{
-    <p>
-        @Html.ActionLink("Restore", "Restore", new { id = Model.EmployeeID }) |
-        @Html.ActionLink("Back to List", "Inactive")
-    </p>
-}
+

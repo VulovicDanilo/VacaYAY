@@ -224,6 +224,11 @@ namespace VacaYAY.Data.Repos
                 return null;
             }
         }
+        /// <summary>
+        /// Get <see cref="Employee"/>'s ID with Users ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public int GetEmployeeIDByUserID(string id)
         {
             try
@@ -287,6 +292,30 @@ namespace VacaYAY.Data.Repos
                 if (employee != null)
                 {
                     employee.Active = false;
+                    db.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+        /// <summary>
+        /// Restores <see cref="Employee"/>.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public bool Restore(int? id)
+        {
+            try
+            {
+                Employee employee = db.Employees.Find(id);
+                if (employee != null)
+                {
+                    employee.Active = true;
                     db.SaveChanges();
                     return true;
                 }

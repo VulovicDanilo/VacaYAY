@@ -93,16 +93,22 @@ namespace VacaYAY.Controllers
             {
                 RequestService requestService = new RequestService();
                 string userID = HttpContext.User.Identity.GetUserId();
-                if (RequestService.Add(CreateRequestViewModel.ToDTO(request), userID))
+                CreateRequestDTO dto = CreateRequestViewModel.ToDTO(request);
+                if (dto.TypeOfDays == Common.Enums.TypeOfDays.Collective)
                 {
-                    return RedirectToAction("Index");
+                    if (RequestService.AddCollective(dto,userID))
+                        return RedirectToAction("Index");
+                    else
+                        return RedirectToAction("Index");
                 }
                 else
                 {
-                    return RedirectToAction("Index");
+                    if (RequestService.Add(dto, userID))
+                        return RedirectToAction("Index");
+                    else
+                        return RedirectToAction("Index");
                 }
             }
-
             return View(request);
         }
 

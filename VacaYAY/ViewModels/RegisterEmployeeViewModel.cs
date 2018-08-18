@@ -25,7 +25,6 @@ namespace VacaYAY.ViewModels
         public string Profession { get; set; }
         [Display(Name="Manager")]
         public bool isManager { get; set; }
-        public List<CreateContractViewModel> Contracts { get; set; }
 
         public static RegisterEmployeeDTO ToDTO(RegisterEmployeeViewModel employee)
         {
@@ -38,7 +37,6 @@ namespace VacaYAY.ViewModels
                 City=employee.City,
                 Profession=employee.Profession,
                 IsManager = employee.isManager,
-                Contracts = CreateContractViewModel.ToDTOs(employee.Contracts),
             };
             return dto;
         }

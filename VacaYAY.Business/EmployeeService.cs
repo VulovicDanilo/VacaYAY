@@ -3,7 +3,9 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
+using Microsoft.Owin;
 using System.Web.Security;
 using VacaYAY.Business.DTOs;
 using VacaYAY.Data;
@@ -14,6 +16,7 @@ using VacaYAY.Entities.Employees;
 using VacaYAY.Entities.Requests;
 using VacaYAY.Entities.Resolutions;
 using static VacaYAY.Common.Enums;
+using Microsoft.Owin.Security;
 
 namespace VacaYAY.Business
 {
@@ -45,6 +48,11 @@ namespace VacaYAY.Business
         {
             return repo.GetManagerEmails();
         }
+        public static List<string> GetActiveEmployeeEmails()
+        {
+            List<Employee> employees = GetAllActiveEmployees();
+            return employees.Select(x => x.User.Email).ToList();
+        }
         public static int GetUsersVacationDays(string id)
         {
             return repo.GetUsersVacationDays(id);
@@ -64,6 +72,10 @@ namespace VacaYAY.Business
         public static bool SoftDelete(int? id)
         {
             return repo.SoftDelete(id);
+        }
+        public static bool Restore(int? id)
+        {
+            return repo.Restore(id);
         }
         public static List<IndexEmployeeDTO> GetIndexEmployees()
         {
@@ -97,6 +109,15 @@ namespace VacaYAY.Business
             dto.AddResolutions(resolutions);
             return dto;
         }
+        public static DetailsEmployeeDTO GetEmployeeDetails(int? id)
+        {
+            DetailsEmployeeDTO dto = DetailsEmployeeDTO.ToDTO(repo.Find(id));
+            var resolutions = ResolutionService.GetEmployeesResolutions(id);
+            dto.AddResolutions(resolutions);
+            var extraDays = ExtraDaysService.GetEmployeesExtraDays(id);
+            dto.AddExtraDays(extraDays);
+            return dto;
+        }
         public static string GetUserIDWithEmployeeID(int? id)
         {
             return repo.GetUserIDWithEmployeeID(id);
@@ -124,7 +145,7 @@ namespace VacaYAY.Business
         private static void CalculateVacationDays(Employee employee)
         {
             int days = 0;
-            if (employee.Contracts != null)
+            if (employee.Contracts.Count>0)
             {
                 Contract last = employee.Contracts.Last();
                 if (last != null)

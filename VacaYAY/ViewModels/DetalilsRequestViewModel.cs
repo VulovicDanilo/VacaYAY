@@ -27,6 +27,7 @@ namespace VacaYAY.ViewModels
         public int NumOfDays { get; set; }
         [Display(Name = "Type of vacation")]
         public TypeOfDays TypeOfDays { get; set; }
+        public List<CollectiveEmployeeViewModel> collectiveEmployees = new List<CollectiveEmployeeViewModel>();
         public Status Status { get; set; }
         public DetailsRequestEmployeeViewModel Employee { get; set; }
         public List<EditRequestCommentViewModel> Comments { get; set; } = new List<EditRequestCommentViewModel>();
@@ -55,6 +56,22 @@ namespace VacaYAY.ViewModels
                 var vm = DetailsRequestViewModel.ToVM(dto);
                 vms.Add(vm);
             }
+            List<DetailsRequestViewModel> newList = new List<DetailsRequestViewModel>();
+            int i = 0;
+            while (i<vms.Count)
+            {
+                if (vms[i].TypeOfDays!=TypeOfDays.Collective)
+                {
+                    newList.Add(vms[i]);
+                }
+                else
+                {
+                    List<DetailsRequestViewModel> collectiveGroup = new List<DetailsRequestViewModel>();
+                    collectiveGroup = vms.Where(x => x.SubmissionDate == vms[i].SubmissionDate).Where(x => x.TypeOfDays == vms[i].TypeOfDays).ToList();
+                    DetailsRequestViewModel vm = new DetailsRequestViewModel();
+
+                }
+            }
             return vms;
         }
         public static DetailsRequestDTO ToDTO(DetailsRequestViewModel vm)
@@ -71,6 +88,10 @@ namespace VacaYAY.ViewModels
                 //Employee = DetailsRequestEmployeeViewModel.ToDTO(vm.Employee),
             };
             return dto;
+        }
+        public static DetailsRequestViewModel ToVMGroup(List<DetailsRequestViewModel> list)
+        {
+            DetailsRequestViewModel vm = new DetailsRequestViewModel();
         }
     }
 }

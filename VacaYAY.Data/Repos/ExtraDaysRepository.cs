@@ -4,28 +4,28 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VacaYAY.Entities.ExtraDaysAditions;
+using VacaYAY.Entities.ExtraDays;
 
 namespace VacaYAY.Data.Repos
 {
-    public class ExtraDaysAditionRepository
+    public class ExtraDaysRepository
     {
         private ApplicationDbContext db { get; set; }
 
-        public ExtraDaysAditionRepository()
+        public ExtraDaysRepository()
         {
             db = new ApplicationDbContext();
         }
         /// <summary>
-        /// Creates new <see cref="ExtraDaysAdition"/>.
+        /// Creates new <see cref="ExtraDays"/>.
         /// </summary>
         /// <param name="extraDaysAdition"></param>
         /// <returns></returns>
-        public bool Add(ExtraDaysAdition extraDaysAdition)
+        public bool Add(ExtraDays extraDaysAdition)
         {
             try
             {
-                db.ExtraDaysAditions.Add(extraDaysAdition);
+                db.ExtraDays.Add(extraDaysAdition);
                 db.SaveChanges();
                 return true;
             }
@@ -36,15 +36,15 @@ namespace VacaYAY.Data.Repos
             }
         }
         /// <summary>
-        /// Finds <see cref="ExtraDaysAdition"/> with specific id.
+        /// Finds <see cref="ExtraDays"/> with specific id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ExtraDaysAdition Find(int? id)
+        public ExtraDays Find(int? id)
         {
             try
             {
-                ExtraDaysAdition extraDaysAdition = db.ExtraDaysAditions.Find(id);
+                ExtraDays extraDaysAdition = db.ExtraDays.Find(id);
                 return extraDaysAdition;
             }
             catch (Exception e)
@@ -54,11 +54,11 @@ namespace VacaYAY.Data.Repos
             }
         }
         /// <summary>
-        /// Updates <see cref="ExtraDaysAdition"/>.
+        /// Updates <see cref="ExtraDays"/>.
         /// </summary>
         /// <param name="extraDaysAdition"></param>
         /// <returns></returns>
-        public bool Update(ExtraDaysAdition extraDaysAdition)
+        public bool Update(ExtraDays extraDaysAdition)
         {
             try
             {
@@ -73,14 +73,14 @@ namespace VacaYAY.Data.Repos
             }
         }
         /// <summary>
-        /// Returns a list of all <see cref="ExtraDaysAdition"/>.
+        /// Returns a list of all <see cref="ExtraDays"/>.
         /// </summary>
         /// <returns></returns>
-        public List<ExtraDaysAdition> All()
+        public List<ExtraDays> All()
         {
             try
             {
-                return db.ExtraDaysAditions.ToList();
+                return db.ExtraDays.ToList();
             }
             catch (Exception e)
             {
@@ -89,7 +89,24 @@ namespace VacaYAY.Data.Repos
             }
         }
         /// <summary>
-        /// Deletes <see cref="ExtraDaysAdition"/> with specific id.
+        /// Gets <see cref="Employee"/>'s Extra Days.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public List<ExtraDays> GetEmployeesExtraDays(int? id)
+        {
+            try
+            {
+                return db.ExtraDays.Where(x => x.EmployeeID == id).ToList();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Deletes <see cref="ExtraDays"/> with specific id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -97,8 +114,8 @@ namespace VacaYAY.Data.Repos
         {
             try
             {
-                ExtraDaysAdition extraDaysAdition = db.ExtraDaysAditions.Find(id);
-                db.ExtraDaysAditions.Remove(extraDaysAdition);
+                ExtraDays extraDaysAdition = db.ExtraDays.Find(id);
+                db.ExtraDays.Remove(extraDaysAdition);
                 db.SaveChanges();
                 return true;
             }

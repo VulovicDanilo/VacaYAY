@@ -117,7 +117,7 @@
     <Compile Include="Repos\CommentRepository.cs" />
     <Compile Include="Repos\ContractRepository.cs" />
     <Compile Include="Repos\EmployeeRepository.cs" />
-    <Compile Include="Repos\ExtraDaysAditionRepository.cs" />
+    <Compile Include="Repos\ExtraDaysRepository.cs" />
     <Compile Include="Repos\RequestRepository.cs" />
     <Compile Include="Repos\ResolutionRepository.cs" />
   </ItemGroup>

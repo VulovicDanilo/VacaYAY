@@ -19,7 +19,7 @@ namespace VacaYAY.Common
             Paid,
             Unpaid,
             Yearly,
-            Leftover
+            Collective,
         }
         public enum Basis
         {

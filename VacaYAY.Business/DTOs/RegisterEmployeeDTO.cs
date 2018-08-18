@@ -45,7 +45,6 @@ namespace VacaYAY.Business.DTOs
                     Profession=dto.Profession,
                     IsManager = dto.IsManager,
                     UserID = u.Id,
-                    Contracts = CreateContractDTO.ToEntityList(dto.Contracts,u.Id),
                 };
                 return employee;
             }

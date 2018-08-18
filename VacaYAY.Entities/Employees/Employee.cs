@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 using VacaYAY.Entities.Contracts;
-using VacaYAY.Entities.ExtraDaysAditions;
+using VacaYAY.Entities.ExtraDays;
 using VacaYAY.Entities.Requests;
 using VacaYAY.Entities.Resolutions;
 
@@ -18,7 +18,7 @@ namespace VacaYAY.Entities.Employees
             Contracts = new List<Contract>();
             Requests = new List<Request>();
             Resolutions = new List<Resolution>();
-            ExtraDaysAditions = new List<ExtraDaysAdition>();
+            ExtraDays = new List<ExtraDays.ExtraDays>();
             Active = true;
         }
         public int EmployeeID { get; set; }
@@ -44,6 +44,6 @@ namespace VacaYAY.Entities.Employees
         public virtual List<Request> Requests { get; set; }
         public virtual List<Resolution> Resolutions { get; set; }
         [InverseProperty("Employee")]
-        public virtual List<ExtraDaysAdition> ExtraDaysAditions { get; set; }
+        public virtual List<ExtraDays.ExtraDays> ExtraDays { get; set; }
     }
 }

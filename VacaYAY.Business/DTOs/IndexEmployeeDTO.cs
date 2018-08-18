@@ -12,6 +12,7 @@ namespace VacaYAY.Business.DTOs
         public int EmployeeID { get; set; }
         public string Name { get; set; }
         public string LastName { get; set; }
+        public bool Active { get; set; }
         public int CurrentVacationDays { get; set; }
         public List<IndexEmployeeContractDTO> Contracts { get; set; } = new List<IndexEmployeeContractDTO>();
 
@@ -22,6 +23,7 @@ namespace VacaYAY.Business.DTOs
                 EmployeeID = employee.EmployeeID,
                 Name = employee.Name,
                 LastName = employee.LastName,
+                Active=employee.Active,
                 CurrentVacationDays = employee.CurrentVacationDays,
                 Contracts = IndexEmployeeContractDTO.ToDTOs(employee.Contracts),
             };

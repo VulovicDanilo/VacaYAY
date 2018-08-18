@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using VacaYAY.Entities.Employees;
 using VacaYAY.Entities.Requests;
@@ -12,7 +13,7 @@ namespace VacaYAY.Business
 {
     public class EmailSender
     {
-        public MailMessage mailMessage;
+        protected MailMessage mailMessage;
         public EmailSender()
         {
             mailMessage = new MailMessage();
@@ -44,13 +45,25 @@ namespace VacaYAY.Business
             mailMessage.Body = body;
         }
         public void SendEmail()
-        { 
+        {
             using (SmtpClient sc = new SmtpClient("smtp.gmail.com", 587))
             {
                 sc.Credentials = new NetworkCredential("VacaYAY.mailsender@gmail.com", "INGPraksa");
                 sc.EnableSsl = true;
                 sc.Send(mailMessage);
             }
+            //var SMTP = new SmtpClient()
+            //{
+            //    Host = "smtp.gmail.com",
+            //    Port = 587,
+            //    EnableSsl = true,
+            //    Credentials = new NetworkCredential("VacaYAY.mailsender@gmail.com", "INGPraksa"),
+            //};
+            //Thread t1 = new Thread(delegate ()
+            //{
+            //    SMTP.Send(mailMessage);
+            //});
+            //t1.Start();
         }
         public static void SendNewRequestEmailToAllManagers(Request request)
         {
@@ -65,14 +78,14 @@ namespace VacaYAY.Business
                 "\n\n" +
                 "Radnik: " + employee.Name + " " + employee.LastName +
                 "\n" +
-                "Pocetak odmora: " + request.StartDate.ToShortDateString() + 
+                "Pocetak odmora: " + request.StartDate.ToShortDateString() +
                 "\n" +
-                "Kraj odmora: " + request.EndDate.ToShortDateString() + 
-                "\n" + 
+                "Kraj odmora: " + request.EndDate.ToShortDateString() +
+                "\n" +
                 "Broj dana: " + request.NumberOfDays +
-                "\n" + 
+                "\n" +
                 "Tip odmora: " + request.TypeOfDays +
-                "\n\n"+
+                "\n\n" +
                 "Vas INGSoftware!");
             es.SendEmail();
         }
@@ -102,7 +115,7 @@ namespace VacaYAY.Business
             es.SendEmail();
         }
 
-        public static void ApproveRequest(Request request,Employee HR,string file)
+        public static void ApproveRequest(Request request, Employee HR, string file)
         {
             EmailSender es = new EmailSender();
             es.AddReceiver(request.Employee.User.Email);
@@ -123,14 +136,14 @@ namespace VacaYAY.Business
                 "Broj dana: " + request.NumberOfDays +
                 "\n" +
                 "Tip odmora: " + request.TypeOfDays +
-                "\n"+
-                "HR koji je odobrio zahtev: " + HR.Name + " " +HR.LastName +
+                "\n" +
+                "HR koji je odobrio zahtev: " + HR.Name + " " + HR.LastName +
                 "\n\n" +
                 "Vas INGSoftware!");
             es.AddAttachment(file);
             es.SendEmail();
         }
-        public static void RejectRequest(Request request,Employee HR)
+        public static void RejectRequest(Request request, Employee HR)
         {
             EmailSender es = new EmailSender();
             es.AddReceiver(request.Employee.User.Email);
@@ -154,6 +167,29 @@ namespace VacaYAY.Business
                 "\n\n" +
                 "Vas INGSoftware!");
             es.SendEmail();
+        }
+        public static void SendCollective(Request request,Employee HR,string filename)
+        {
+            EmailSender es = new EmailSender();
+            es.AddReceiver(request.Employee.User.Email);
+            es.SetSubject("[INGSoftware] Kolektivni odmor kreiran od strane - " + HR.Name + " " + HR.LastName);
+            es.SetBody("Postovani" +
+                "\n\n" +
+                "Kolektivni odmor je kreiran." +
+                "\n\n" +
+                "Pocetak odmora: " + request.StartDate.ToShortDateString() +
+                "\n" +
+                "Kraj odmora: " + request.EndDate.ToShortDateString() +
+                "\n" +
+                "Broj dana: " + request.NumberOfDays +
+                "\n" +
+                "Tip odmora: " + request.TypeOfDays +
+                "\n" +
+                "HR koji je kreirao kolektivni odmor: " + HR.Name + " " + HR.LastName +
+                "\n\n" +
+                "Vas INGSoftware!");
+            es.AddAttachment(filename);
+            Task t1 = Task.Factory.StartNew(() => es.SendEmail());
         }
     }
 }

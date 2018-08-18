@@ -4,7 +4,7 @@ using VacaYAY.Entities.Resolutions;
 
 namespace VacaYAY.Business.DTOs
 {
-    public class EditEmployeeResolutionDTO
+    public class ResolutionDTO
     {
         public int ResolutionID { get; set; }
         public string SerialNumber { get; set; }
@@ -13,24 +13,25 @@ namespace VacaYAY.Business.DTOs
         public int NumOfDays { get; set; }
         public string Link { get; set; }
 
-        public static EditEmployeeResolutionDTO ToDTO(Resolution resolution)
+        public static ResolutionDTO ToDTO(Resolution resolution)
         {
-            EditEmployeeResolutionDTO dto = new EditEmployeeResolutionDTO()
+            ResolutionDTO dto = new ResolutionDTO()
             {
                 ResolutionID = resolution.ResolutionID,
                 SerialNumber = resolution.SerialNumber,
                 StartDate = resolution.Request.StartDate,
                 EndDate = resolution.Request.EndDate,
                 NumOfDays = resolution.Request.NumberOfDays,
+                Link=resolution.Link,
             };
             return dto;
         }
-        public static List<EditEmployeeResolutionDTO> ToDTOs(List<Resolution> resolutions)
+        public static List<ResolutionDTO> ToDTOs(List<Resolution> resolutions)
         {
-            List<EditEmployeeResolutionDTO> dtos = new List<EditEmployeeResolutionDTO>();
+            List<ResolutionDTO> dtos = new List<ResolutionDTO>();
             foreach( var resolution in resolutions)
             {
-                EditEmployeeResolutionDTO dto = EditEmployeeResolutionDTO.ToDTO(resolution);
+                ResolutionDTO dto = ResolutionDTO.ToDTO(resolution);
                 dtos.Add(dto);
             }
             return dtos;

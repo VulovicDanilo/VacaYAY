@@ -19,10 +19,12 @@ namespace VacaYAY.Business.DTOs
         public string LastName { get; set; }
         public string City { get; set; }
         public string Profession { get; set; }
+        public int VacationDays { get; set; }
+        public int LeftoverDays { get; set; }
         public bool IsManager { get; set; }
         public List<EditEmployeeContractDTO> Contracts { get; set; }
         public List<CreateContractDTO> NewContracts { get; set; }
-        public List<EditEmployeeResolutionDTO> Resolutions { get; set; }
+        public List<ResolutionDTO> Resolutions { get; set; }
 
         public static EditEmployeeDTO ToDTO(Employee employee)
         {
@@ -33,6 +35,8 @@ namespace VacaYAY.Business.DTOs
                 LastName = employee.LastName,
                 City=employee.City,
                 Profession=employee.Profession,
+                VacationDays=employee.CurrentVacationDays,
+                LeftoverDays=employee.LeftoverVacationDays,
                 IsManager = employee.IsManager,
                 Contracts = EditEmployeeContractDTO.ToDTOs(employee.Contracts),
             };
@@ -41,7 +45,7 @@ namespace VacaYAY.Business.DTOs
         }
         public void AddResolutions(List<Resolution> resolutions)
         {
-            this.Resolutions = EditEmployeeResolutionDTO.ToDTOs(resolutions);
+            this.Resolutions = ResolutionDTO.ToDTOs(resolutions);
         }
         
     }

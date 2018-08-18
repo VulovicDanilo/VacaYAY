@@ -210,12 +210,16 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\CollectiveEmployeeViewModel.cs" />
     <Compile Include="ViewModels\CreateContractViewModel.cs" />
     <Compile Include="ViewModels\CreateRequestViewModel.cs" />
+    <Compile Include="ViewModels\DetailsEmployeeContractViewModel.cs" />
+    <Compile Include="ViewModels\DetailsEmployeeExtraDaysViewModel.cs" />
+    <Compile Include="ViewModels\DetailsEmployeeViewModel.cs" />
     <Compile Include="ViewModels\DetailsRequestEmployeeViewModel.cs" />
     <Compile Include="ViewModels\DetalilsRequestViewModel.cs" />
     <Compile Include="ViewModels\EditEmployeeContractViewModel.cs" />
-    <Compile Include="ViewModels\EditEmployeeResolutionViewModel.cs" />
+    <Compile Include="ViewModels\ResolutionViewModel.cs" />
     <Compile Include="ViewModels\EditEmployeeViewModel.cs" />
     <Compile Include="ViewModels\EditRequestCommentViewModel.cs" />
     <Compile Include="ViewModels\EditRequestEmployeeViewModel.cs" />
@@ -373,6 +377,7 @@
     <Content Include="Views\Requests\AsyncReject.cshtml" />
     <Content Include="Views\Employees\Active.cshtml" />
     <Content Include="Views\Employees\Inactive.cshtml" />
+    <Content Include="Views\Employees\UserProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VacaYAY.Business\VacaYAY.Business.csproj">
