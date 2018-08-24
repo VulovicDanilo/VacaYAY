@@ -181,12 +181,14 @@ namespace VacaYAY.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AsyncApprove(int id)
+        public ActionResult AsyncApprove(DetailsRequestViewModel vm)
         {
             if (ModelState.IsValid)
             {
+                int id = vm.RequestID;
+                string resolutionSerialNumber = vm.ResolutionSerialNumber;
                 int HR_ID = (EmployeeService.GetEmployeeIDWithUserID(HttpContext.User.Identity.GetUserId()));
-                RequestService.Approve(id, HR_ID);
+                RequestService.Approve(id, HR_ID, resolutionSerialNumber);
                 return RedirectToAction("Index");
             }
             else

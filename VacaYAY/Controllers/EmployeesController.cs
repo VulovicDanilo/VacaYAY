@@ -157,35 +157,37 @@ namespace VacaYAY.Controllers
                 EditEmployeeDTO dto = EditEmployeeViewModel.ToDTO(vm);
 
                 List<EditEmployeeContractViewModel> OldContracts = HttpContext.Session["OldContracts"] as List<EditEmployeeContractViewModel>;
-                List<CreateContractViewModel> NewContracts = new List<CreateContractViewModel>();
-                dto.NewContracts = new List<CreateContractDTO>();
 
-                string[] serials = Request.Form.GetValues("serial");
-                if (serials != null && serials.Count() > 0)
+                
+                if (EmployeeService.UpdateEmployee(dto))
                 {
-                    DateTime[] startDates = Request.Form.GetValues("startDate").Select(x => DateTime.Parse(x)).ToArray();
-                    DateTime[] endDates = Request.Form.GetValues("endDate").Select(x => DateTime.Parse(x)).ToArray();
-                    var files = Request.Files;
-                    for (int i = 0; i < serials.Length; i++)
-                    {
-                        CreateContractViewModel contract = new CreateContractViewModel();
-                        contract.SerialNumber = serials[i];
-                        contract.StartDate = startDates[i];
-                        contract.EndDate = endDates[i];
-                        if (files[i] != null)
-                        {
-                            contract.File = files[i];
-                            if (contract.EndDate > contract.StartDate)
-                                NewContracts.Add(contract);
-                        }
-                    }
-                    dto.NewContracts = CreateContractViewModel.ToDTOs(NewContracts);
+                    return RedirectToAction("Details", "Employees", new { id = vm.EmployeeID });
                 }
-                EmployeeService.UpdateEmployee(dto);
-                return RedirectToAction("Details", "Employee", new { id = dto.EmployeeID });
+                else
+                {
+                    return RedirectToAction("Edit", "Employees", new { id = vm.EmployeeID });
+                }
             }
-            //ViewBag.UserID = new SelectList(db.Users, "Id", "Email", employee.UserID);
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "Employees", new { id = vm.EmployeeID });
+        }
+
+        public ActionResult AddContract(CreateContractViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                CreateContractDTO dto = CreateContractViewModel.ToDTO(vm);
+                if (EmployeeService.AddContract(dto))
+                {
+
+                    return JavaScript("location.reload(true)");
+                }
+                else
+                {
+                    string path = "~/Employees/Details/" + vm.EmployeeID;
+                    return JavaScript("window.location = " + path);
+                }
+            }
+            return JavaScript("location.reload(true)");
         }
 
         // GET: Employees/Delete/5

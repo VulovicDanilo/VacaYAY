@@ -29,6 +29,10 @@
                         $('#myModalContent').html(data);
                         $('#myModal').modal(options);
                         $('#myModal').modal('show');
+                        //$('#approve_request_form').on("submit", function (e) {
+                        //    e.preventDefault();
+                        //    console.log("ne submituje se");
+                        //});
                     },
                     error: function () {
                         alert("Content load failed.");
@@ -132,6 +136,10 @@
 
             <td class="text-center">
                 <a href="javascript:void(0);" data-id="@item.RequestID" data-url="/Requests/AsyncDetails" class="btnModal">Details</a>
+                @if (item.TypeOfDays == VacaYAY.Common.Enums.TypeOfDays.Collective)
+                {
+                    <span> (Collective)</span>
+                }
                 @if (item.Status == VacaYAY.Common.Enums.Status.Pending)
                 {
                     <span> | </span>

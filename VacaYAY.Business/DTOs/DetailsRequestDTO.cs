@@ -16,6 +16,7 @@ namespace VacaYAY.Business.DTOs
         public DateTime EndDate { get; set; }
         public int NumOfDays { get; set; }
         public TypeOfDays TypeOfDays { get; set; }
+        public List<CollectiveEmployeeDTO> collectiveEmployees { get; set; } = new List<CollectiveEmployeeDTO>();
         public Status Status { get; set; }
         public DetailsRequestEmployeeDTO Employee { get; set; }
         public List<EditRequestCommentDTO> Comments { get; set; }
@@ -45,7 +46,39 @@ namespace VacaYAY.Business.DTOs
                 DetailsRequestDTO dto = DetailsRequestDTO.ToDTO(request);
                 dtos.Add(dto);
             }
-            return dtos;
+            List<DetailsRequestDTO> newList = new List<DetailsRequestDTO>();
+            int i = 0;
+            while (dtos.Count > 0)
+            {
+                if (dtos[0].TypeOfDays != TypeOfDays.Collective)
+                {
+                    newList.Add(dtos[0]);
+                    dtos.RemoveAt(0);
+                }
+                else
+                {
+                    List<DetailsRequestDTO> collectiveGroup = new List<DetailsRequestDTO>();
+                    collectiveGroup = dtos.Where(x => x.SubmissionDate == dtos[0].SubmissionDate).Where(x => x.TypeOfDays == dtos[0].TypeOfDays).ToList();
+                    DetailsRequestDTO vm = DetailsRequestDTO.ToDTOGroup(collectiveGroup);
+                    newList.Add(vm);
+                    foreach (var item in collectiveGroup)
+                    {
+                        dtos.Remove(item);
+                    }
+                }
+            }
+            return newList;
+        }
+        public static DetailsRequestDTO ToDTOGroup(List<DetailsRequestDTO> dtos)
+        {
+            DetailsRequestDTO vm = new DetailsRequestDTO();
+            vm = dtos[0];
+            vm.collectiveEmployees.Add(CollectiveEmployeeDTO.ToDTO(dtos[0]));
+            for (int i = 1; i < dtos.Count; i++)
+            {
+                vm.collectiveEmployees.Add(CollectiveEmployeeDTO.ToDTO(dtos[i]));
+            }
+            return vm;
         }
     }
 }

@@ -58,6 +58,8 @@ namespace VacaYAY.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            if (Request.IsAuthenticated)
+                return RedirectToAction("Index", "Employees");
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }

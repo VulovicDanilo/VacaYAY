@@ -119,7 +119,7 @@
     <h4>Add Employee</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <h5>Login info</h5>
+    <h3>Login info</h3>
     <div class="form-group">
         @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
@@ -135,7 +135,7 @@
             @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
         </div>
     </div>
-    <h5>Basic info</h5>
+    <h3>Basic info</h3>
 
     <div class="form-group">
         @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })

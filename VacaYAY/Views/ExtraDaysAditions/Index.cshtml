@@ -1,4 +1,4 @@
-﻿@model IEnumerable<VacaYAY.Entities.ExtraDaysAditions.ExtraDaysAdition>
+﻿@model IEnumerable<VacaYAY.Entities.ExtraDays.ExtraDays>
 
 @{
     ViewBag.Title = "Index";
@@ -35,9 +35,9 @@
             @Html.DisplayFor(modelItem => item.Basis)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ExtraDaysAditionID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ExtraDaysAditionID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ExtraDaysAditionID })
+            @Html.ActionLink("Edit", "Edit", new { id=item.ExtraDaysID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ExtraDaysID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ExtraDaysID })
         </td>
     </tr>
 }

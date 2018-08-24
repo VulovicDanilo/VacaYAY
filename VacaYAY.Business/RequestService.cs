@@ -74,7 +74,22 @@ namespace VacaYAY.Business
         public static DetailsRequestDTO GetDetailsDTO(int? id)
         {
             Request request = repo.Find(id);
-            return DetailsRequestDTO.ToDTO(request);
+            List<DetailsRequestDTO> list = DetailsRequestDTO.ToDTOs(repo.All());
+
+            foreach(var item in list)
+            {
+                if (item.RequestID == id)
+                    return item;
+                else
+                {
+                    foreach(var emp in item.collectiveEmployees)
+                    {
+                        if (emp.RequestID == id)
+                            return item;
+                    }
+                }
+            }
+            return null;
         }
         public static bool Update(EditRequestDTO dto)
         {
@@ -103,13 +118,14 @@ namespace VacaYAY.Business
         {
             return repo.AllRejected();
         }
-        public static bool Approve(int RequestID, int HRID)
+        public static bool Approve(int RequestID, int HRID,string resolutionSerialNumber)
         {
             Request request = RequestService.GetRequest(RequestID);
             Employee HR = EmployeeService.GetEmployee(HRID);
             Resolution resolution = new Resolution()
             {
                 RequestID = request.RequestID,
+                SerialNumber=resolutionSerialNumber,
                 HR_ID = HR.EmployeeID,
                 ApprovalDate = DateTime.Now,
             };
@@ -118,7 +134,6 @@ namespace VacaYAY.Business
                 request.Employee.CurrentVacationDays -= request.NumberOfDays;
                 request.Status = Status.Approved;
                 request.Comments.Last().Status = request.Status;
-                // TODO Generate resolution PDF and store it and send it via e-mail and set 
                 PDFGen generator = new PDFGen();
                 string filepath = "~/Resolutions/" + request.Employee.UserID + "/";
                 var directory = HttpContext.Current.Server.MapPath(filepath);
@@ -161,8 +176,7 @@ namespace VacaYAY.Business
                 request.SubmissionDate = subDate;
 
                 // TODO Lower everyones Vacation Days!!!
-                // ...
-                // ...
+
                 RequestRepository requestRepository = new RequestRepository();
                 if (requestRepository.Add(request))
                 {

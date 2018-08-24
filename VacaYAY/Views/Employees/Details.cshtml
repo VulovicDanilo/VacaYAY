@@ -4,10 +4,25 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>Employee Details</h2>
 
 <div>
-    <h4>Employee Details</h4>
+    @if (Model.Active)
+    {
+    <p>
+        <a href="~/Employees/Edit/@Model.EmployeeID">
+            Edit <i class="fa fa-cog"></i>
+        </a> |
+        @Html.ActionLink("All employees", "Index")
+    </p>
+    }
+    else
+    {
+        <p>
+            @Html.ActionLink("Restore", "Restore", new { id = Model.EmployeeID }) <i class="fa fa-cog"></i> |
+            @Html.ActionLink("Back to List", "Inactive")
+        </p>
+    }
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -59,6 +74,7 @@
         </dd>
 
     </dl>
+    <h3>Contracts</h3>
     <table class="table table-responsive">
         <tr class="top-row">
             <th>
@@ -94,6 +110,7 @@
         }
 
     </table>
+    <h3>Resolutions</h3>
     <table class="table table-responsive">
         <tr class="top-row">
             <th>
@@ -135,6 +152,7 @@
         }
 
     </table>
+    <h3>Extra Days</h3>
     <table class="table table-responsive">
         <tr class="top-row">
             <th>
@@ -165,17 +183,4 @@
 
     </table>
 </div>
-@if (Model.Active)
-{
-    <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.EmployeeID }) |
-        @Html.ActionLink("Back to List", "Index")
-    </p>
-}
-else
-{
-    <p>
-        @Html.ActionLink("Restore", "Restore", new { id = Model.EmployeeID }) |
-        @Html.ActionLink("Back to List", "Inactive")
-    </p>
-}
+

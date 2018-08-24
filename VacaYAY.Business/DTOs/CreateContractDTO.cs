@@ -14,6 +14,7 @@ namespace VacaYAY.Business.DTOs
         public string SerialNumber { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public int EmployeeID { get; set; }
         public HttpPostedFileBase File { get; set; }
 
         public static Contract ToEntity(CreateContractDTO dto)
@@ -23,6 +24,7 @@ namespace VacaYAY.Business.DTOs
                 SerialNumber = dto.SerialNumber,
                 StartDate = dto.StartDate,
                 EndDate = dto.EndDate,
+                EmployeeID = dto.EmployeeID,
             };
             return contract;
         }
@@ -36,6 +38,7 @@ namespace VacaYAY.Business.DTOs
                     SerialNumber = dto.SerialNumber,
                     StartDate = dto.StartDate,
                     EndDate = dto.EndDate,
+                    EmployeeID = dto.EmployeeID,
                 };
                 var fileName = Path.GetFileName(dto.File.FileName);
                 var filepath = "~/Contracts/" + userID + "/";

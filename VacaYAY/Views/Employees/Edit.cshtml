@@ -9,6 +9,8 @@
         $(function () {
             $(".createModal").click(function () {
                 var $buttonClicked = $(this);
+                var id = $buttonClicked.attr("data-id");
+                console.log(id);
                 var options = {
                     "backdrop": false,
                     keyboard: true
@@ -16,6 +18,9 @@
                 $.ajax({
                     type: "GET",
                     url: ajaxCallURL,
+                    data: {
+                        id: id,
+                    },
                     contentType: "application/json; charset=utf-8",
                     datatype: "json",
                     success: function (data) {
@@ -24,31 +29,31 @@
                         $("#myModal").on("submit", "#create_contract_form", function (e) {
                             e.preventDefault();
                             var form = $(this);
-                            var data = form.serializeArray();
-                            console.log(data);
-                            var serial = data[1].value;
-                            var startDate = data[2].value;
-                            var endDate = data[3].value;
-
-                            $("#contracts-table-body").append("<tr><td> " + serial + " </td><td>" + startDate + "</td><td>" + endDate + "</td><td><input type='file' accept='.docx,.doc,.pdf' required name='file' /></td><td></td></tr>");
-                            $("#contracts-table").append("<input type='hidden' value= '" + serial + "' name='serial' />")
-                                .append("<input type='hidden' value= '" + startDate + "' name='startDate' />")
-                                .append("<input type='hidden' value= '" + endDate + "' name='endDate' />")
+                            var formData = new FormData(this);
+                            $.ajax({
+                                type: "POST",
+                                url: '/Employees/AddContract',
+                                contentType: false,
+                                processData: false,
+                                data: formData,
+                                success: function (response) {
+                                },
+                                error: function (response) {
+                                    alert(response);
+                                }
+                            });
                             $("#myModal").modal("hide");
                             $('#myModalContent').html("");
-                            console.log(inner);
-                            //while (inner.firstChild)
-                            //    inner.removeChild(inner.firstChild);
+
                         });
                         $("#closebtn").click(function () {
                             $("#myModal").modal("hide");
                             $('#myModalContent').html("");
-                            //console.log(inner);
-                            //while (inner.firstChild)
-                            //    inner.removeChild(inner.firstChild);
                         });
                     },
                     error: function () {
+                        $("#myModal").modal("hide");
+                        $('#myModalContent').html("");
                         alert("Content load failed.");
                     }
                 });
@@ -76,6 +81,9 @@
 
     <div class="form-horizontal">
         <h4>Edit Employee</h4>
+        <div>
+            @Html.ActionLink("All employees", "Index")
+        </div>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.EmployeeID)
@@ -112,25 +120,25 @@
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.VacationDays, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.VacationDays)
-                    @Html.ValidationMessageFor(model => model.VacationDays, "", new { @class = "text-danger" })
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.VacationDays, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.VacationDays)
+                        @Html.ValidationMessageFor(model => model.VacationDays, "", new { @class = "text-danger" })
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.LeftoverDays, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.LeftoverDays)
-                    @Html.ValidationMessageFor(model => model.LeftoverDays, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.LeftoverDays, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.LeftoverDays)
+                        @Html.ValidationMessageFor(model => model.LeftoverDays, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
-        </div>
+            </div>*@
 
         <div class="form-group">
             @Html.LabelFor(model => model.IsManager, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -150,7 +158,8 @@
         </div>
 
         <div class="form-group">
-            <table class="table table-bordered" id="contracts-table">
+            <h3>Contracts</h3>
+            <table class="table table-responsive" id="contracts-table">
                 <tbody id="contracts-table-body">
                     <tr>
                         <th>
@@ -193,7 +202,7 @@
                 </tbody>
             </table>
             <a href="javascript:void(0);"
-               class="createModal">Add Contract</a>
+               class="createModal" data-id="@Model.EmployeeID">Add Contract</a>
         </div>
 
         <div class="form-group">
@@ -204,9 +213,7 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("All employees", "Index")
-</div>
+
 
 @*@section Scripts {
         @Scripts.Render("~/bundles/jqueryval")

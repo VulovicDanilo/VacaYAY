@@ -11,7 +11,7 @@ namespace VacaYAY.ViewModels
     public class DetailsRequestViewModel
     {
         [Key]
-        public int RequestID;
+        public int RequestID { get; set; }
         [DataType(DataType.Date)]
         [Display(Name = "Submission Date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
@@ -24,13 +24,19 @@ namespace VacaYAY.ViewModels
         [Display(Name = "End Date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime EndDate { get; set; }
+        [Display(Name ="Number of days")]
         public int NumOfDays { get; set; }
         [Display(Name = "Type of vacation")]
         public TypeOfDays TypeOfDays { get; set; }
+        [Display(Name ="Employees on vacation")]
         public List<CollectiveEmployeeViewModel> collectiveEmployees = new List<CollectiveEmployeeViewModel>();
         public Status Status { get; set; }
+        [Display(Name ="Employee")]
         public DetailsRequestEmployeeViewModel Employee { get; set; }
         public List<EditRequestCommentViewModel> Comments { get; set; } = new List<EditRequestCommentViewModel>();
+        [Display(Name ="Resolution Serial Number")]
+        [Required]
+        public string ResolutionSerialNumber { get; set; }
 
         public static DetailsRequestViewModel ToVM(DetailsRequestDTO dto)
         {
@@ -42,10 +48,11 @@ namespace VacaYAY.ViewModels
                 SubmissionDate = dto.SubmissionDate,
                 NumOfDays = dto.NumOfDays,
                 TypeOfDays = dto.TypeOfDays,
-                Status=dto.Status,
+                Status = dto.Status,
+                collectiveEmployees = CollectiveEmployeeViewModel.ToVMs(dto.collectiveEmployees),
                 Comments = EditRequestCommentViewModel.ToViewModelList(dto.Comments),
                 Employee = DetailsRequestEmployeeViewModel.ToViewModel(dto.Employee),
-            }; 
+            };
             return vm;
         }
         public static List<DetailsRequestViewModel> ToVMs(List<DetailsRequestDTO> dtos)
@@ -55,22 +62,6 @@ namespace VacaYAY.ViewModels
             {
                 var vm = DetailsRequestViewModel.ToVM(dto);
                 vms.Add(vm);
-            }
-            List<DetailsRequestViewModel> newList = new List<DetailsRequestViewModel>();
-            int i = 0;
-            while (i<vms.Count)
-            {
-                if (vms[i].TypeOfDays!=TypeOfDays.Collective)
-                {
-                    newList.Add(vms[i]);
-                }
-                else
-                {
-                    List<DetailsRequestViewModel> collectiveGroup = new List<DetailsRequestViewModel>();
-                    collectiveGroup = vms.Where(x => x.SubmissionDate == vms[i].SubmissionDate).Where(x => x.TypeOfDays == vms[i].TypeOfDays).ToList();
-                    DetailsRequestViewModel vm = new DetailsRequestViewModel();
-
-                }
             }
             return vms;
         }
@@ -92,6 +83,13 @@ namespace VacaYAY.ViewModels
         public static DetailsRequestViewModel ToVMGroup(List<DetailsRequestViewModel> list)
         {
             DetailsRequestViewModel vm = new DetailsRequestViewModel();
+            vm = list[0];
+            vm.collectiveEmployees.Add(CollectiveEmployeeViewModel.ToVMForRequest(list[0].Employee));
+            for (int i=1;i<list.Count;i++)
+            {
+                vm.collectiveEmployees.Add(CollectiveEmployeeViewModel.ToVMForRequest(list[i].Employee));
+            }
+            return vm;
         }
     }
 }

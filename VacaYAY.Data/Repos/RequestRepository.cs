@@ -86,7 +86,7 @@ namespace VacaYAY.Data.Repos
         {
             try
             {
-                return db.Requests.ToList();
+                return db.Requests.Where(x => x.Employee.Active).ToList();
             }
             catch (Exception e)
             {
@@ -102,7 +102,9 @@ namespace VacaYAY.Data.Repos
         {
             try
             {
-                return db.Requests.Where(x => x.Status == Status.Pending).ToList();
+                return db.Requests
+                    .Where(x => x.Status == Status.Pending)
+                    .Where(x=>x.Employee.Active).ToList();
             }
             catch (Exception e)
             {
@@ -118,7 +120,10 @@ namespace VacaYAY.Data.Repos
         {
             try
             {
-                return db.Requests.Where(x => x.Status == Status.Approved).ToList();
+                return db.Requests
+                    .Where(x => x.Status == Status.Approved)
+                    .Where(x=>x.Employee.Active)
+                    .ToList();
             }
             catch (Exception e)
             {

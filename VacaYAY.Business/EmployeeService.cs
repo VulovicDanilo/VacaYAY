@@ -95,12 +95,7 @@ namespace VacaYAY.Business
         public static bool RegisterEmployee(RegisterEmployeeDTO dto)
         {
             Employee emp = RegisterEmployeeDTO.ToEntity(dto);
-            if (repo.Add(emp))
-            {
-                CalculateVacationDays(emp);
-                return repo.Update(emp);
-            }
-            return false;
+            return repo.Add(emp);
         }
         public static EditEmployeeDTO GetEmployeeEdit(int? id)
         {
@@ -131,8 +126,6 @@ namespace VacaYAY.Business
             emp.LastName = dto.LastName;
             emp.City = dto.City;
             emp.Profession = dto.Profession;
-            List<Contract> newContracts = CreateContractDTO.ToEntityList(dto.NewContracts, userID);
-            emp.Contracts.AddRange(newContracts);
             if (emp.IsManager != dto.IsManager)
             {
                 if (EditRole(userID, dto.IsManager))
@@ -140,41 +133,58 @@ namespace VacaYAY.Business
             }
             return repo.Update(emp);
         }
-
-        #region helpers
-        private static void CalculateVacationDays(Employee employee)
+        public static bool AddContract(CreateContractDTO dto)
         {
-            int days = 0;
-            if (employee.Contracts.Count>0)
+            Employee employee = EmployeeService.GetEmployee(dto.EmployeeID);
+            string userID = EmployeeService.GetUserIDWithEmployeeID(employee.EmployeeID);
+            Contract contract = CreateContractDTO.ToEntity(dto);
+            var fileName = System.IO.Path.GetFileName(dto.File.FileName);
+            var filepath = "~/Contracts/" + userID + "/";
+            var directory = HttpContext.Current.Server.MapPath(filepath);
+            var path = System.IO.Path.Combine(directory, fileName);
+            if (System.IO.File.Exists(path))
             {
-                Contract last = employee.Contracts.Last();
-                if (last != null)
-                {
-                    int numOfMonths = 0;
-                    DateTime startDate = last.StartDate;
-                    DateTime? endDate = last.EndDate;
-                    if (!endDate.HasValue)
-                    {
-                        employee.CurrentVacationDays = 20 + employee.ExtraVacationDays;
-                    }
-                    else
-                    {
-                        DateTime start = startDate;
-                        DateTime end = endDate.Value;
-                        numOfMonths = ((end.Year - start.Year) * 12) + end.Month - start.Month;
-                        days = (20 + employee.ExtraVacationDays) / 12 * numOfMonths + employee.LeftoverVacationDays;
-                        employee.CurrentVacationDays = days;
-                    }
-                }
-                else
-                {
-                    employee.CurrentVacationDays = 0;
-                }
+                System.IO.File.Delete(path);
+            }
+            else if (!System.IO.Directory.Exists(directory))
+            {
+                System.IO.Directory.CreateDirectory(directory);
+            }
+            dto.File.SaveAs(path);
+            contract.Link = filepath + fileName;
+            employee.Contracts.Add(contract);
+            CalculateVacation(employee);
+            if(repo.Update(employee))
+            {
+                
+                return true;
             }
             else
             {
-                employee.CurrentVacationDays = 0;
+                return false;
             }
+        }
+        #region helpers
+        private static int CalculateVacationDaysForDates(DateTime start, DateTime end)
+        {
+            int numOfMonths = 0;
+            double days = 0;
+            numOfMonths = ((end.Year - start.Year) * 12) + end.Month - start.Month;
+            days = numOfMonths * (((double)20 / 12));
+            return (int)days;
+        }
+        private static void CalculateVacation(Employee employee)
+        {
+            int days = 0;
+            DateTime start = employee.Contracts.Last().StartDate;
+            DateTime end = employee.Contracts.Last().EndDate.Value;
+            if (end == null || end.Year > start.Year)
+            {
+                // Ako je neodredjeno ili ako ugovor ide u narednu godinu
+                end = new DateTime(start.Year, 12, 31);
+            }
+            days = CalculateVacationDaysForDates(start, end);
+            employee.CurrentVacationDays += days;
         }
 
         private static bool EditRole(string userID, bool IsManager)

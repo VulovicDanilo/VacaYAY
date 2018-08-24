@@ -19,6 +19,7 @@ namespace VacaYAY.ViewModels
         [Display(Name = "End Date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime EndDate { get; set; }
+        public int EmployeeID { get; set; }
         public HttpPostedFileBase File { get; set; }
         public static CreateContractDTO ToDTO(CreateContractViewModel contract)
         {
@@ -27,6 +28,8 @@ namespace VacaYAY.ViewModels
                 SerialNumber=contract.SerialNumber,
                 StartDate=contract.StartDate,
                 EndDate=contract.EndDate,
+                EmployeeID=contract.EmployeeID,
+                File=contract.File,
             };
             return dto;
         }
@@ -35,13 +38,7 @@ namespace VacaYAY.ViewModels
             List<CreateContractDTO> dtos = new List<CreateContractDTO>();
             foreach(var contract in contracts)
             {
-                CreateContractDTO dto = new CreateContractDTO()
-                {
-                    SerialNumber = contract.SerialNumber,
-                    StartDate = contract.StartDate,
-                    EndDate = contract.EndDate,
-                    File = contract.File,
-                };
+                CreateContractDTO dto = CreateContractViewModel.ToDTO(contract);
                 dtos.Add(dto);
             }
             return dtos;

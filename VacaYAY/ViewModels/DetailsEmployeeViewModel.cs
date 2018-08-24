@@ -14,9 +14,12 @@ namespace VacaYAY.ViewModels
         public string Name { get; set; }
         public string City { get; set; }
         public string Profession { get; set; }
+        [Display(Name ="Vacation days")]
         public int CurrentVacationDays { get; set; }
         public int ExtraVacationDays { get; set; }
+        [Display(Name ="Leftover days")]
         public int LeftoverVacationDays { get; set; }
+        [Display(Name ="Manager")]
         public bool IsManager { get; set; }
         public bool Active { get; set; }
         public List<DetailsEmployeeContractViewModel> Contracts { get; set; } = new List<DetailsEmployeeContractViewModel>();

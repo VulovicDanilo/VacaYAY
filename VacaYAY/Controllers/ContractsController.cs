@@ -1,4 +1,4 @@
-﻿using System;
+﻿        using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using VacaYAY.Data;
 using VacaYAY.Entities.Contracts;
+using VacaYAY.ViewModels;
 
 namespace VacaYAY.Controllers
 {
@@ -89,9 +90,13 @@ namespace VacaYAY.Controllers
             }
             return View(contract);
         }
-        public ActionResult AsyncContract()
+        public ActionResult AsyncContract(int id)
         {
-            return PartialView();
+            CreateContractViewModel vm = new CreateContractViewModel()
+            {
+                EmployeeID = id,
+            };
+            return PartialView(vm);
         }
 
         // GET: Contracts/Delete/5

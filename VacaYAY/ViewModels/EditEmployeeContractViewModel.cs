@@ -9,8 +9,15 @@ namespace VacaYAY.ViewModels
     {
         [Key]
         public int ContractID { get; set; }
+        [Display(Name ="Serial Number")]
         public string SerialNumber { get; set; }
+        [DataType(DataType.Date)]
+        [Display(Name = "Start Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime StartDate { get; set; }
+        [DataType(DataType.Date)]
+        [Display(Name = "End Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? EndDate { get; set; }
         public string Link { get; set; }
 

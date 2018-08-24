@@ -115,6 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContractService.cs" />
+    <Compile Include="DTOs\CollectioveEmployeeDTO.cs" />
     <Compile Include="DTOs\DetailsEmployeeDTO.cs" />
     <Compile Include="DTOs\DetailsEmployeeContractDTO.cs" />
     <Compile Include="DTOs\DetailsEmployeeExtraDaysDTO.cs" />

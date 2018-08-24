@@ -12,8 +12,10 @@ namespace VacaYAY.ViewModels
         [Key]
         public int EmployeeID { get; set; }
         public string Name { get; set; }
+        [Display(Name="Last Name")]
         public string LastName { get; set; }
         public bool Active { get; set; }
+        [Display(Name="Vacation Days")]
         public int CurrentVacationDays { get; set; }
         public List<IndexEmployeeContractViewModel> Contracts { get; set; } = new List<IndexEmployeeContractViewModel>();
 

@@ -9,9 +9,14 @@
 <div>
     @if (User.IsInRole("Manager"))
     {
+    <p>
         <a href="~/Employees/Edit/@Model.EmployeeID">
             Edit <i class="fa fa-cog"></i>
         </a>
+        <span> | </span>
+        @Html.ActionLink("All employees", "Index")
+
+    </p>
     }
     <hr />
     <dl class="dl-horizontal">
@@ -64,6 +69,7 @@
         </dd>
 
     </dl>
+    <h3>Contract</h3>
     <table class="table table-responsive">
         <tr class="top-row">
             <th>
@@ -99,6 +105,7 @@
         }
 
     </table>
+    <h3>Resolutions</h3>
     <table class="table table-responsive">
         <tr class="top-row">
             <th>
@@ -140,6 +147,7 @@
         }
 
     </table>
+    <h3>Extra Days</h3>
     <table class="table table-responsive">
         <tr class="top-row">
             <th>
