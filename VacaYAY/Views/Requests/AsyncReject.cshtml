@@ -2,7 +2,6 @@
 
 <h3>Are you sure you want to reject this request?</h3>
 <div>
-    <h4>Reject Request Dialog</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -85,7 +84,26 @@
                             @Html.DisplayFor(modelItem => item.Text)
                         </td>
                         <td>
-                            @Html.ActionLink(linkText: "" + item.Commenter.Name + " " + item.Commenter.LastName, actionName: "Details", controllerName: "Employees", routeValues: new { id = item.Commenter.EmployeeID }, htmlAttributes: null)
+                            @if (User.IsInRole("Manager"))
+                            {
+                                <a href="~/Employees/Details/@item.Commenter.EmployeeID">
+                                    @item.Commenter.Name @item.Commenter.LastName
+                                    @if (item.Commenter.IsManager)
+                                    {
+                                        <i class="fa fa-user-secret"></i>
+                                    }
+                                </a>
+                            }
+                            else
+                            {
+                                <p>
+                                    @item.Commenter.Name @item.Commenter.LastName
+                                    @if (item.Commenter.IsManager)
+                                    {
+                                        <i class="fa fa-user-secret"></i>
+                                    }
+                                </p>
+                            }
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Status)
@@ -96,9 +114,11 @@
         </table>
     }
 
-    @using (Html.BeginForm())
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "reject_request_form" }))
     {
         @Html.AntiForgeryToken()
+
+        <p id="errorMessage" class="text-danger"></p>
 
         <div class="form-actions no-color">
             <input type="submit" value="Reject" class="btn btn-danger pull-right" />

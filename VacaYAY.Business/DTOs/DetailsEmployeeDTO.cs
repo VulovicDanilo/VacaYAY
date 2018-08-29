@@ -19,6 +19,7 @@ namespace VacaYAY.Business.DTOs
         public int CurrentVacationDays { get; set; }
         public int ExtraVacationDays { get; set; }
         public int LeftoverVacationDays { get; set; }
+        public int UsedPaidVacationDays { get; set; }
         public bool IsManager { get; set; }
         public bool Active { get; set; }
         public List<DetailsEmployeeContractDTO> Contracts { get; set; } = new List<DetailsEmployeeContractDTO>();
@@ -39,6 +40,7 @@ namespace VacaYAY.Business.DTOs
                 ExtraVacationDays=employee.ExtraVacationDays,
                 CurrentVacationDays=employee.CurrentVacationDays,
                 LeftoverVacationDays=employee.LeftoverVacationDays,
+                UsedPaidVacationDays=employee.UsedPaidVacationDays,
                 Contracts = DetailsEmployeeContractDTO.ToDTOs(employee.Contracts),
             };
             return dto;

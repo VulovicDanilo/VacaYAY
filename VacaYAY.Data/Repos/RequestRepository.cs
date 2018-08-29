@@ -86,7 +86,9 @@ namespace VacaYAY.Data.Repos
         {
             try
             {
-                return db.Requests.Where(x => x.Employee.Active).ToList();
+                List<Request> requests = db.Requests.Where(x => x.Employee.Active).ToList();
+                requests.Reverse();
+                return requests;
             }
             catch (Exception e)
             {
@@ -104,7 +106,7 @@ namespace VacaYAY.Data.Repos
             {
                 return db.Requests
                     .Where(x => x.Status == Status.Pending)
-                    .Where(x=>x.Employee.Active).ToList();
+                    .Where(x => x.Employee.Active).ToList();
             }
             catch (Exception e)
             {
@@ -122,7 +124,7 @@ namespace VacaYAY.Data.Repos
             {
                 return db.Requests
                     .Where(x => x.Status == Status.Approved)
-                    .Where(x=>x.Employee.Active)
+                    .Where(x => x.Employee.Active)
                     .ToList();
             }
             catch (Exception e)
@@ -150,8 +152,8 @@ namespace VacaYAY.Data.Repos
         public List<Request> AllUsersRequests(string userID)
         {
             try
-            { 
-                List<Request> list=db.Requests.Where(x => x.Employee.UserID == userID).ToList();
+            {
+                List<Request> list = db.Requests.Where(x => x.Employee.UserID == userID).ToList();
                 return list;
             }
             catch (Exception e)

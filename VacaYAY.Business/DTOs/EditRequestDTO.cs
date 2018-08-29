@@ -19,6 +19,7 @@ namespace VacaYAY.Business.DTOs
         public TypeOfDays TypeOfDays { get; set; }
         public List<EditRequestCommentDTO> Comments { get; set; }
         public string NewComment { get; set; }
+        public int EmployeeID { get; set; }
 
         public static Request ToEntity(EditRequestDTO dto)
         {
@@ -51,6 +52,7 @@ namespace VacaYAY.Business.DTOs
                 EndDate = request.EndDate,
                 TypeOfDays = request.TypeOfDays,
                 Comments = EditRequestCommentDTO.ToDTOList(request.Comments),
+                EmployeeID=request.EmployeeID,
             };
             return dto;
         }

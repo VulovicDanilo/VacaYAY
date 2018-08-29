@@ -90,14 +90,14 @@ namespace VacaYAY.Controllers
                 EmployeeService.RegisterEmployee(RegisterEmployeeViewModel.ToDTO(employee));
                 return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            return View(employee);
         }
         // GET: Employees/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("UserProfile");
             }
             EditEmployeeDTO employeeDTO = EmployeeService.GetEmployeeEdit(id);
             if (employeeDTO == null)
@@ -158,7 +158,7 @@ namespace VacaYAY.Controllers
 
                 List<EditEmployeeContractViewModel> OldContracts = HttpContext.Session["OldContracts"] as List<EditEmployeeContractViewModel>;
 
-                
+
                 if (EmployeeService.UpdateEmployee(dto))
                 {
                     return RedirectToAction("Details", "Employees", new { id = vm.EmployeeID });
@@ -170,25 +170,39 @@ namespace VacaYAY.Controllers
             }
             return RedirectToAction("Details", "Employees", new { id = vm.EmployeeID });
         }
+        public ActionResult EditVacDays(int? id)
+        {
+            if (id != null)
+            {
+                EditVacationDaysViewModel vm = EditVacationDaysViewModel.ToVM(EmployeeService.GetVacDays(id));
+                return PartialView(vm);
+            }
+            return RedirectToAction("Index");
 
-        public ActionResult AddContract(CreateContractViewModel vm)
+        }
+        [HttpPost]
+        public JsonResult EditVacDays(EditVacationDaysViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                string returned = EmployeeService.SetVacDays(EditVacationDaysViewModel.FromVM(vm));
+                return Json(returned);
+            }
+            return Json("Invalid model error");
+        }
+
+        public JsonResult AddContract(CreateContractViewModel vm)
         {
             if (ModelState.IsValid)
             {
                 CreateContractDTO dto = CreateContractViewModel.ToDTO(vm);
-                if (EmployeeService.AddContract(dto))
-                {
-
-                    return JavaScript("location.reload(true)");
-                }
-                else
-                {
-                    string path = "~/Employees/Details/" + vm.EmployeeID;
-                    return JavaScript("window.location = " + path);
-                }
+                string returned = EmployeeService.AddContract(dto);
+                return Json(returned);
             }
-            return JavaScript("location.reload(true)");
+            return Json("Model state invalid");
         }
+        
+       
 
         // GET: Employees/Delete/5
         public ActionResult Delete(int? id)

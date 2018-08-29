@@ -13,7 +13,7 @@ namespace VacaYAY.Business.DTOs
     {
         public string SerialNumber { get; set; }
         public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public int EmployeeID { get; set; }
         public HttpPostedFileBase File { get; set; }
 

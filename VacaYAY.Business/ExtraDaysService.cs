@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using VacaYAY.Business.DTOs;
 using VacaYAY.Data.Repos;
 using VacaYAY.Entities.ExtraDays;
 
@@ -18,6 +19,10 @@ namespace VacaYAY.Business
         public static List<ExtraDays> GetEmployeesExtraDays(int? id)
         {
             return repo.GetEmployeesExtraDays(id);
+        }
+        public static ExtraDaysDTO Find(int? id)
+        {
+            return ExtraDaysDTO.ToDTO(repo.Find(id));
         }
     }
 }

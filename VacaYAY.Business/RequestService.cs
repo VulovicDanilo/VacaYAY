@@ -17,30 +17,33 @@ namespace VacaYAY.Business
     {
         private static RequestRepository repo = new RequestRepository();
         private static ResolutionRepository resRepo = new ResolutionRepository();
+        private static EmployeeRepository empRepo = new EmployeeRepository();
 
-        public static bool Add(CreateRequestDTO dto, string userID)
+        public static string Add(CreateRequestDTO dto, string userID)
         {
+            string msg = CreateRequestValidation(dto, userID);
+            if (msg != "OK")
+                return msg;
             Request request = CreateRequestDTO.ToEntity(dto);
             Employee employee = EmployeeService.GetEmployeeWithUserID(userID);
             request.EmployeeID = employee.EmployeeID;
             int days = CalculateNumberOfWorkingDays(request.StartDate, request.EndDate);
-            if (employee.CurrentVacationDays >= days && request.EndDate >= request.StartDate)
+            request.NumberOfDays = days;
+            if (request.Comments.Count > 0)
             {
-                request.NumberOfDays = days;
                 request.Comments.First().CommenterID = employee.EmployeeID;
-                if (repo.Add(request))
-                {
-                    EmailSender es = new EmailSender();
-                    EmailSender.SendNewRequestEmailToAllManagers(request);
-                    return true;
-                }
-                return false;
             }
-            else
+            if (repo.Add(request))
             {
-                return false;
+                EmailSender es = new EmailSender();
+                EmailSender.SendNewRequestEmailToAllManagers(request);
+                return "OK";
             }
+            return "Failed to add request [Database error]";
+
         }
+
+
 
         public static List<DetailsRequestDTO> AllUsersRequests(string userID)
         {
@@ -76,13 +79,13 @@ namespace VacaYAY.Business
             Request request = repo.Find(id);
             List<DetailsRequestDTO> list = DetailsRequestDTO.ToDTOs(repo.All());
 
-            foreach(var item in list)
+            foreach (var item in list)
             {
                 if (item.RequestID == id)
                     return item;
                 else
                 {
-                    foreach(var emp in item.collectiveEmployees)
+                    foreach (var emp in item.collectiveEmployees)
                     {
                         if (emp.RequestID == id)
                             return item;
@@ -91,16 +94,32 @@ namespace VacaYAY.Business
             }
             return null;
         }
-        public static bool Update(EditRequestDTO dto)
+        public static string Update(EditRequestDTO dto)
         {
+            string msg = EditRequestValidation(dto);
+            if (msg != "OK")
+                return msg;
             Request request = (EditRequestDTO.ToEntity(dto));
             if (repo.Update(request))
             {
                 EmailSender es = new EmailSender();
                 EmailSender.SendEditRequestEmailToAllManagers(request);
-                return true;
+                return "OK";
             }
-            return false;
+            return "Failed to edit request [Database error]";
+        }
+
+        public static bool IsCreatorManager(int RequestID)
+        {
+            Request request = repo.Find(RequestID);
+            if (request != null)
+            {
+                return request.Employee.IsManager;
+            }
+            else
+            {
+                return false;
+            }
         }
         public static List<DetailsRequestDTO> All()
         {
@@ -118,19 +137,23 @@ namespace VacaYAY.Business
         {
             return repo.AllRejected();
         }
-        public static bool Approve(int RequestID, int HRID,string resolutionSerialNumber)
+        public static string Approve(int RequestID, int HRID, string resolutionSerialNumber)
         {
             Request request = RequestService.GetRequest(RequestID);
             Employee HR = EmployeeService.GetEmployee(HRID);
             Resolution resolution = new Resolution()
             {
                 RequestID = request.RequestID,
-                SerialNumber=resolutionSerialNumber,
+                SerialNumber = resolutionSerialNumber,
                 HR_ID = HR.EmployeeID,
                 ApprovalDate = DateTime.Now,
             };
-            if (request.Employee.CurrentVacationDays >= request.NumberOfDays)
+            if (request.TypeOfDays == TypeOfDays.Regular)
             {
+                string msg = ApproveRegularRequestValidation(RequestID);
+                if (msg != "OK")
+                    return msg;
+                // TODO PDF GENERATE REGULAR VACATION
                 request.Employee.CurrentVacationDays -= request.NumberOfDays;
                 request.Status = Status.Approved;
                 request.Comments.Last().Status = request.Status;
@@ -143,36 +166,73 @@ namespace VacaYAY.Business
                     Directory.CreateDirectory(directory);
                 file.MoveTo(directory + filename);
                 resolution.Link = filepath + filename;
-                EmailSender.ApproveRequest(request, HR, file.FullName);
+                EmailSender.ApproveRegularVacation(request, HR, file.FullName);
                 ResolutionService.Add(resolution);
-                return repo.Update(request);
+                return repo.Update(request) ? "OK" : "Cant approve regular request [Database error]";
             }
-            return false;
+            else if (request.TypeOfDays == TypeOfDays.Paid)
+            {
+                string msg = ApprovePaidRequestValidation(RequestID);
+                if (msg != "OK")
+                    return msg;
+                // ne skidaj dane slobodnog odmora
+                // TODO PDF GENERATE PAID AND UNPAID VACATION
+                request.Employee.CurrentVacationDays -= request.NumberOfDays;
+                request.Status = Status.Approved;
+                request.Comments.Last().Status = request.Status;
+                PDFGen generator = new PDFGen();
+                string filepath = "~/Resolutions/" + request.Employee.UserID + "/";
+                var directory = HttpContext.Current.Server.MapPath(filepath);
+                string filename = generator.GenerateResolution(request);
+                FileInfo file = new FileInfo(filename);
+                if (!Directory.Exists(directory))
+                    Directory.CreateDirectory(directory);
+                file.MoveTo(directory + filename);
+                resolution.Link = filepath + filename;
+                EmailSender.ApprovePaidOrUnpaidVacation(request, HR, file.FullName);
+                ResolutionService.Add(resolution);
+                return repo.Update(request) ? "OK" : "Cant approve paid request [Database error]";
+            }
+            else if (request.TypeOfDays==TypeOfDays.Unpaid)
+            {
+                request.Status = Status.Approved;
+                if (request.Comments.Count > 0)
+                    request.Comments.Last().Status = Status.Approved;
+                return repo.Update(request) ? "OK" : "Cant approve unpaid request [Database error]";
+                
+            }
+            return "TypeOfDays not specified";
         }
         public static bool Reject(int RequestID, int HRID)
         {
             Request request = RequestService.GetRequest(RequestID);
             Employee HR = EmployeeService.GetEmployee(HRID);
             request.Status = Status.Rejected;
-            request.Comments.Last().Status = request.Status;
+            if (request.Comments.Count > 0)
+            {
+                request.Comments.Last().Status = request.Status;
+            }
             EmailSender.RejectRequest(request, HR);
             return repo.Update(request);
         }
-        public static bool AddCollective(CreateRequestDTO dto, string HRID)
+        public static string AddCollective(CreateCollectiveDTO dto, string HRID)
         {
+            string msg = CreateCollectiveVacationValidation(dto);
+            if (msg != "OK")
+                return msg;
+
             List<Employee> employees = EmployeeService.GetAllActiveEmployees();
             Employee HR = EmployeeService.GetEmployeeWithUserID(HRID);
             DateTime subDate = DateTime.Now;
+            string resolutionNumber = dto.ResolutionNumber;
 
             foreach (var employee in employees)
             {
-                Request request = CreateRequestDTO.ToEntity(dto);
+                Request request = CreateCollectiveDTO.ToEntity(dto);
                 request.TypeOfDays = TypeOfDays.Collective;
                 request.Status = Status.Approved;
                 request.EmployeeID = employee.EmployeeID;
                 request.NumberOfDays = CalculateNumberOfWorkingDays(request.StartDate, request.EndDate);
-                request.Comments.First().CommenterID = employee.EmployeeID;
-                request.Comments.Last().Status = request.Status;
                 request.SubmissionDate = subDate;
 
                 // TODO Lower everyones Vacation Days!!!
@@ -183,8 +243,9 @@ namespace VacaYAY.Business
                     Resolution resolution = new Resolution()
                     {
                         RequestID = request.RequestID,
-                        ApprovalDate = DateTime.Now,
+                        ApprovalDate = subDate,
                         HR_ID = HR.EmployeeID,
+                        SerialNumber=resolutionNumber,
                     };
                     PDFGen generator = new PDFGen();
                     string filepath = "~/Resolutions/" + request.Employee.UserID + "/";
@@ -197,14 +258,122 @@ namespace VacaYAY.Business
                     resolution.Link = filepath + filename;
                     EmailSender.SendCollective(request, HR, file.FullName);
                     if (!ResolutionService.Add(resolution))
-                        return false;
+                        return "Failed to add resolution [Database error]";
                 }
                 else
                 {
-                    return false;
+                    return "Failed to add request [Database error]";
                 }
             }
-            return true;
+            return "OK";
+        }
+        private static string CreateRequestValidation(CreateRequestDTO dto, string userID)
+        {
+            Employee employee = EmployeeService.GetEmployeeWithUserID(userID);
+            if (dto.StartDate > dto.EndDate)
+            {
+                return "Start Date must be before End Date";
+            }
+            int days = CalculateNumberOfWorkingDays(dto.StartDate, dto.EndDate);
+            if (employee.CurrentVacationDays < days)
+            {
+                return "You don't have enough vacation days";
+            }
+            if (DateTime.Now.AddDays(1) >= dto.StartDate)
+            {
+                return "Start Date must be later than tommorow";
+            }
+            return "OK";
+        }
+        private static string CreateCollectiveVacationValidation(CreateCollectiveDTO dto)
+        {
+            if (DateTime.Now.AddDays(1) >= dto.StartDate)
+            {
+                return "Start Date must be later than tommorow";
+            }
+            if (dto.StartDate > dto.EndDate)
+            {
+                return "Start Date must be before End Date";
+            }
+            if (string.IsNullOrEmpty(dto.ResolutionNumber))
+            {
+                return "Resolution member not appropriate";
+            }
+            return "OK";
+        }
+        private static string EditRequestValidation(EditRequestDTO dto)
+        {
+            Employee employee = EmployeeService.GetEmployee(dto.EmployeeID);
+            if (employee == null)
+                return "Database error";
+            if (dto.StartDate > dto.EndDate)
+            {
+                return "Start Date must be before End Date";
+            }
+            if (DateTime.Now.AddDays(1) >= dto.StartDate)
+            {
+                return "Start Date must be later than tommorow";
+            }
+            int days = CalculateNumberOfWorkingDays(dto.StartDate, dto.EndDate);
+            if (employee.CurrentVacationDays < days)
+            {
+                return "You don't have enough vacation days";
+            }
+            return "OK";
+        }
+        private static string ApproveRegularRequestValidation(int RequestID)
+        {
+            Request request = repo.Find(RequestID);
+            if (request==null)
+            {
+                return "Database error [request]";
+            }
+            Employee employee = empRepo.Find(request.EmployeeID);
+            if (employee==null)
+            {
+                return "Database error [employee]";
+            }
+            if (request.StartDate > request.EndDate)
+            {
+                return "Start Date must be before End Date";
+            }
+            if (DateTime.Now.AddDays(1) >= request.StartDate)
+            {
+                return "Start Date must be later than tommorow";
+            }
+            int days = CalculateNumberOfWorkingDays(request.StartDate, request.EndDate);
+            if (employee.CurrentVacationDays < days)
+            {
+                return "You don't have enough vacation days";
+            }
+            return "OK";
+        }
+        private static string ApprovePaidRequestValidation(int RequestID)
+        {
+            Request request = repo.Find(RequestID);
+            if (request == null)
+            {
+                return "Database error [request]";
+            }
+            Employee employee = empRepo.Find(request.EmployeeID);
+            if (employee == null)
+            {
+                return "Database error [employee]";
+            }
+            if (request.StartDate > request.EndDate)
+            {
+                return "Start Date must be before End Date";
+            }
+            if (DateTime.Now.AddDays(1) >= request.StartDate)
+            {
+                return "Start Date must be later than tommorow";
+            }
+            int days = CalculateNumberOfWorkingDays(request.StartDate, request.EndDate);
+            if (employee.UsedPaidVacationDays+days>10)
+            {
+                return "Paid vacation days limit hit, you have " +(10-employee.UsedPaidVacationDays) + " left";
+            }
+            return "OK";
         }
     }
 }

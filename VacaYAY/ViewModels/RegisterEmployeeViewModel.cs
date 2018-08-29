@@ -13,13 +13,15 @@ namespace VacaYAY.ViewModels
         public string Email { get; set; }
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name="Lozinka")]
+        [Display(Name="Password")]
         public string Password { get; set; }
         [Required]
-        [Display(Name="Ime")]
+        [Display(Name="Name")]
+        [RegularExpression("[a-zA-ZšŠčČćĆđĐžŽ]+",ErrorMessage ="Invalid characters used")]
         public string Name { get; set; }
         [Required]
-        [Display(Name="Prezime")]
+        [Display(Name="Last Name")]
+        [RegularExpression("[a-zA-ZšŠčČćĆđĐžŽ]+", ErrorMessage = "Invalid characters used")]
         public string LastName { get; set; }
         public string City { get; set; }
         public string Profession { get; set; }

@@ -4,19 +4,23 @@
     ViewBag.Title = "Profile";
 }
 
-<h2>Your Details</h2>
+<h2>
+    Your Details
+    @if (User.IsInRole("Manager"))
+    {
+        <a class="pull-right" href="~/Employees/Edit/@Model.EmployeeID">
+            Edit <i class="fa fa-cog"></i>
+        </a>
+    }
+</h2>
 
 <div>
     @if (User.IsInRole("Manager"))
     {
-    <p>
-        <a href="~/Employees/Edit/@Model.EmployeeID">
-            Edit <i class="fa fa-cog"></i>
-        </a>
-        <span> | </span>
-        @Html.ActionLink("All employees", "Index")
+        <p>
+            @Html.ActionLink("All employees", "Index")
 
-    </p>
+        </p>
     }
     <hr />
     <dl class="dl-horizontal">
@@ -58,6 +62,22 @@
 
         <dd>
             @Html.DisplayFor(model => model.LeftoverVacationDays)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ExtraVacationDays)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ExtraVacationDays)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UsedPaidVacationDays)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UsedPaidVacationDays)
         </dd>
 
         <dt>

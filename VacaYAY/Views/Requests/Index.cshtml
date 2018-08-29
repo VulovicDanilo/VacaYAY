@@ -5,13 +5,35 @@
 }
 
 @section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
     <script>
+        $("#myModal").on("submit", "#create_request_form", function (e) {
+            e.preventDefault();
+            onSubmit('#create_request_form', '/Requests/Create')
+        });
+        
+        $("#myModal").on("submit", "#edit_request_form", function (e) {
+            e.preventDefault();
+            onSubmit('#edit_request_form', '/Requests/AsyncEdit')
+        });
+
+        $("#myModal").on("submit", "#approve_request_form", function (e) {
+            e.preventDefault();
+            onSubmit('#approve_request_form', '/Requests/AsyncApprove')
+        });
+
+        $("#myModal").on("submit", "#create_colletive_vacation", function (e) {
+            e.preventDefault();
+            onSubmit('#create_colletive_vacation', '/Requests/CreateCollective')
+        });
+
 
         $(function () {
             $(".btnModal").click(function () {
                 var $buttonClicked = $(this);
                 var id = $buttonClicked.attr("data-id");
                 var callback = $buttonClicked.attr("data-url");
+                console.log(callback);
                 $(".myModelContent").html('');
                 var options = {
                     "backdrop": false,
@@ -29,10 +51,6 @@
                         $('#myModalContent').html(data);
                         $('#myModal').modal(options);
                         $('#myModal').modal('show');
-                        //$('#approve_request_form').on("submit", function (e) {
-                        //    e.preventDefault();
-                        //    console.log("ne submituje se");
-                        //});
                     },
                     error: function () {
                         alert("Content load failed.");
@@ -76,6 +94,11 @@
 
 <div class="above-table">
     <a href="javascript:void(0);" class="btnModal" data-url="/Requests/Create">Create Request</a>
+    @if (User.IsInRole("Manager"))
+    {
+        <span> | </span>
+        <a href="javascript:void(0);" class="btnModal" data-url="/Requests/CreateCollective">Create Collective</a>
+    }
     <div class="legend pull-right">
         <div class="legend-box all selected" onclick="filter('all')">
             <p>All requests</p>

@@ -199,7 +199,7 @@
     <Compile Include="Controllers\CommentsController.cs" />
     <Compile Include="Controllers\ContractsController.cs" />
     <Compile Include="Controllers\EmployeesController.cs" />
-    <Compile Include="Controllers\ExtraDaysAditionsController.cs" />
+    <Compile Include="Controllers\ExtraDaysController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\RequestsController.cs" />
@@ -207,18 +207,24 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="HtmlHelperExt\HtmlHelperExtensions.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\CollectiveEmployeeViewModel.cs" />
+    <Compile Include="ViewModels\CreateCollectiveViewModel.cs" />
     <Compile Include="ViewModels\CreateContractViewModel.cs" />
+    <Compile Include="ViewModels\CreateExtraDaysViewModel.cs" />
     <Compile Include="ViewModels\CreateRequestViewModel.cs" />
+    <Compile Include="ViewModels\CustomAttributes\CustomAttributes.cs" />
     <Compile Include="ViewModels\DetailsEmployeeContractViewModel.cs" />
     <Compile Include="ViewModels\DetailsEmployeeExtraDaysViewModel.cs" />
     <Compile Include="ViewModels\DetailsEmployeeViewModel.cs" />
     <Compile Include="ViewModels\DetailsRequestEmployeeViewModel.cs" />
     <Compile Include="ViewModels\DetalilsRequestViewModel.cs" />
     <Compile Include="ViewModels\EditEmployeeContractViewModel.cs" />
+    <Compile Include="ViewModels\ExtraDaysViewModel.cs" />
+    <Compile Include="ViewModels\EditVacationDaysViewModel.cs" />
     <Compile Include="ViewModels\ResolutionViewModel.cs" />
     <Compile Include="ViewModels\EditEmployeeViewModel.cs" />
     <Compile Include="ViewModels\EditRequestCommentViewModel.cs" />
@@ -279,6 +285,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\onSubmit.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
@@ -347,11 +354,6 @@
     <Content Include="Views\Contracts\Details.cshtml" />
     <Content Include="Views\Contracts\Edit.cshtml" />
     <Content Include="Views\Contracts\Index.cshtml" />
-    <Content Include="Views\ExtraDaysAditions\Create.cshtml" />
-    <Content Include="Views\ExtraDaysAditions\Delete.cshtml" />
-    <Content Include="Views\ExtraDaysAditions\Details.cshtml" />
-    <Content Include="Views\ExtraDaysAditions\Edit.cshtml" />
-    <Content Include="Views\ExtraDaysAditions\Index.cshtml" />
     <Content Include="Views\Requests\Create.cshtml" />
     <Content Include="Views\Requests\Delete.cshtml" />
     <Content Include="Views\Requests\Details.cshtml" />
@@ -370,7 +372,7 @@
     <Content Include="Views\Employees\AsyncDetails.cshtml" />
     <Content Include="Views\Employees\AsyncEdit.cshtml" />
     <Content Include="Views\Employees\Register.cshtml" />
-    <Content Include="Views\Contracts\AsyncContract.cshtml" />
+    <Content Include="Views\Contracts\AsyncCreate.cshtml" />
     <Content Include="Views\Requests\AsyncEdit.cshtml" />
     <Content Include="Views\Requests\AsyncDetails.cshtml" />
     <Content Include="Views\Requests\AsyncApprove.cshtml" />
@@ -378,6 +380,17 @@
     <Content Include="Views\Employees\Active.cshtml" />
     <Content Include="Views\Employees\Inactive.cshtml" />
     <Content Include="Views\Employees\UserProfile.cshtml" />
+    <Content Include="Views\Employees\RemoveContract.cshtml" />
+    <Content Include="Views\Employees\EditVacDays.cshtml" />
+    <Content Include="Views\ExtraDays\Create.cshtml" />
+    <Content Include="Views\ExtraDays\Delete.cshtml" />
+    <Content Include="Views\ExtraDays\Details.cshtml" />
+    <Content Include="Views\ExtraDays\Edit.cshtml" />
+    <Content Include="Views\ExtraDays\Index.cshtml" />
+    <Content Include="Views\ExtraDays\CreateAsync.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Enum.cshtml" />
+    <Content Include="Views\ExtraDays\RemoveExtraDays.cshtml" />
+    <Content Include="Views\Requests\CreateCollective.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VacaYAY.Business\VacaYAY.Business.csproj">

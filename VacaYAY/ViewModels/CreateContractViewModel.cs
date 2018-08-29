@@ -10,6 +10,8 @@ namespace VacaYAY.ViewModels
 {
     public class CreateContractViewModel
     {
+        [Required]
+        [Display(Name ="Serial Number")]
         public string SerialNumber { get; set; }
         [DataType(DataType.Date)]
         [Display(Name = "Start Date")]
@@ -18,7 +20,7 @@ namespace VacaYAY.ViewModels
         [DataType(DataType.Date)]
         [Display(Name = "End Date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public int EmployeeID { get; set; }
         public HttpPostedFileBase File { get; set; }
         public static CreateContractDTO ToDTO(CreateContractViewModel contract)

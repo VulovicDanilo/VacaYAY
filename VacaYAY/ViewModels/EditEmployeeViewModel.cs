@@ -27,6 +27,7 @@ namespace VacaYAY.ViewModels
         public bool IsManager { get; set; }
         public List<EditEmployeeContractViewModel> Contracts { get; set; }
         public List<ResolutionViewModel> Resolutions { get; set; }
+        public List<ExtraDaysViewModel> ExtraDays { get; set; }
 
         public static EditEmployeeViewModel ToVM(EditEmployeeDTO dto)
         {
@@ -41,6 +42,7 @@ namespace VacaYAY.ViewModels
                 IsHimself = false,
                 Contracts = EditEmployeeContractViewModel.ToVMs(dto.Contracts),
                 Resolutions = ResolutionViewModel.ToVMs(dto.Resolutions),
+                ExtraDays = ExtraDaysViewModel.ToVMs(dto.ExtraDays),
             };
             return vm;
         }

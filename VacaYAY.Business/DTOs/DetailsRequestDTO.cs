@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VacaYAY.Common;
 using VacaYAY.Entities.Requests;
 using static VacaYAY.Common.Enums;
 
@@ -72,6 +73,7 @@ namespace VacaYAY.Business.DTOs
         public static DetailsRequestDTO ToDTOGroup(List<DetailsRequestDTO> dtos)
         {
             DetailsRequestDTO vm = new DetailsRequestDTO();
+            dtos.Reverse();
             vm = dtos[0];
             vm.collectiveEmployees.Add(CollectiveEmployeeDTO.ToDTO(dtos[0]));
             for (int i = 1; i < dtos.Count; i++)

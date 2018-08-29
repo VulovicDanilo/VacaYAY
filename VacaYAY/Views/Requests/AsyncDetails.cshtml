@@ -57,7 +57,14 @@
         </dt>
 
         <dd>
-            @Html.ActionLink(linkText: "" + Model.Employee.Name + " " + Model.Employee.LastName, actionName: "Details", controllerName: "Employees", routeValues: new { id = Model.Employee.EmployeeID }, htmlAttributes: null)
+            @if (User.IsInRole("Manager"))
+            {
+                @Html.ActionLink(linkText: "" + Model.Employee.Name + " " + Model.Employee.LastName, actionName: "Details", controllerName: "Employees", routeValues: new { id = Model.Employee.EmployeeID }, htmlAttributes: null)
+            }
+            else
+            {
+                <p>@Model.Employee.Name @Model.Employee.LastName</p>
+            }
         </dd>
 
         @if (Model.collectiveEmployees.Count > 0)
@@ -69,7 +76,14 @@
             <dd>
                 @foreach (var item in Model.collectiveEmployees)
                 {
-                    @Html.ActionLink(item.Name, "Details", "Employees", new { id = item.EmployeeID })
+                    if (User.IsInRole("Manager"))
+                    {
+                        @Html.ActionLink(item.Name, "Details", "Employees", new { id = item.EmployeeID })
+                    }
+                    else
+                    {
+                        @item.Name
+                    }
                     <span> </span>
                 }
             </dd>
@@ -81,16 +95,16 @@
         <table class="table table-condensed">
             <tbody>
                 <tr>
-                    <th>
+                    <th class="col-md-3">
                         @Html.DisplayNameFor(model => model.Comments[0].TimeStamp)
                     </th>
-                    <th>
+                    <th class="col-md-3">
                         @Html.DisplayNameFor(model => model.Comments[0].Text)
                     </th>
-                    <th>
+                    <th class="col-md-4">
                         @Html.DisplayNameFor(model => model.Comments[0].Commenter.Name)
                     </th>
-                    <th>
+                    <th class="col-md-2">
                         @Html.DisplayNameFor(model => model.Comments[0].Status)
                     </th>
                     <th></th>
@@ -106,7 +120,27 @@
                             @Html.DisplayFor(modelItem => item.Text)
                         </td>
                         <td>
-                            @Html.ActionLink(linkText: "" + item.Commenter.Name + " " + item.Commenter.LastName, actionName: "Details", controllerName: "Employees", routeValues: new { id = item.Commenter.EmployeeID }, htmlAttributes: null)
+                            @if (User.IsInRole("Manager"))
+                            {
+                                <a href="~/Employees/Details/@item.Commenter.EmployeeID">
+                                    @item.Commenter.Name @item.Commenter.LastName
+                                    @if (item.Commenter.IsManager)
+                                    {
+                                        <i class="fa fa-user-secret"></i>
+                                    }
+                                </a>
+                            }
+                            else
+                            {
+                                <p>
+                                    @item.Commenter.Name @item.Commenter.LastName
+                                    @if (item.Commenter.IsManager)
+                                    {
+                                        <i class="fa fa-user-secret"></i>
+                                    }
+                                </p>
+                            }
+
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Status)

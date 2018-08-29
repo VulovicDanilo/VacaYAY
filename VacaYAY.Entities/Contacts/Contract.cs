@@ -21,7 +21,7 @@ namespace VacaYAY.Entities.Contracts
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? EndDate { get; set; }
         public string Link { get; set; }
-        public int EmployeeID { get; set; }
+        public int? EmployeeID { get; set; }
         public virtual Employee Employee { get; set; }
     }
 }

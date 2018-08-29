@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using VacaYAY.Business.DTOs;
 using VacaYAY.Data.Repos;
 using VacaYAY.Entities.Contracts;
 using VacaYAY.Entities.Employees;
@@ -28,6 +29,10 @@ namespace VacaYAY.Business
         public static List<Contract> GetAllContracts()
         {
             return repo.All();
+        }
+        public static EditEmployeeContractDTO GetEditContract(int? id)
+        {
+            return EditEmployeeContractDTO.ToDTO(repo.Find(id));
         }
     }
 }

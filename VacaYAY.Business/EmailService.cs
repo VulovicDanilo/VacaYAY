@@ -115,7 +115,35 @@ namespace VacaYAY.Business
             es.SendEmail();
         }
 
-        public static void ApproveRequest(Request request, Employee HR, string file)
+        public static void ApproveRegularVacation(Request request, Employee HR, string file)
+        {
+            EmailSender es = new EmailSender();
+            es.AddReceiver(request.Employee.User.Email);
+            es.AddReceiver(HR.User.Email);
+            List<string> managerEmails = EmployeeService.GetManagerEmails();
+            es.AddReceivers(managerEmails);
+            es.SetSubject("[INGSoftware] Odobren zahtev za odmor - " + request.Employee.Name + " " + request.Employee.LastName);
+            es.SetBody("Postovani" +
+                "\n\n" +
+                "Odobren je zahtev za odmor." +
+                "\n\n" +
+                "Radnik: " + request.Employee.Name + " " + request.Employee.LastName +
+                "\n" +
+                "Pocetak odmora: " + request.StartDate.ToShortDateString() +
+                "\n" +
+                "Kraj odmora: " + request.EndDate.ToShortDateString() +
+                "\n" +
+                "Broj dana: " + request.NumberOfDays +
+                "\n" +
+                "Tip odmora: " + request.TypeOfDays +
+                "\n" +
+                "HR koji je odobrio zahtev: " + HR.Name + " " + HR.LastName +
+                "\n\n" +
+                "Vas INGSoftware!");
+            es.AddAttachment(file);
+            es.SendEmail();
+        }
+        public static void ApprovePaidOrUnpaidVacation(Request request, Employee HR, string file)
         {
             EmailSender es = new EmailSender();
             es.AddReceiver(request.Employee.User.Email);

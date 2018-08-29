@@ -16,9 +16,12 @@ namespace VacaYAY.ViewModels
         public string Profession { get; set; }
         [Display(Name ="Vacation days")]
         public int CurrentVacationDays { get; set; }
+        [Display(Name="Extra vacation days")]
         public int ExtraVacationDays { get; set; }
         [Display(Name ="Leftover days")]
         public int LeftoverVacationDays { get; set; }
+        [Display(Name = "Used vacation days")]
+        public int UsedPaidVacationDays { get; set; }
         [Display(Name ="Manager")]
         public bool IsManager { get; set; }
         public bool Active { get; set; }
@@ -39,6 +42,7 @@ namespace VacaYAY.ViewModels
                 ExtraVacationDays = dto.ExtraVacationDays,
                 CurrentVacationDays = dto.CurrentVacationDays,
                 LeftoverVacationDays = dto.LeftoverVacationDays,
+                UsedPaidVacationDays=dto.UsedPaidVacationDays,
                 Contracts = DetailsEmployeeContractViewModel.ToVMs(dto.Contracts),
                 Resolutions = ResolutionViewModel.ToVMs(dto.Resolutions),
                 ExtraDays = DetailsEmployeeExtraDaysViewModel.ToVMs(dto.ExtraDays),

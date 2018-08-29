@@ -87,29 +87,39 @@ namespace VacaYAY.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CreateRequestViewModel request)
+        public JsonResult Create(CreateRequestViewModel request)
         {
             if (ModelState.IsValid)
             {
-                RequestService requestService = new RequestService();
                 string userID = HttpContext.User.Identity.GetUserId();
                 CreateRequestDTO dto = CreateRequestViewModel.ToDTO(request);
-                if (dto.TypeOfDays == Common.Enums.TypeOfDays.Collective)
-                {
-                    if (RequestService.AddCollective(dto,userID))
-                        return RedirectToAction("Index");
-                    else
-                        return RedirectToAction("Index");
-                }
-                else
-                {
-                    if (RequestService.Add(dto, userID))
-                        return RedirectToAction("Index");
-                    else
-                        return RedirectToAction("Index");
-                }
+                string returned = RequestService.Add(dto, userID);
+                return Json(returned);
             }
-            return View(request);
+            return Json("Invalid model error");
+        }
+        public ActionResult CreateCollective()
+        {
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView();
+            }
+            else
+            { 
+                return RedirectToAction("Index");
+            }
+        }
+        [HttpPost]
+        public JsonResult CreateCollective(CreateCollectiveViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                string HRID = HttpContext.User.Identity.GetUserId();
+                CreateCollectiveDTO dto = CreateCollectiveViewModel.ToDTO(vm);
+                string returned = RequestService.AddCollective(dto, HRID);
+                return Json(returned);
+            }
+            return Json("Invalid model error");
         }
 
         // GET: Requests/Edit/5
@@ -157,14 +167,14 @@ namespace VacaYAY.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AsyncEdit(EditRequestViewModel request)
+        public JsonResult AsyncEdit(EditRequestViewModel request)
         {
             if (ModelState.IsValid)
             {
-                RequestService.Update(EditRequestViewModel.ToDTO(request));
-                return RedirectToAction("Index");
+                string returned=RequestService.Update(EditRequestViewModel.ToDTO(request));
+                return Json(returned);
             }
-            return RedirectToAction("Index");
+            return Json("Model state invalid");
         }
         public ActionResult AsyncApprove(int? id)
         {
@@ -181,20 +191,17 @@ namespace VacaYAY.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AsyncApprove(DetailsRequestViewModel vm)
+        public JsonResult AsyncApprove(DetailsRequestViewModel vm)
         {
             if (ModelState.IsValid)
             {
                 int id = vm.RequestID;
                 string resolutionSerialNumber = vm.ResolutionSerialNumber;
                 int HR_ID = (EmployeeService.GetEmployeeIDWithUserID(HttpContext.User.Identity.GetUserId()));
-                RequestService.Approve(id, HR_ID, resolutionSerialNumber);
-                return RedirectToAction("Index");
+                string returned=RequestService.Approve(id, HR_ID, resolutionSerialNumber);
+                return Json(returned);
             }
-            else
-            {
-                return RedirectToAction("Index");
-            }
+            return Json("Invalid model state");
         }
         public ActionResult AsyncReject(int? id)
         {

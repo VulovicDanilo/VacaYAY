@@ -27,13 +27,16 @@ namespace VacaYAY.Business.DTOs
                 SubmissionDate = DateTime.Now,
                 Status = Status.Pending,
             };
-            Comment comment = new Comment()
+            if (!string.IsNullOrEmpty(dto.Comment))
             {
-                Text = dto.Comment,
-                Timestamp = DateTime.Now,
-                Status = Status.Pending,
-            };
-            request.Comments.Add(comment);
+                Comment comment = new Comment()
+                {
+                    Text = dto.Comment,
+                    Timestamp = DateTime.Now,
+                    Status = Status.Pending,
+                };
+                request.Comments.Add(comment);
+            }
             return request;
         }
     }

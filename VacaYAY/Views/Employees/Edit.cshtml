@@ -4,20 +4,41 @@
     ViewBag.Title = "Edit";
 }
 @section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
     <script>
-        var ajaxCallURL = '/Contracts/AsyncContract';
+        $("#myModal").on("submit", "#create_contract_form", function (e) {
+            e.preventDefault();
+            onSubmit('#create_contract_form', '/Employees/AddContract')
+        });
+        $("#myModal").on("submit", "#remove_contract_form", function (e) {
+            e.preventDefault();
+            onSubmit('#remove_contract_form', '/Contracts/Delete')
+        });
+        $("#myModal").on("submit", "#edit_vac_days", function (e) {
+            e.preventDefault();
+            onSubmit('#edit_vac_days', '/Employees/EditVacDays');
+        });
+        $("#myModal").on("submit", "#create_extra_days", function (e) {
+            e.preventDefault();
+            onSubmit('#create_extra_days', '/ExtraDays/CreateAsync')
+        });
+        $("#myModal").on("submit", "#remove_extra_days", function (e) {
+            e.preventDefault();
+            onSubmit('#remove_extra_days', '/ExtraDays/RemoveExtraDays')
+        });
+        var ajaxCallURL = '/Contracts/AsyncCreate';
         $(function () {
-            $(".createModal").click(function () {
+            $(".modalPopup").click(function () {
                 var $buttonClicked = $(this);
                 var id = $buttonClicked.attr("data-id");
-                console.log(id);
+                var url = $buttonClicked.attr("data-url");
                 var options = {
                     "backdrop": false,
                     keyboard: true
                 };
                 $.ajax({
                     type: "GET",
-                    url: ajaxCallURL,
+                    url: url,
                     data: {
                         id: id,
                     },
@@ -26,30 +47,7 @@
                     success: function (data) {
                         $('#myModalContent').html(data);
                         $('#myModal').modal(options);
-                        $("#myModal").on("submit", "#create_contract_form", function (e) {
-                            e.preventDefault();
-                            var form = $(this);
-                            var formData = new FormData(this);
-                            $.ajax({
-                                type: "POST",
-                                url: '/Employees/AddContract',
-                                contentType: false,
-                                processData: false,
-                                data: formData,
-                                success: function (response) {
-                                },
-                                error: function (response) {
-                                    alert(response);
-                                }
-                            });
-                            $("#myModal").modal("hide");
-                            $('#myModalContent').html("");
-
-                        });
-                        $("#closebtn").click(function () {
-                            $("#myModal").modal("hide");
-                            $('#myModalContent').html("");
-                        });
+                        $('#myModal').modal('show');
                     },
                     error: function () {
                         $("#myModal").modal("hide");
@@ -58,7 +56,11 @@
                     }
                 });
             });
-        })
+            $("#closebtn").click(function () {
+                $("#myModal").modal("hide");
+                $('#myModalContent').html("");
+            });
+        });
     </script>
 }
 
@@ -72,7 +74,7 @@
     </div>
 </div>
 
-<h2>Edit</h2>
+<h2>Edit Employee</h2>
 
 
 @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -80,8 +82,8 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Edit Employee</h4>
         <div>
+            @Html.ActionLink("Details", "Details", new { id = Model.EmployeeID }) |
             @Html.ActionLink("All employees", "Index")
         </div>
         <hr />
@@ -120,26 +122,6 @@
             </div>
         </div>
 
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.VacationDays, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    <div class="checkbox">
-                        @Html.EditorFor(model => model.VacationDays)
-                        @Html.ValidationMessageFor(model => model.VacationDays, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.LeftoverDays, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    <div class="checkbox">
-                        @Html.EditorFor(model => model.LeftoverDays)
-                        @Html.ValidationMessageFor(model => model.LeftoverDays, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-            </div>*@
-
         <div class="form-group">
             @Html.LabelFor(model => model.IsManager, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -154,6 +136,7 @@
                     }
                     @Html.ValidationMessageFor(model => model.IsManager, "", new { @class = "text-danger" })
                 </div>
+                <a href="javascript:void(0);" class="modalPopup pull-right btn btn-info" data-id="@Model.EmployeeID" data-url="/Employees/EditVacDays">Edit Vacation Days <i class="fa fa-warning"></i></a>
             </div>
         </div>
 
@@ -177,6 +160,9 @@
                         <th>
                             Preview
                         </th>
+                        <th>
+                            Delete
+                        </th>
                     </tr>
                     @foreach (var item in Model.Contracts)
                     {
@@ -197,12 +183,51 @@
                             <td>
                                 @Html.ActionLink("Preview", "Preview", "Employees", new { filename = item.Link }, new { target = "_blank" })
                             </td>
+                            <td>
+                                <a href="javascript:void(0);" class="modalPopup" data-url="/Contracts/Delete" data-id="@item.ContractID">Delete</a>
+                            </td>
                         </tr>
                     }
                 </tbody>
             </table>
             <a href="javascript:void(0);"
-               class="createModal" data-id="@Model.EmployeeID">Add Contract</a>
+               class="modalPopup" data-id="@Model.EmployeeID" data-url="/Contracts/Create">Add Contract</a>
+        </div>
+
+        <div class="form-group">
+            <h3>Extra Days</h3>
+            <table class="table table-responsive" id="extradays-table">
+                <tbody id="extradays-table-body">
+                    <tr>
+                        <th>
+                            Basis
+                        </th>
+                        <th>
+                            Days
+                        </th>
+                        <th>
+                            Delete
+                        </th>
+                    </tr>
+                    @foreach (var item in Model.ExtraDays)
+                    {
+                        <tr>
+                            @Html.HiddenFor(model => item.ExtraDaysID)
+                            <td>
+                                @Html.DisplayFor(model => item.Basis)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => item.Days)
+                            </td>
+                            <td>
+                                <a href="javascript:void(0);" class="modalPopup" data-id="@item.ExtraDaysID" data-url="/ExtraDays/RemoveExtraDays">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <a href="javascript:void(0);"
+               class="modalPopup" data-id="@Model.EmployeeID" data-url="/ExtraDays/CreateAsync">Add Extra Days</a>
         </div>
 
         <div class="form-group">
@@ -214,7 +239,3 @@
 }
 
 
-
-@*@section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-    }*@

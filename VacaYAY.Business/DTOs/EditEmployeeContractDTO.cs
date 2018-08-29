@@ -11,6 +11,7 @@ namespace VacaYAY.Business.DTOs
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public string Link { get; set; }
+        public int EmployeeID { get; set; }
 
         public static EditEmployeeContractDTO ToDTO(Contract contract)
         {
@@ -21,6 +22,7 @@ namespace VacaYAY.Business.DTOs
                 StartDate = contract.StartDate,
                 EndDate = contract.EndDate,
                 Link = contract.Link,
+                EmployeeID=contract.EmployeeID.Value,
             };
             return dto;
         }

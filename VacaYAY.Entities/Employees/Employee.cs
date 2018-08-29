@@ -30,8 +30,8 @@ namespace VacaYAY.Entities.Employees
         public bool Active { get; set; }
         [Display(Name = "Extra Vacation Days")] // Dodatni
         public int ExtraVacationDays { get; set; }
-        [Display(Name = "Total Extra Vacation Days")] // Total extra days
-        public int TotalExtraVacationDays { get; set; }
+        [Display(Name = "Used Paid Vacation Days")] // Paid vac days
+        public int UsedPaidVacationDays { get; set; }
         [Display(Name = "Current Vacation Days")] // Godisnje
         public int CurrentVacationDays { get; set; }
         [Display(Name = "Leftover Vacation Days")] // Zaostali od prosle godine

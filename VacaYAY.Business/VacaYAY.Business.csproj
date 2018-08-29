@@ -116,6 +116,8 @@
   <ItemGroup>
     <Compile Include="ContractService.cs" />
     <Compile Include="DTOs\CollectioveEmployeeDTO.cs" />
+    <Compile Include="DTOs\CreateCollectiveDTO.cs" />
+    <Compile Include="DTOs\CreateExtraDaysDTO.cs" />
     <Compile Include="DTOs\DetailsEmployeeDTO.cs" />
     <Compile Include="DTOs\DetailsEmployeeContractDTO.cs" />
     <Compile Include="DTOs\DetailsEmployeeExtraDaysDTO.cs" />
@@ -123,6 +125,8 @@
     <Compile Include="DTOs\DetailsRequestEmployeeDTO.cs" />
     <Compile Include="DTOs\EditEmployeeContractDTO.cs" />
     <Compile Include="DTOs\EditEmployeeDTO.cs" />
+    <Compile Include="DTOs\EditVacationDaysDTO.cs" />
+    <Compile Include="DTOs\ExtraDaysDTO.cs" />
     <Compile Include="DTOs\ResolutionDTO.cs" />
     <Compile Include="DTOs\EditRequestCommentDTO.cs" />
     <Compile Include="DTOs\CreateContractDTO.cs" />
@@ -155,7 +159,9 @@
       <Name>VacaYAY.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\RegularReport.rdlc" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -22,16 +22,15 @@ namespace VacaYAY.ViewModels
         public TypeOfDays TypeOfDays { get; set; }
         public string Comment { get; set; }
 
-        public static CreateRequestDTO ToDTO(CreateRequestViewModel request)
+        public static CreateRequestDTO ToDTO(CreateRequestViewModel vm)
         {
             CreateRequestDTO dto = new CreateRequestDTO()
             {
-                RemainingVacationDays = request.RemainingVacationDays,
-                StartDate = request.StartDate,
-                EndDate = request.EndDate,
-                TypeOfDays = request.TypeOfDays,
-                Comment = request.Comment,
-
+                RemainingVacationDays = vm.RemainingVacationDays,
+                StartDate = vm.StartDate,
+                EndDate = vm.EndDate,
+                TypeOfDays = vm.TypeOfDays,
+                Comment = vm.Comment,
             };
             return dto;
         }

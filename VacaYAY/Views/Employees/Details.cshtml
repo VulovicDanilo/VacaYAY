@@ -1,18 +1,20 @@
 ﻿@model VacaYAY.ViewModels.DetailsEmployeeViewModel
-
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Employee Details</h2>
+<h2>
+    Employee Details
+    <a class="pull-right" href="~/Employees/Edit/@Model.EmployeeID">
+        Edit<i class="fa fa-cog"></i>
+    </a>
+</h2>
 
 <div>
     @if (Model.Active)
     {
     <p>
-        <a href="~/Employees/Edit/@Model.EmployeeID">
-            Edit <i class="fa fa-cog"></i>
-        </a> |
+        
         @Html.ActionLink("All employees", "Index")
     </p>
     }
@@ -63,6 +65,22 @@
 
         <dd>
             @Html.DisplayFor(model => model.LeftoverVacationDays)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ExtraVacationDays)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ExtraVacationDays)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UsedPaidVacationDays)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UsedPaidVacationDays)
         </dd>
 
         <dt>

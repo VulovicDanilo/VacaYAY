@@ -1,93 +1,117 @@
 ﻿@model VacaYAY.ViewModels.EditRequestViewModel
+@using VacaYAY.HtmlHelperExt
 
 
-@using (Html.BeginForm())
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "edit_request_form" }))
 {
     @Html.AntiForgeryToken()
-    
-<div class="form-horizontal">
-    <h4>Edit Request</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.RequestID)
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+    <div class="form-horizontal">
+        <h4>Edit Request</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.RequestID)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.TypeOfDays, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EmployeeEnumDropDown(model => model.TypeOfDays, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.TypeOfDays, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <h5><strong>Comments</strong></h5>
+            <table class="table table-condensed">
+                <tbody>
+                    <tr>
+                        <th class="col-md-3">
+                            @Html.DisplayNameFor(model => model.Comments[0].TimeStamp)
+                        </th>
+                        <th class="col-md-3">
+                            @Html.DisplayNameFor(model => model.Comments[0].Text)
+                        </th>
+                        <th class="col-md-4">
+                            @Html.DisplayNameFor(model => model.Comments[0].Commenter.Name)
+                        </th>
+                        <th class="col-md-2">
+                            @Html.DisplayNameFor(model => model.Comments[0].Status)
+                        </th>
+                    </tr>
+
+                    @foreach (var item in Model.Comments)
+                    {
+                        <tr>
+                            <td>
+                                @String.Format("{0:HH:mm dd/MM/yyyy}", item.TimeStamp)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Text)
+                            </td>
+                            <td>
+                                @if (User.IsInRole("Manager"))
+                                {
+                                    <a href="~/Employees/Details/@item.Commenter.EmployeeID">
+                                        @item.Commenter.Name @item.Commenter.LastName
+                                        @if (item.Commenter.IsManager)
+                                        {
+                                            <i class="fa fa-user-secret"></i>
+                                        }
+                                    </a>
+                                }
+                                else
+                                {
+                                    <p>
+                                        @item.Commenter.Name @item.Commenter.LastName
+                                        @if (item.Commenter.IsManager)
+                                        {
+                                            <i class="fa fa-user-secret"></i>
+                                        }
+                                    </p>
+
+
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.NewComment, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NewComment, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NewComment, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @Html.HiddenFor(model => model.EmployeeID)
+
+        <p id="errorMessage" class="text-danger"></p>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Edit" class="btn btn-success" />
+            </div>
         </div>
     </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.TypeOfDays, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EnumDropDownListFor(model => model.TypeOfDays, htmlAttributes: new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.TypeOfDays, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        <h5><strong>Comments</strong></h5>
-        <table class="table table-condensed">
-            <tbody>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Comments[0].TimeStamp)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Comments[0].Text)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Comments[0].Commenter.Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Comments[0].Status)
-                    </th>
-                    <th></th>
-                </tr>
-
-                @foreach (var item in Model.Comments)
-                {
-                <tr>
-                    <td>
-                        @String.Format("{0:HH:mm dd/MM/yyyy}", item.TimeStamp)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Text)
-                    </td>
-                    <td>
-                        @Html.ActionLink(linkText: "" + item.Commenter.Name + " " + item.Commenter.LastName, actionName: "Details", controllerName: "Employees", routeValues: new { id = item.Commenter.EmployeeID }, htmlAttributes: null)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </td>
-                </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.NewComment, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.NewComment, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.NewComment, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Edit" class="btn btn-success" />
-        </div>
-    </div>
-</div>
 }
 
 <div>

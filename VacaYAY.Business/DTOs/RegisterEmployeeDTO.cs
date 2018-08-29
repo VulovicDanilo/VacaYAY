@@ -45,6 +45,7 @@ namespace VacaYAY.Business.DTOs
                     Profession=dto.Profession,
                     IsManager = dto.IsManager,
                     UserID = u.Id,
+                    UsedPaidVacationDays=0,
                 };
                 return employee;
             }

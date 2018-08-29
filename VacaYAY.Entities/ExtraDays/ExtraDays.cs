@@ -15,7 +15,7 @@ namespace VacaYAY.Entities.ExtraDays
         public DateTime Timestamp { get; set; }
         public int Days { get; set; }
         public Basis Basis { get; set; }
-        public int EmployeeID { get; set; }
+        public int? EmployeeID { get; set; }
         [InverseProperty("ExtraDays")]
         public virtual Employee Employee { get; set; }
     }

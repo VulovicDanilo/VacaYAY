@@ -20,6 +20,7 @@ namespace VacaYAY.ViewModels
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? EndDate { get; set; }
         public string Link { get; set; }
+        public int EmployeeID { get; set; }
 
         public static EditEmployeeContractViewModel ToVM(EditEmployeeContractDTO dto)
         {
@@ -30,6 +31,7 @@ namespace VacaYAY.ViewModels
                 StartDate = dto.StartDate,
                 EndDate = dto.EndDate,
                 Link = dto.Link,
+                EmployeeID=dto.EmployeeID,
             };
             return vm;
         }
