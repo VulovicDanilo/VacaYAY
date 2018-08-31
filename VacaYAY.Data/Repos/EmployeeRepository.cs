@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using VacaYAY.Entities.Employees;
 using VacaYAY.Entities.Resolutions;
 using Microsoft.AspNet.Identity.EntityFramework;
+using VacaYAY.Common;
+
 namespace VacaYAY.Data.Repos
 {
     public class EmployeeRepository
@@ -122,35 +124,24 @@ namespace VacaYAY.Data.Repos
             }
         }
         /// <summary>
-        /// Gets all <see cref="Employee"/>'s sorted by their last name and then by their name alphabeticly.
-        /// </summary>
-        public List<Employee> GetActiveByLastName()
-        {
-            try
-            {
-                return db.Employees.OrderBy(x => x.LastName).ThenBy(x => x.Name).ToList();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return null;
-            }
-        }
-        /// <summary>
         /// Get <see cref="Employee"/>'s with certain name and last name.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="lastName"></param>
         /// <returns></returns>
-        public List<Employee> GetWithName(string name, string lastName)
+        public List<Employee> GetWithNameOrSurname(params string[] words)
         {
             try
             {
-                return db.Employees
-                    .Where(x => x.Name == name)
-                    .Where(x => x.LastName == lastName)
-                    .Where(x => x.Active)
-                    .ToList();
+                var dict = new Dictionary<int, Employee>();
+                foreach(var word in words)
+                {
+                    List<Employee> list = db.Employees.Where(x => x.Name.Contains(word)).ToList();
+                    foreach (var employee in list) dict[employee.EmployeeID] = employee;
+                    list = db.Employees.Where(x => x.LastName.Contains(word)).ToList();
+                    foreach (var employee in list) dict[employee.EmployeeID] = employee;
+                }
+                return dict.Values.ToList();
             }
             catch (Exception e)
             {
@@ -159,14 +150,17 @@ namespace VacaYAY.Data.Repos
             }
         }
         /// <summary>
-        /// Get <see cref="Employee"/>'s sorted by date.
+        /// Get <see cref="Employee"/>'s who started working after specified date.
         /// </summary>
-        public List<Employee> GetByDate()
+        public List<Employee> GetEmployeesWhoStartedWorkingAfter(DateTime date)
         {
             // TODO GetByDate() in EmployeeRepository
             try
             {
-                return null;
+                return db.Employees
+                    .Where(x => x.Contracts.Count > 0)
+                    .Where(x => x.Contracts.FirstOrDefault().StartDate > date)
+                    .ToList();
             }
             catch (Exception e)
             {

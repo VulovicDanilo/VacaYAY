@@ -27,12 +27,52 @@
             }
             return this;
         }
+        $('select').change(function () {
+            console.log(this.value);
+            if (this.value == "Date") {
+                $('.searchValueDate').removeClass('hidden');
+                $('.searchValueText').addClass('hidden');
+            }
+            else {
+                $('.searchValueDate').addClass('hidden');
+                $('.searchValueText').removeClass('hidden');
+            }
+        });
     </script>
 }
 <h2>All employees</h2>
 
 <div class="above-table">
-    @Html.ActionLink("Create New Employee", "Register")
+    <a href="~/Employees/Register">Create New Employee <i class="fa fa-user-plus"></i></a>
+    @using (Html.BeginForm("Search", "Employees", FormMethod.Post, new { id = "search_form" }))
+    {
+        <div class="form-inline">
+            <select class="form-control" name="criteria" id="select">
+                <option>Name</option>
+                @if (ViewBag.Date!=null)
+                {
+                    <option selected>Date</option>
+                }
+                else
+                {
+                    <option>Date</option>
+                }
+            </select>
+            @if (ViewBag.Date != null)
+            {
+                <input type="date" value="@(ViewBag.Date)" name="valueDate" class="searchValueDate form-control col col-md-2" />
+                <input type="text" placeholder="keywords..." value="" name='valueText' class="searchValueText form-control col col-md-2 hidden" />
+            }
+            else
+            {
+                <input type="date" value="" name="valueDate" class="searchValueDate form-control col col-md-2 hidden" />
+                <input type="text" placeholder="keywords..." value="@(ViewBag.Value)" name='valueText' class="searchValueText form-control col col-md-2" />
+            }
+            <button type="submit" class="btn btn-success">Search <i class="fa fa-search"></i></button>
+
+        </div>
+
+    }
     <div class="legend pull-right">
         <div class="legend-box all-employees selected" onclick="filter('all')">
             <p>All Employees</p>

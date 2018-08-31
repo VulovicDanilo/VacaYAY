@@ -87,7 +87,7 @@ namespace VacaYAY.Business
                 "Tip odmora: " + request.TypeOfDays +
                 "\n\n" +
                 "Vas INGSoftware!");
-            es.SendEmail();
+            Task t1 = Task.Factory.StartNew(() => es.SendEmail());
         }
 
         public static void SendEditRequestEmailToAllManagers(Request request)
@@ -112,7 +112,7 @@ namespace VacaYAY.Business
                 "Tip odmora: " + request.TypeOfDays +
                 "\n\n" +
                 "Vas INGSoftware!");
-            es.SendEmail();
+            Task t1 = Task.Factory.StartNew(() => es.SendEmail());
         }
 
         public static void ApproveRegularVacation(Request request, Employee HR, string file)
@@ -141,7 +141,7 @@ namespace VacaYAY.Business
                 "\n\n" +
                 "Vas INGSoftware!");
             es.AddAttachment(file);
-            es.SendEmail();
+            Task t1 = Task.Factory.StartNew(() => es.SendEmail());
         }
         public static void ApprovePaidOrUnpaidVacation(Request request, Employee HR, string file)
         {
@@ -169,7 +169,7 @@ namespace VacaYAY.Business
                 "\n\n" +
                 "Vas INGSoftware!");
             es.AddAttachment(file);
-            es.SendEmail();
+            Task t1 = Task.Factory.StartNew(() => es.SendEmail());
         }
         public static void RejectRequest(Request request, Employee HR)
         {
@@ -194,7 +194,7 @@ namespace VacaYAY.Business
                 "HR koji je odbio zahtev: " + HR.Name + " " + HR.LastName +
                 "\n\n" +
                 "Vas INGSoftware!");
-            es.SendEmail();
+            Task t1 = Task.Factory.StartNew(() => es.SendEmail());
         }
         public static void SendCollective(Request request,Employee HR,string filename)
         {

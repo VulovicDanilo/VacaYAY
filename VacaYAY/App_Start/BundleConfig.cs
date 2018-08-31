@@ -24,9 +24,6 @@ namespace VacaYAY
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/request").Include(
-                "~/Scripts/request.js"));
-
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap2.css",
                       "~/Content/font-awesome.css",

@@ -255,6 +255,17 @@ namespace VacaYAY.Business
             Employee employee = EmployeeService.GetEmployee(employeeID);
             return employee.Active;
         }
+        public static List<IndexEmployeeDTO> GetEmployeesWhoStartedWorkingAfter(DateTime date)
+        {
+            List<IndexEmployeeDTO> list = IndexEmployeeDTO.ToDTOs(repo.GetEmployeesWhoStartedWorkingAfter(date));
+            return list;
+        }
+        public static List<IndexEmployeeDTO> GetEmployeesByName(string text)
+        {
+            string[] words = text.Split(' ');
+            List<IndexEmployeeDTO> list = IndexEmployeeDTO.ToDTOs(repo.GetWithNameOrSurname(words));
+            return list;
+        }
         #region helpers
         private static int CalculateVacationDaysForDates(DateTime start, DateTime end)
         {

@@ -44,11 +44,12 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+
+    @RenderSection("scripts", required: false)
     <script>
         function burgerToggle(x) {
             x.classList.toggle("change");
         }
     </script>
-    @RenderSection("scripts", required: false)
 </body>
 </html>

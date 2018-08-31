@@ -122,7 +122,10 @@
                     @Html.DisplayFor(modelItem => item.EndDate)
                 </td>
                 <td>
-                    @Html.ActionLink("Preview", "Preview", "Employees", new { filename = item.Link }, new { target = "_blank" })
+                    <a href="~/Employees/Preview/@item.Link" target="_blank">
+                        Preview
+                        <i class="fa fa-eye"></i>
+                    </a>
                 </td>
             </tr>
         }
@@ -164,7 +167,10 @@
                     @Html.DisplayFor(modelItem => item.NumOfDays)
                 </td>
                 <td>
-                    @Html.ActionLink("Preview", "Preview", "Employees", new { filename = item.Link }, new { target = "_blank" })
+                    <a href="~/Employees/Preview/@item.Link" target="_blank">
+                        Preview
+                        <i class="fa fa-eye"></i>
+                    </a>
                 </td>
             </tr>
         }

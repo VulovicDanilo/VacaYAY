@@ -3,7 +3,6 @@
     $.validator.unobtrusive.parse(form);
 
     $(form).validate();
-    console.log($(form).valid());
     if ($(form).valid()) {
 
         var form_data = new FormData($(form)[0]);

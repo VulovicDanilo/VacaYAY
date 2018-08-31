@@ -48,7 +48,6 @@ namespace VacaYAY.Business.DTOs
                 dtos.Add(dto);
             }
             List<DetailsRequestDTO> newList = new List<DetailsRequestDTO>();
-            int i = 0;
             while (dtos.Count > 0)
             {
                 if (dtos[0].TypeOfDays != TypeOfDays.Collective)

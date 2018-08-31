@@ -26,7 +26,6 @@
             e.preventDefault();
             onSubmit('#remove_extra_days', '/ExtraDays/RemoveExtraDays')
         });
-        var ajaxCallURL = '/Contracts/AsyncCreate';
         $(function () {
             $(".modalPopup").click(function () {
                 var $buttonClicked = $(this);
@@ -56,10 +55,6 @@
                     }
                 });
             });
-            $("#closebtn").click(function () {
-                $("#myModal").modal("hide");
-                $('#myModalContent').html("");
-            });
         });
     </script>
 }
@@ -67,7 +62,7 @@
 <div id='myModal' class='modal'>
     <div class="modal-dialog">
         <div class="modal-content" style="overflow: auto;padding:20px">
-            <button type="button" class="btn btn-info pull-right" id="closebtn">x</button>
+            <button type="button" data-dismiss="modal" class="btn btn-info pull-right" id="closebtn">x</button>
             <div id='myModalContent'>
             </div>
         </div>
@@ -178,20 +173,25 @@
                                 @Html.DisplayFor(model => item.EndDate)
                             </td>
                             <td>
-                                @Html.ActionLink("Download file", "Download", new { filename = item.Link }, new { target = "_blank" })
+                                <a href="~/Employees/Download/@item.Link" target="_blank">Download 
+                                        <i class="fa fa-download"></i>
+                                </a>
                             </td>
                             <td>
-                                @Html.ActionLink("Preview", "Preview", "Employees", new { filename = item.Link }, new { target = "_blank" })
+                                <a href="~/Employees/Preview/@item.Link" target="_blank">
+                                    Preview
+                                    <i class="fa fa-eye"></i>
+                                </a>
                             </td>
                             <td>
-                                <a href="javascript:void(0);" class="modalPopup" data-url="/Contracts/Delete" data-id="@item.ContractID">Delete</a>
+                                <a href="javascript:void(0);" class="modalPopup" data-url="/Contracts/Delete" data-id="@item.ContractID">Delete <i class="fa fa-remove"></i></a>
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
             <a href="javascript:void(0);"
-               class="modalPopup" data-id="@Model.EmployeeID" data-url="/Contracts/Create">Add Contract</a>
+               class="modalPopup" data-id="@Model.EmployeeID" data-url="/Contracts/Create">Add Contract <i class="fa fa-plus"></i></a>
         </div>
 
         <div class="form-group">
@@ -220,19 +220,19 @@
                                 @Html.DisplayFor(model => item.Days)
                             </td>
                             <td>
-                                <a href="javascript:void(0);" class="modalPopup" data-id="@item.ExtraDaysID" data-url="/ExtraDays/RemoveExtraDays">Delete</a>
+                                <a href="javascript:void(0);" class="modalPopup" data-id="@item.ExtraDaysID" data-url="/ExtraDays/RemoveExtraDays">Delete <i class="fa fa-remove"></i></a>
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
             <a href="javascript:void(0);"
-               class="modalPopup" data-id="@Model.EmployeeID" data-url="/ExtraDays/CreateAsync">Add Extra Days</a>
+               class="modalPopup" data-id="@Model.EmployeeID" data-url="/ExtraDays/CreateAsync">Add Extra Days <i class="fa fa-plus"></i></a>
         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <button type="submit" class="btn btn-info pull-right">Save <i class="fa fa-save"></i></button>
             </div>
         </div>
     </div>

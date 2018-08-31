@@ -57,9 +57,6 @@
                     }
                 });
             });
-            $("#closbtn").click(function () {
-                $('#myModal').modal('hide');
-            });
         });
         function filter($param) {
             var $div = $(event.target)
@@ -83,7 +80,7 @@
 <div id='myModal' class='modal'>
     <div class="modal-dialog">
         <div class="modal-content" style="overflow: auto;padding:20px">
-            <button type="button" class="btn btn-info pull-right" id="closbtn">x</button>
+            <button type="button" data-dismiss="modal" class="btn btn-info pull-right" id="closbtn">x</button>
             <div id='myModalContent'>
             </div>
         </div>

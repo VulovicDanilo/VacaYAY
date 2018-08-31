@@ -22,10 +22,29 @@ namespace VacaYAY.Controllers
     {
 
         // GET: Employees
-        public ActionResult Index()
+        public ActionResult Index(bool? filtered)
         {
-            var employees = EmployeeService.GetIndexEmployees();
-            return View(IndexEmployeeViewModel.ToVMs(employees).AsEnumerable());
+            if (filtered!=null && filtered.Value)
+            {
+                var employees = TempData["emps"] as List<IndexEmployeeViewModel>;
+                if (TempData["value"] != null)
+                {
+                    string s = TempData["value"] as string;
+                    ViewBag.Value = s;
+
+                }
+                if (TempData["date"] != null)
+                {
+                    DateTime date=DateTime.Parse(TempData["date"] as string);
+                    ViewBag.Date = date.ToString("yyyy-MM-dd");
+                }
+                return View(employees.AsEnumerable());
+            }
+            else
+            {
+                var employees = EmployeeService.GetIndexEmployees();
+                return View(IndexEmployeeViewModel.ToVMs(employees).AsEnumerable());
+            }
         }
         public ActionResult UserProfile()
         {
@@ -44,15 +63,40 @@ namespace VacaYAY.Controllers
             return View(vm);
 
         }
-        public ActionResult Active()
+        public ActionResult Search(FormCollection form)
         {
-            var employees = EmployeeService.GetIndexActiveEmployees();
-            return View(IndexEmployeeViewModel.ToVMs(employees).AsEnumerable());
-        }
-        public ActionResult Inactive()
-        {
-            var employees = EmployeeService.GetIndexInactiveEmployees();
-            return View(IndexEmployeeViewModel.ToVMs(employees).AsEnumerable());
+            string criteria = form.GetValues("criteria")[0];
+            if (criteria == "Date")
+            {
+                DateTime date;
+                DateTime.TryParse(form.GetValues("valueDate")[0],out date);
+                if (date != null)
+                {
+                    var employees = IndexEmployeeViewModel.ToVMs(EmployeeService.GetEmployeesWhoStartedWorkingAfter(date));
+                    TempData["emps"] = employees;
+                    TempData["date"] = date.ToString();
+                    return RedirectToAction("Index", new { filtered = true });
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+            else
+            {
+                string text = form.GetValues("valueText")[0];
+                if (!string.IsNullOrEmpty(text))
+                { 
+                    var employees = IndexEmployeeViewModel.ToVMs(EmployeeService.GetEmployeesByName(text));
+                    TempData["emps"] = employees;
+                    TempData["value"] = text;
+                    return RedirectToAction("Index","Employees",new { filtered=true }); 
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
+            }
         }
 
         // GET: Employees/Details/5
