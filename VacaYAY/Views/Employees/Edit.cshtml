@@ -173,12 +173,12 @@
                                 @Html.DisplayFor(model => item.EndDate)
                             </td>
                             <td>
-                                <a href="~/Employees/Download/@item.Link" target="_blank">Download 
+                                <a href="~/Employees/Download?filename=@item.Link" target="_blank">Download 
                                         <i class="fa fa-download"></i>
                                 </a>
                             </td>
                             <td>
-                                <a href="~/Employees/Preview/@item.Link" target="_blank">
+                                <a href="~/Employees/Preview?filename=@item.Link" target="_blank">
                                     Preview
                                     <i class="fa fa-eye"></i>
                                 </a>

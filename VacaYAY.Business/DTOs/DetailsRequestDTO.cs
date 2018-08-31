@@ -21,7 +21,7 @@ namespace VacaYAY.Business.DTOs
         public Status Status { get; set; }
         public DetailsRequestEmployeeDTO Employee { get; set; }
         public List<EditRequestCommentDTO> Comments { get; set; }
-
+        public string Basis { get; set; }
 
         public static DetailsRequestDTO ToDTO(Request request)
         {

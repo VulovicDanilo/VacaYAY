@@ -20,6 +20,10 @@ namespace VacaYAY.Business
         {
             return repo.Add(resolution);
         }
+        public static bool Update(Resolution resolution)
+        {
+            return repo.Update(resolution);
+        }
         
         public static List<Resolution> GetAllResolutions()
         {

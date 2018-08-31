@@ -12,7 +12,7 @@ namespace VacaYAY.ViewModels
     {
         public DateTime TimeStamp { get; set; }
         public Basis Basis { get; set; }
-        [Range(1,double.MaxValue,ErrorMessage ="Number of Days must be positive")]
+        [Range(1,double.MaxValue,ErrorMessage ="Days must be positive")]
         public int Days { get; set; }
         public int EmployeeID { get; set; }
 

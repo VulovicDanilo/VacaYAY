@@ -58,36 +58,36 @@
 
         <dd>
             @if (User.IsInRole("Manager"))
-            {
-                @Html.ActionLink(linkText: "" + Model.Employee.Name + " " + Model.Employee.LastName, actionName: "Details", controllerName: "Employees", routeValues: new { id = Model.Employee.EmployeeID }, htmlAttributes: null)
-            }
-            else
-            {
-                <p>@Model.Employee.Name @Model.Employee.LastName</p>
-            }
+        {
+            @Html.ActionLink(linkText: "" + Model.Employee.Name + " " + Model.Employee.LastName, actionName: "Details", controllerName: "Employees", routeValues: new { id = Model.Employee.EmployeeID }, htmlAttributes: null)
+    }
+    else
+    {
+        <p>@Model.Employee.Name @Model.Employee.LastName</p>
+}
         </dd>
 
         @if (Model.collectiveEmployees.Count > 0)
-        {
-            <dt>
-                Employees on vacation
-            </dt>
+    {
+        <dt>
+            Employees on vacation
+        </dt>
 
-            <dd>
-                @foreach (var item in Model.collectiveEmployees)
-                {
-                    if (User.IsInRole("Manager"))
-                    {
-                        @Html.ActionLink(item.Name, "Details", "Employees", new { id = item.EmployeeID })
-                    }
-                    else
-                    {
-                        @item.Name
-                    }
-                    <span> </span>
-                }
-            </dd>
+        <dd>
+            @foreach (var item in Model.collectiveEmployees)
+        {
+            if (User.IsInRole("Manager"))
+            {
+                @Html.ActionLink(item.Name, "Details", "Employees", new { id = item.EmployeeID })
         }
+        else
+        {
+            @item.Name
+    }
+    <span> </span>
+}
+        </dd>
+}
     </dl>
     <h5><strong>Comments</strong></h5>
     @if (Model.Comments.Count > 0)

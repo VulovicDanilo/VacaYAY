@@ -120,13 +120,16 @@
 
 
         @Html.HiddenFor(model => model.RequestID)
-        <div class="form-group">
-            @Html.LabelFor(model => model.ResolutionSerialNumber, htmlAttributes: new { @class = "control-label col-md-4" })
-            <div class="col-md-6">
-                @Html.EditorFor(model => model.ResolutionSerialNumber, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ResolutionSerialNumber, "", new { @class = "text-danger" })
+        if (Model.TypeOfDays == VacaYAY.Common.Enums.TypeOfDays.Paid)
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.Basis, htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.Basis, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Basis, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
+        }
 
         <p id="errorMessage" class="text-danger"></p>
 

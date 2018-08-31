@@ -52,18 +52,6 @@ namespace VacaYAY.Business
                 sc.EnableSsl = true;
                 sc.Send(mailMessage);
             }
-            //var SMTP = new SmtpClient()
-            //{
-            //    Host = "smtp.gmail.com",
-            //    Port = 587,
-            //    EnableSsl = true,
-            //    Credentials = new NetworkCredential("VacaYAY.mailsender@gmail.com", "INGPraksa"),
-            //};
-            //Thread t1 = new Thread(delegate ()
-            //{
-            //    SMTP.Send(mailMessage);
-            //});
-            //t1.Start();
         }
         public static void SendNewRequestEmailToAllManagers(Request request)
         {
@@ -143,7 +131,7 @@ namespace VacaYAY.Business
             es.AddAttachment(file);
             Task t1 = Task.Factory.StartNew(() => es.SendEmail());
         }
-        public static void ApprovePaidOrUnpaidVacation(Request request, Employee HR, string file)
+        public static void ApprovePaidVacation(Request request, Employee HR, string file)
         {
             EmailSender es = new EmailSender();
             es.AddReceiver(request.Employee.User.Email);
@@ -169,6 +157,33 @@ namespace VacaYAY.Business
                 "\n\n" +
                 "Vas INGSoftware!");
             es.AddAttachment(file);
+            Task t1 = Task.Factory.StartNew(() => es.SendEmail());
+        }
+        public static void ApproveUnpaidVacation(Request request, Employee HR)
+        {
+            EmailSender es = new EmailSender();
+            es.AddReceiver(request.Employee.User.Email);
+            es.AddReceiver(HR.User.Email);
+            List<string> managerEmails = EmployeeService.GetManagerEmails();
+            es.AddReceivers(managerEmails);
+            es.SetSubject("[INGSoftware] Odobren zahtev za odmor - " + request.Employee.Name + " " + request.Employee.LastName);
+            es.SetBody("Postovani" +
+                "\n\n" +
+                "Odobren je zahtev za odmor." +
+                "\n\n" +
+                "Radnik: " + request.Employee.Name + " " + request.Employee.LastName +
+                "\n" +
+                "Pocetak odmora: " + request.StartDate.ToShortDateString() +
+                "\n" +
+                "Kraj odmora: " + request.EndDate.ToShortDateString() +
+                "\n" +
+                "Broj dana: " + request.NumberOfDays +
+                "\n" +
+                "Tip odmora: " + request.TypeOfDays +
+                "\n" +
+                "HR koji je odobrio zahtev: " + HR.Name + " " + HR.LastName +
+                "\n\n" +
+                "Vas INGSoftware!");
             Task t1 = Task.Factory.StartNew(() => es.SendEmail());
         }
         public static void RejectRequest(Request request, Employee HR)
@@ -219,5 +234,6 @@ namespace VacaYAY.Business
             es.AddAttachment(filename);
             Task t1 = Task.Factory.StartNew(() => es.SendEmail());
         }
+        
     }
 }

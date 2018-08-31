@@ -34,9 +34,8 @@ namespace VacaYAY.ViewModels
         [Display(Name ="Employee")]
         public DetailsRequestEmployeeViewModel Employee { get; set; }
         public List<EditRequestCommentViewModel> Comments { get; set; } = new List<EditRequestCommentViewModel>();
-        [Display(Name ="Resolution Serial Number")]
         [Required]
-        public string ResolutionSerialNumber { get; set; }
+        public string Basis { get; set; }
 
         public static DetailsRequestViewModel ToVM(DetailsRequestDTO dto)
         {

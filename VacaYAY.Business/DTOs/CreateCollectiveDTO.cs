@@ -13,7 +13,6 @@ namespace VacaYAY.Business.DTOs
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public TypeOfDays TypeOfDays { get; set; }
-        public string ResolutionNumber { get; set; }
 
         public static Request ToEntity(CreateCollectiveDTO dto)
         {

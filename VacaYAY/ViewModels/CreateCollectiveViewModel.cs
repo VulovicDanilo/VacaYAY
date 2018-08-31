@@ -19,8 +19,6 @@ namespace VacaYAY.ViewModels
         [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime EndDate { get; set; }
         public TypeOfDays TypeOfDays { get; set; }
-        [Required]
-        public string ResolutionNumber { get; set; }
 
         public static CreateCollectiveDTO ToDTO(CreateCollectiveViewModel vm)
         {
@@ -29,7 +27,6 @@ namespace VacaYAY.ViewModels
                 StartDate = vm.StartDate,
                 EndDate = vm.EndDate,
                 TypeOfDays = TypeOfDays.Collective,
-                ResolutionNumber = vm.ResolutionNumber,
             };
             return dto;
         }

@@ -127,6 +127,7 @@
     <Compile Include="DTOs\EditEmployeeDTO.cs" />
     <Compile Include="DTOs\EditVacationDaysDTO.cs" />
     <Compile Include="DTOs\ExtraDaysDTO.cs" />
+    <Compile Include="DTOs\PaidReportDTO.cs" />
     <Compile Include="DTOs\ResolutionDTO.cs" />
     <Compile Include="DTOs\EditRequestCommentDTO.cs" />
     <Compile Include="DTOs\CreateContractDTO.cs" />
@@ -159,8 +160,9 @@
       <Name>VacaYAY.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Reports\" />
+    <EmbeddedResource Include="Reports\PaidReport.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

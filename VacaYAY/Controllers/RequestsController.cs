@@ -196,9 +196,9 @@ namespace VacaYAY.Controllers
             if (ModelState.IsValid)
             {
                 int id = vm.RequestID;
-                string resolutionSerialNumber = vm.ResolutionSerialNumber;
+                string basis = vm.Basis;
                 int HR_ID = (EmployeeService.GetEmployeeIDWithUserID(HttpContext.User.Identity.GetUserId()));
-                string returned=RequestService.Approve(id, HR_ID, resolutionSerialNumber);
+                string returned=RequestService.Approve(id, HR_ID, basis);
                 return Json(returned);
             }
             return Json("Invalid model state");

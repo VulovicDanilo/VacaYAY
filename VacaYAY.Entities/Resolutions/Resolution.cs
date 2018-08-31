@@ -16,6 +16,9 @@ namespace VacaYAY.Entities.Resolutions
         [Display(Name = "Serial number")]
         public string SerialNumber { get; set; }
         public string Link { get; set; }
+        public string Basis { get; set; }
+        public int RegularUsed { get; set; }
+        public int LeftoverUsed { get; set; }
         public int RequestID { get; set; }
         public virtual Request Request { get; set; }
         [ForeignKey("HR")]
