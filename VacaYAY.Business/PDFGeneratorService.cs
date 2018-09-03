@@ -1,11 +1,15 @@
 ﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
+using Microsoft.Reporting.WebForms;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
+using VacaYAY.Business.DTOs;
+using VacaYAY.Entities.Employees;
 using VacaYAY.Entities.Requests;
 using VacaYAY.Entities.Resolutions;
 
@@ -13,33 +17,52 @@ namespace VacaYAY.Business
 {
     public class PDFGen
     {
-        public Document Document;
-        private PdfWriter pdfWriter;
+        public static void GenerateUnpaidResolution(Employee employee, Request request, Resolution resolution,Employee HR)
+        {
+            ReportViewer viewer = CreateReportViewer();
 
-        public PDFGen()
-        {
-            
+            string filename = SavePDF(viewer, resolution, employee);
+            FileInfo file = new FileInfo(filename);
+            EmailSender.ApproveRegularVacation(request, file.FullName);
         }
-        public string GenerateResolution(Request request)
+
+        public static void GeneratePaidResolution(Employee employee,Request request,Resolution resolution,Employee HR)
         {
-            Document = new Document(PageSize.A4, 20, 20, 42, 35);
-            string filename = DateTime.Now.ToString("yyyyMMdd_hhmmss") + ".pdf";
-            pdfWriter = PdfWriter.GetInstance(Document, new FileStream(filename, FileMode.Create));
-            Document.Open();
-            Document.AddTitle("Resolution for " + request.Employee.Name + " " + request.Employee.LastName);
-            Document.Add(new Paragraph(15, "Radnik: " + request.Employee.Name + " " + request.Employee.LastName, new Font(Font.FontFamily.HELVETICA)));
-            Document.Add(new Paragraph(15, "Pocetak odmora: " + request.StartDate.ToShortDateString(), new Font(Font.FontFamily.HELVETICA)));
-            Document.Add(new Paragraph(15, "Zavrsetak odmora: " + request.EndDate.ToShortDateString(), new Font(Font.FontFamily.HELVETICA)));
-            Document.Add(new Paragraph(15, "Tip odmora: " + request.TypeOfDays, new Font(Font.FontFamily.HELVETICA)));
-            Document.Add(new Paragraph(15, "Broj dana: " + request.NumberOfDays, new Font(Font.FontFamily.HELVETICA)));
-            Document.Add(new Paragraph(15, "\n\nPoyy", new Font(Font.FontFamily.HELVETICA)));
-            Close();
-            return filename;
+            PaidReportDTO dto = new PaidReportDTO(employee, request, resolution);
+            ReportViewer viewer = CreateReportViewer();
+            List<PaidReportDTO> dtos = new List<PaidReportDTO>();
+            dtos.Add(dto);
+            viewer.LocalReport.ReportPath = ".\\Reports\\PaidReport.rdlc";
+            viewer.LocalReport.DataSources.Add(new ReportDataSource("PaidReportDataSet", dtos));
+
+            string filename= SavePDF(viewer, resolution,employee);
+            FileInfo file = new FileInfo(filename);
+            EmailSender.ApprovePaidVacation(request, file.FullName);
         }
-        private void Close()
+        private static string SavePDF(ReportViewer viewer,Resolution resolution,Employee employee)
         {
-            Document.Close();
-            pdfWriter.Close();
+            byte[] bytes = viewer.LocalReport.Render("PDF", "");
+
+            string filepath = "~/Resolutions/" + employee.UserID + "/";
+            var directory = HttpContext.Current.Server.MapPath(filepath);
+            Directory.CreateDirectory(directory);
+
+            var filename = DateTime.Now.ToString("yyyyMMdd_hhmmss") + ".pdf";
+            var fullpath = Path.Combine(directory, filename);
+            using (FileStream fs = new FileStream(fullpath, FileMode.Create))
+            {
+                fs.Write(bytes, 0, bytes.Length);
+            }
+            resolution.Link = filepath + filename;
+            return fullpath;
+        }
+        private static ReportViewer CreateReportViewer()
+        {
+            ReportViewer reportViewer = new ReportViewer();
+            reportViewer.ProcessingMode = ProcessingMode.Local;
+            reportViewer.SizeToReportContent = true;
+            reportViewer.LocalReport.EnableHyperlinks = true;
+            return reportViewer;
         }
 
     }

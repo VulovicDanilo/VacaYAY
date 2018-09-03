@@ -75,7 +75,7 @@ namespace VacaYAY.Business
                 "Tip odmora: " + request.TypeOfDays +
                 "\n\n" +
                 "Vas INGSoftware!");
-            Task t1 = Task.Factory.StartNew(() => es.SendEmail());
+            Task t = Task.Factory.StartNew(() => es.SendEmail());
         }
 
         public static void SendEditRequestEmailToAllManagers(Request request)
@@ -100,14 +100,13 @@ namespace VacaYAY.Business
                 "Tip odmora: " + request.TypeOfDays +
                 "\n\n" +
                 "Vas INGSoftware!");
-            Task t1 = Task.Factory.StartNew(() => es.SendEmail());
+            Task t = Task.Factory.StartNew(() => es.SendEmail());
         }
 
-        public static void ApproveRegularVacation(Request request, Employee HR, string file)
+        public static void ApproveRegularVacation(Request request, string file)
         {
             EmailSender es = new EmailSender();
             es.AddReceiver(request.Employee.User.Email);
-            es.AddReceiver(HR.User.Email);
             List<string> managerEmails = EmployeeService.GetManagerEmails();
             es.AddReceivers(managerEmails);
             es.SetSubject("[INGSoftware] Odobren zahtev za odmor - " + request.Employee.Name + " " + request.Employee.LastName);
@@ -124,18 +123,15 @@ namespace VacaYAY.Business
                 "Broj dana: " + request.NumberOfDays +
                 "\n" +
                 "Tip odmora: " + request.TypeOfDays +
-                "\n" +
-                "HR koji je odobrio zahtev: " + HR.Name + " " + HR.LastName +
                 "\n\n" +
                 "Vas INGSoftware!");
             es.AddAttachment(file);
-            Task t1 = Task.Factory.StartNew(() => es.SendEmail());
+            Task t = Task.Factory.StartNew(() => es.SendEmail());
         }
-        public static void ApprovePaidVacation(Request request, Employee HR, string file)
+        public static void ApprovePaidVacation(Request request, string file)
         {
             EmailSender es = new EmailSender();
             es.AddReceiver(request.Employee.User.Email);
-            es.AddReceiver(HR.User.Email);
             List<string> managerEmails = EmployeeService.GetManagerEmails();
             es.AddReceivers(managerEmails);
             es.SetSubject("[INGSoftware] Odobren zahtev za odmor - " + request.Employee.Name + " " + request.Employee.LastName);
@@ -152,18 +148,15 @@ namespace VacaYAY.Business
                 "Broj dana: " + request.NumberOfDays +
                 "\n" +
                 "Tip odmora: " + request.TypeOfDays +
-                "\n" +
-                "HR koji je odobrio zahtev: " + HR.Name + " " + HR.LastName +
                 "\n\n" +
                 "Vas INGSoftware!");
             es.AddAttachment(file);
-            Task t1 = Task.Factory.StartNew(() => es.SendEmail());
+            Task t = Task.Factory.StartNew(() => es.SendEmail());
         }
-        public static void ApproveUnpaidVacation(Request request, Employee HR)
+        public static void ApproveUnpaidVacation(Request request)
         {
             EmailSender es = new EmailSender();
             es.AddReceiver(request.Employee.User.Email);
-            es.AddReceiver(HR.User.Email);
             List<string> managerEmails = EmployeeService.GetManagerEmails();
             es.AddReceivers(managerEmails);
             es.SetSubject("[INGSoftware] Odobren zahtev za odmor - " + request.Employee.Name + " " + request.Employee.LastName);
@@ -180,17 +173,14 @@ namespace VacaYAY.Business
                 "Broj dana: " + request.NumberOfDays +
                 "\n" +
                 "Tip odmora: " + request.TypeOfDays +
-                "\n" +
-                "HR koji je odobrio zahtev: " + HR.Name + " " + HR.LastName +
                 "\n\n" +
                 "Vas INGSoftware!");
-            Task t1 = Task.Factory.StartNew(() => es.SendEmail());
+            Task t = Task.Factory.StartNew(() => es.SendEmail());
         }
-        public static void RejectRequest(Request request, Employee HR)
+        public static void RejectRequest(Request request)
         {
             EmailSender es = new EmailSender();
             es.AddReceiver(request.Employee.User.Email);
-            es.AddReceiver(HR.User.Email);
             es.SetSubject("[INGSoftware] Odbijen zahtev za odmor - " + request.Employee.Name + " " + request.Employee.LastName);
             es.SetBody("Postovani" +
                 "\n\n" +
@@ -205,11 +195,9 @@ namespace VacaYAY.Business
                 "Broj dana: " + request.NumberOfDays +
                 "\n" +
                 "Tip odmora: " + request.TypeOfDays +
-                "\n" +
-                "HR koji je odbio zahtev: " + HR.Name + " " + HR.LastName +
                 "\n\n" +
                 "Vas INGSoftware!");
-            Task t1 = Task.Factory.StartNew(() => es.SendEmail());
+            Task t = Task.Factory.StartNew(() => es.SendEmail());
         }
         public static void SendCollective(Request request,Employee HR,string filename)
         {
@@ -232,7 +220,7 @@ namespace VacaYAY.Business
                 "\n\n" +
                 "Vas INGSoftware!");
             es.AddAttachment(filename);
-            Task t1 = Task.Factory.StartNew(() => es.SendEmail());
+            Task t = Task.Factory.StartNew(() => es.SendEmail());
         }
         
     }

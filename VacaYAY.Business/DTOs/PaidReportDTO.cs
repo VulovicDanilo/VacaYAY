@@ -19,7 +19,9 @@ namespace VacaYAY.Business.DTOs
         public string Basis { get; set; }
         public string StartDate { get; set; }
         public string EndDate { get; set; }
+        public string StartWorking { get; set; }
         public string SubmissionDate { get; set; }
+        public string ApprovalDate { get; set; }
 
         public PaidReportDTO(Employee employee,Request request,Resolution resolution)
         {
@@ -31,7 +33,21 @@ namespace VacaYAY.Business.DTOs
             Basis = resolution.Basis;
             StartDate = request.StartDate.ToString("dd.MM.yyyy.");
             EndDate = request.EndDate.ToString("dd.MM.yyyy.");
-            SubmissionDate = request.SubmissionDate.ToString("dd.MM.yyyy");
+            DateTime date = request.EndDate;
+            if (request.EndDate.DayOfWeek==DayOfWeek.Friday || request.EndDate.DayOfWeek==DayOfWeek.Saturday || request.EndDate.DayOfWeek==DayOfWeek.Sunday)
+            {
+                while(date.DayOfWeek!=DayOfWeek.Monday)
+                {
+                    date = date.AddDays(1);
+                }
+            }
+            else
+            {
+                date = date.AddDays(1);
+            }
+            StartWorking = date.ToString("dd.MM.yyyy.");
+            SubmissionDate = request.SubmissionDate.ToString("dd.MM.yyyy.");
+            ApprovalDate = DateTime.Now.ToString("dd.MM.yyyy.");
         }
     }
 }

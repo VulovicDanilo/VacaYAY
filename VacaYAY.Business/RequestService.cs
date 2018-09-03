@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity;
 using static VacaYAY.Common.Enums;
 using VacaYAY.Entities.Resolutions;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace VacaYAY.Business
 {
@@ -178,16 +179,7 @@ namespace VacaYAY.Business
                     return "Failed to update employee [Database error] => Employee:" + employee.Name + " " + employee.LastName;
                 request.Status = Status.Approved;
                 request.Comments.Last().Status = request.Status;
-                PDFGen generator = new PDFGen();
-                string filepath = "~/Resolutions/" + request.Employee.UserID + "/";
-                var directory = HttpContext.Current.Server.MapPath(filepath);
-                string filename = generator.GenerateResolution(request);
-                FileInfo file = new FileInfo(filename);
-                if (!Directory.Exists(directory))
-                    Directory.CreateDirectory(directory);
-                file.MoveTo(directory + filename);
-                resolution.Link = filepath + filename;
-                EmailSender.ApproveRegularVacation(request, HR, file.FullName);
+                Task t1 = Task.Factory.StartNew(() => PDFGen.GenerateUnpaidResolution(employee, request, resolution, HR));
                 if (!ResolutionService.Update(resolution))
                     return "Failed to update resolution [Database error]";
                 return repo.Update(request) ? "OK" : "Cant approve regular request [Database error]";
@@ -197,8 +189,6 @@ namespace VacaYAY.Business
                 string msg = ApprovePaidRequestValidation(RequestID,basis);
                 if (msg != "OK")
                     return msg;
-                // ne skidaj dane slobodnog odmora
-                // TODO PDF GENERATE PAID AND UNPAID VACATION
                 resolution.Basis = basis;
                 if (!ResolutionService.Add(resolution))
                     return "Failed to add resolution [Database error]";
@@ -210,17 +200,7 @@ namespace VacaYAY.Business
                 request.Status = Status.Approved;
                 if (request.Comments.Count > 0)
                     request.Comments.Last().Status = request.Status;
-                PaidReportDTO report = new PaidReportDTO(employee, request, resolution);
-                PDFGen generator = new PDFGen();
-                string filepath = "~/Resolutions/" + request.Employee.UserID + "/";
-                var directory = HttpContext.Current.Server.MapPath(filepath);
-                string filename = generator.GenerateResolution(request);
-                FileInfo file = new FileInfo(filename);
-                if (!Directory.Exists(directory))
-                    Directory.CreateDirectory(directory);
-                file.MoveTo(directory + filename);
-                resolution.Link = filepath + filename;
-                EmailSender.ApprovePaidVacation(request, HR, file.FullName);
+                PDFGen.GeneratePaidResolution(employee, request, resolution, HR);
                 if (!ResolutionService.Update(resolution))
                     return "Failed to update resolution [Database error]";
                 return repo.Update(request) ? "OK" : "Cant approve paid request [Database error]";
@@ -230,7 +210,7 @@ namespace VacaYAY.Business
                 request.Status = Status.Approved;
                 if (request.Comments.Count > 0)
                     request.Comments.Last().Status = Status.Approved;
-                EmailSender.ApproveUnpaidVacation(request, HR);
+                EmailSender.ApproveUnpaidVacation(request);
                 return repo.Update(request) ? "OK" : "Cant approve unpaid request [Database error]";
 
             }
@@ -245,7 +225,7 @@ namespace VacaYAY.Business
             {
                 request.Comments.Last().Status = request.Status;
             }
-            EmailSender.RejectRequest(request, HR);
+            EmailSender.RejectRequest(request);
             return repo.Update(request);
         }
         public static string AddCollective(CreateCollectiveDTO dto, string HRID)
@@ -267,8 +247,7 @@ namespace VacaYAY.Business
                 request.EmployeeID = employee.EmployeeID;
                 request.NumberOfDays = CalculateNumberOfWorkingDays(request.StartDate, request.EndDate);
                 request.SubmissionDate = subDate;
-
-                // TODO Lower everyones Vacation Days!!!
+                
                 if (employee.CurrentVacationDays >= days)
                 {
                     employee.CurrentVacationDays -= days;
@@ -290,25 +269,16 @@ namespace VacaYAY.Business
                             return "Failed to add resolution [Database error]";
                         }
                         resolution.SerialNumber = resolution.ResolutionID.ToString() + "/" + DateTime.Now.Year;
-                        PDFGen generator = new PDFGen();
-                        string filepath = "~/Resolutions/" + request.Employee.UserID + "/";
-                        var directory = HttpContext.Current.Server.MapPath(filepath);
-                        string filename = generator.GenerateResolution(request);
-                        FileInfo file = new FileInfo(filename);
-                        if (!Directory.Exists(directory))
-                            Directory.CreateDirectory(directory);
-                        file.MoveTo(directory + filename);
-                        resolution.Link = filepath + filename;
-                        EmailSender.SendCollective(request, HR, file.FullName);
+                        Task t1 = Task.Factory.StartNew(() => PDFGen.GenerateUnpaidResolution(employee, request, resolution, HR));
                         if (!ResolutionService.Update(resolution))
                         {
                             return "Failed to update resolution [Database error]";
                         }
                     }
-                }
-                else
-                {
-                    return "Failed to add request [Database error]";
+                    else
+                    {
+                        return "Failed to add request [Database error]";
+                    }
                 }
             }
             return "OK";
@@ -320,14 +290,17 @@ namespace VacaYAY.Business
             {
                 return "Start Date must be before End Date";
             }
-            int days = CalculateNumberOfWorkingDays(dto.StartDate, dto.EndDate);
-            if (employee.CurrentVacationDays < days)
-            {
-                return "You don't have enough vacation days";
-            }
             if (DateTime.Now.AddDays(1) >= dto.StartDate)
             {
                 return "Start Date must be later than tommorow";
+            }
+            if (dto.TypeOfDays != TypeOfDays.Paid)
+            {
+                int days = CalculateNumberOfWorkingDays(dto.StartDate, dto.EndDate);
+                if (employee.CurrentVacationDays < days)
+                {
+                    return "You don't have enough vacation days";
+                }
             }
             return "OK";
         }
