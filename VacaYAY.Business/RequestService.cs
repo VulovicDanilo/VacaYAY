@@ -178,8 +178,11 @@ namespace VacaYAY.Business
                 if (!EmployeeService.Update(employee))
                     return "Failed to update employee [Database error] => Employee:" + employee.Name + " " + employee.LastName;
                 request.Status = Status.Approved;
-                request.Comments.Last().Status = request.Status;
-                Task t1 = Task.Factory.StartNew(() => PDFGen.GenerateUnpaidResolution(employee, request, resolution, HR));
+                if (request.Comments.Count > 0)
+                {
+                    request.Comments.Last().Status = request.Status;
+                }
+                PDFGen.GenerateUnpaidResolution(employee, request, resolution, HR);
                 if (!ResolutionService.Update(resolution))
                     return "Failed to update resolution [Database error]";
                 return repo.Update(request) ? "OK" : "Cant approve regular request [Database error]";

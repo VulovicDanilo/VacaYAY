@@ -19,7 +19,14 @@ namespace VacaYAY.Business
     {
         public static void GenerateUnpaidResolution(Employee employee, Request request, Resolution resolution,Employee HR)
         {
+            RegularReportDTO dto = new RegularReportDTO(employee, request, resolution);
             ReportViewer viewer = CreateReportViewer();
+
+            List<RegularReportDTO> dtos = new List<RegularReportDTO>();
+            dtos.Add(dto);
+
+            viewer.LocalReport.ReportPath = ".\\Reports\\PaidReport.rdlc";
+            viewer.LocalReport.DataSources.Add(new ReportDataSource("RegularReportDataSet", dtos));
 
             string filename = SavePDF(viewer, resolution, employee);
             FileInfo file = new FileInfo(filename);

@@ -34,6 +34,8 @@ namespace VacaYAY.Entities.Employees
         public int UsedPaidVacationDays { get; set; }
         [Display(Name = "Current Vacation Days")] // Godisnje
         public int CurrentVacationDays { get; set; }
+        public int DefaultVacationDays { get; set; }
+
         [Display(Name = "Leftover Vacation Days")] // Zaostali od prosle godine
         public int LeftoverVacationDays { get; set; }
         [Display(Name = "Manager")]

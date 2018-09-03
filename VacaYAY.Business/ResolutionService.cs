@@ -33,5 +33,10 @@ namespace VacaYAY.Business
         {
             return repo.GetEmployeesResolutions(EmployeeID);
         }
+        public static List<Resolution> GetThisYearsResolutions(int? EmployeeID,int year)
+        {
+            return repo.GetEmployeesResolutions(EmployeeID)
+                .Where(x => x.ApprovalDate.Year == year).ToList();
+        }
     }
 }
